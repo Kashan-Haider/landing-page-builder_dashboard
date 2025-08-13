@@ -1,10 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { Save, Undo, Redo, Eye, Clock, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Save, ArrowLeft } from 'lucide-react';
 import { Button, Card } from '../ui/inputs';
 import { SectionForm, BusinessContactForm } from './SectionForm';
 import { setNestedValue } from '../../types/field-definitions';
-import { useAutoSave } from '../../hooks/useAutoSave';
-import { useFieldHistory } from '../../hooks/useFieldHistory';
 
 interface LandingPage {
   id: string;
@@ -37,33 +35,19 @@ interface LandingPage {
 interface DynamicLandingPageFormProps {
   landingPage: LandingPage;
   onSave: (data: Partial<LandingPage>) => Promise<void>;
-  onPreview?: () => void;
   onBack?: () => void;
 }
 
 export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
   landingPage,
   onSave,
-  onPreview,
   onBack
 }) => {
   const [activeSection, setActiveSection] = useState('basic');
   const [localData, setLocalData] = useState<LandingPage>(landingPage);
-
-  // History and auto-save hooks
-  const {
-    pushHistory,
-    undo,
-    redo,
-    canUndo,
-    canRedo
-  } = useFieldHistory(landingPage);
-
-  const { isSaving, lastSaved, error, saveNow } = useAutoSave(
-    localData,
-    onSave,
-    { delay: 3000, enabled: true }
-  );
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Section definitions (updated for one-to-one relationships)
   const sections = [
@@ -92,25 +76,33 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
   const handleFieldChange = useCallback((path: string, value: any) => {
     setLocalData(prevData => {
       const newData = setNestedValue(prevData, path, value);
-      pushHistory(newData, `Updated ${path}`);
       return newData;
     });
-  }, [pushHistory]);
-
-  // Handle undo/redo
-  const handleUndo = useCallback(() => {
-    const previousData = undo();
-    if (previousData) {
-      setLocalData(previousData);
+    // Clear any previous save status when user makes changes
+    if (saveError) {
+      setSaveError(null);
     }
-  }, [undo]);
-
-  const handleRedo = useCallback(() => {
-    const nextData = redo();
-    if (nextData) {
-      setLocalData(nextData);
+    if (saveSuccess) {
+      setSaveSuccess(false);
     }
-  }, [redo]);
+  }, [saveError]);
+
+  // Handle manual save
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+      setSaveSuccess(false);
+      await onSave(localData);
+      setSaveSuccess(true);
+      // Auto-hide success message after 3 seconds
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Failed to save');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Render specialized section forms
   const renderSectionContent = (section: typeof sections[0]) => {
@@ -156,82 +148,49 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
           </div>
           
           {/* Save Status */}
-          <div className="mb-6 p-4 bg-slate-700 border border-slate-600 rounded-lg">
-            <div className="flex items-center justify-between text-sm">
-              {isSaving ? (
-                <div className="flex items-center text-blue-400">
-                  <Clock className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
-                </div>
-              ) : lastSaved ? (
-                <div className="flex items-center text-green-400">
-                  <Save className="w-4 h-4 mr-2" />
-                  Saved
-                </div>
-              ) : (
-                <div className="text-slate-400">Not saved</div>
-              )}
+          {saveError && (
+            <div className="mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+              <div className="flex items-center text-red-400 text-sm">
+                <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {saveError}
+              </div>
             </div>
-            {lastSaved && (
-              <div className="text-xs text-slate-400 mt-2">
-                {lastSaved.toLocaleTimeString()}
+          )}
+          {saveSuccess && (
+            <div className="mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+              <div className="flex items-center text-green-400 text-sm">
+                <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Changes saved successfully!
               </div>
-            )}
-            {error && (
-              <div className="flex items-center text-red-400 text-xs mt-2">
-                <AlertCircle className="w-3 h-3 mr-1" />
-                {error}
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Action Buttons */}
-          <div className="mb-6 space-y-2">
-            <div className="flex gap-2">
-              <Button
-                onClick={handleUndo}
-                disabled={!canUndo}
-                variant="outline"
-                size="sm"
-                className="flex-1"
-              >
-                <Undo className="w-4 h-4 mr-1" />
-                Undo
-              </Button>
-              <Button
-                onClick={handleRedo}
-                disabled={!canRedo}
-                variant="outline"
-                size="sm"
-                className="flex-1"
-              >
-                <Redo className="w-4 h-4 mr-1" />
-                Redo
-              </Button>
-            </div>
-            
-            <div className="flex gap-2">
-              <Button
-                onClick={saveNow}
-                disabled={isSaving}
-                size="sm"
-                className="flex-1"
-              >
-                <Save className="w-4 h-4 mr-1" />
-                Save Now
-              </Button>
-              {onPreview && (
-                <Button
-                  onClick={onPreview}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                >
-                  <Eye className="w-4 h-4 mr-1" />
-                  Preview
-                </Button>
+          <div className="mb-6">
+            <Button
+              onClick={handleSave}
+              disabled={isSaving}
+              size="md"
+              className="w-full"
+            >
+              {isSaving ? (
+                <>
+                  <svg className="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Changes
+                </>
               )}
-            </div>
+            </Button>
           </div>
 
           {/* Section Navigation */}

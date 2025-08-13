@@ -300,10 +300,6 @@ const Dashboard: React.FC = () => {
       <DynamicLandingPageForm
         landingPage={selectedPage}
         onSave={handleSaveFromDynamicForm}
-        onPreview={() => {
-          // You can implement preview functionality here
-          console.log('Preview functionality to be implemented');
-        }}
         onBack={() => setViewMode('list')}
       />
     );
