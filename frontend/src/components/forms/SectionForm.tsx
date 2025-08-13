@@ -55,14 +55,15 @@ export const SectionForm: React.FC<SectionFormProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h3 className="text-2xl font-bold mb-6 text-gray-900">
+        <h3 className="text-3xl font-bold mb-8 text-slate-100 flex items-center gap-3">
+          <div className="w-2 h-8 bg-blue-500 rounded-full"></div>
           {getSectionTitle(sectionId)}
         </h3>
         
         {fields.map((field) => (
-          <div key={field} className="mb-6">
+          <div key={field} className="mb-8">
             {renderFieldGroup(field)}
           </div>
         ))}

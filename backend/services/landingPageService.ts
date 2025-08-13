@@ -13,20 +13,33 @@ class LandingPageService {
           }
         },
         seoSettings: true,
-        heroSections: true,
-        aboutSections: true,
-        servicesSections: true,
-        testimonialsSections: true,
-        faqSections: true,
-        serviceAreaSections: true,
-        companyOverviewSections: true,
-        serviceHighlightsSections: true,
-        preFooterSections: true,
-        footerSections: true,
         theme: true,
-        images: true,
-        socialLinks: true,
-        serviceAreas: true
+        // One-to-one section includes
+        serviceArea: true,
+        socialLink: true,
+        image: true,
+        heroSection: true,
+        aboutSection: true,
+        servicesSection: true,
+        gallerySection: true,
+        testimonialsSection: true,
+        faqSection: true,
+        serviceAreaSection: true,
+        businessDetailsSection: {
+          include: {
+            sections: true,
+            contactForm: true,
+            map: true
+          }
+        },
+        companyOverviewSection: {
+          include: {
+            sections: true
+          }
+        },
+        serviceHighlightsSection: true,
+        preFooterSection: true,
+        footerSection: true
       }
     });
   }
@@ -41,49 +54,66 @@ class LandingPageService {
           }
         },
         seoSettings: true,
-        heroSections: true,
-        aboutSections: true,
-        servicesSections: true,
-        testimonialsSections: true,
-        faqSections: true,
-        serviceAreaSections: true,
-        companyOverviewSections: true,
-        serviceHighlightsSections: true,
-        preFooterSections: true,
-        footerSections: true,
         theme: true,
-        images: true,
-        socialLinks: true,
-        serviceAreas: true
+        // One-to-one section includes
+        serviceArea: true,
+        socialLink: true,
+        image: true,
+        heroSection: true,
+        aboutSection: true,
+        servicesSection: true,
+        gallerySection: true,
+        testimonialsSection: true,
+        faqSection: true,
+        serviceAreaSection: true,
+        businessDetailsSection: {
+          include: {
+            sections: true,
+            contactForm: true,
+            map: true
+          }
+        },
+        companyOverviewSection: {
+          include: {
+            sections: true
+          }
+        },
+        serviceHighlightsSection: true,
+        preFooterSection: true,
+        footerSection: true
       }
     });
   }
 
   async createLandingPage(data: any) {
     try {
-      // Extract all valid fields for LandingPage model
+      // Extract all required fields for LandingPage model
       const {
         templateId,
         businessName,
         githubUrl,
         businessContact,
+        businessContactId,
         seoSettings,
+        seoSettingsId,
         theme,
-        serviceAreas,
-        socialLinks,
-        images,
-        heroSections,
-        aboutSections,
-        servicesSections,
-        gallerySections,
-        testimonialsSections,
-        faqSections,
-        serviceAreaSections,
-        businessDetailsSections,
-        companyOverviewSections,
-        serviceHighlightsSections,
-        preFooterSections,
-        footerSections,
+        themeId,
+        // Single section objects (required)
+        serviceArea,
+        socialLink,
+        image,
+        heroSection,
+        aboutSection,
+        servicesSection,
+        gallerySection,
+        testimonialsSection,
+        faqSection,
+        serviceAreaSection,
+        businessDetailsSection,
+        companyOverviewSection,
+        serviceHighlightsSection,
+        preFooterSection,
+        footerSection,
         ...otherData
       } = data;
 
@@ -92,14 +122,43 @@ class LandingPageService {
         throw new Error('templateId and businessName are required');
       }
 
-      // Handle related entities creation with proper error handling
-      let businessContactId: string | undefined;
-      let seoSettingsId: string | undefined;
+      // Validate all required sections are provided
+      const requiredSections = {
+        serviceArea,
+        socialLink,
+        image,
+        heroSection,
+        aboutSection,
+        servicesSection,
+        gallerySection,
+        testimonialsSection,
+        faqSection,
+        serviceAreaSection,
+        businessDetailsSection,
+        companyOverviewSection,
+        serviceHighlightsSection,
+        preFooterSection,
+        footerSection
+      };
 
-      // Create BusinessContact if provided
-      if (businessContact) {
+      const missingSections = Object.entries(requiredSections)
+        .filter(([key, value]) => !value)
+        .map(([key]) => key);
+
+      if (missingSections.length > 0) {
+        throw new Error(`Missing required sections: ${missingSections.join(', ')}`);
+      }
+
+      // Handle related entities creation with proper error handling
+      let finalBusinessContactId: string | undefined;
+      let finalSeoSettingsId: string | undefined;
+      let finalThemeId: string | undefined;
+
+      // Handle BusinessContact - either use provided ID or create new
+      if (businessContactId) {
+        finalBusinessContactId = businessContactId;
+      } else if (businessContact) {
         try {
-          // Handle nested BusinessHour creation
           const businessHoursData = businessContact.businessHours || [];
           delete businessContact.businessHours;
 
@@ -111,269 +170,235 @@ class LandingPageService {
               }
             }
           });
-          businessContactId = contact.id;
+          finalBusinessContactId = contact.id;
         } catch (error) {
           console.error('Error creating business contact:', error);
           throw new Error(`Failed to create business contact: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
 
-      // Create SEOSettings if provided
-      if (seoSettings) {
+      // Handle SEOSettings - either use provided ID or create new
+      if (seoSettingsId) {
+        finalSeoSettingsId = seoSettingsId;
+      } else if (seoSettings) {
         try {
           const seo = await prisma.sEOSettings.create({
             data: seoSettings
           });
-          seoSettingsId = seo.id;
+          finalSeoSettingsId = seo.id;
         } catch (error) {
           console.error('Error creating SEO settings:', error);
           throw new Error(`Failed to create SEO settings: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
 
-      // Create the landing page first
-      const landingPageData = {
-        templateId,
-        businessName,
-        ...(githubUrl && { githubUrl }),
-        ...(businessContactId && { businessContactId }),
-        ...(seoSettingsId && { seoSettingsId })
-      };
+      // Handle Theme - either use provided ID or create new
+      if (themeId) {
+        finalThemeId = themeId;
+      } else if (theme) {
+        try {
+          const themeData = theme.create || theme;
+          const createdTheme = await prisma.theme.create({
+            data: themeData
+          });
+          finalThemeId = createdTheme.id;
+        } catch (error) {
+          console.error('Error creating theme:', error);
+          throw new Error(`Failed to create theme: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
 
-      const landingPage = await prisma.landingPage.create({
-        data: landingPageData
-      });
+      // Validate that all required relations are provided
+      if (!finalBusinessContactId || !finalSeoSettingsId || !finalThemeId) {
+        throw new Error('businessContact/businessContactId, seoSettings/seoSettingsId, and theme/themeId are required');
+      }
 
-      // Create related sections and entities
+      // Create all sections first
       try {
-        // Create Theme if provided
-        if (theme) {
-          await prisma.theme.create({
-            data: {
-              ...theme,
-              landingPage: {
-                connect: { id: landingPage.id }
-              }
-            }
-          });
-        }
+        // Create default CTA buttons for sections that require them
+        const serviceAreaCtaButton = await prisma.ctaButton.create({
+          data: {
+            label: "View Service Area",
+            href: "/service-areas"
+          }
+        });
 
-        // Create Images if provided
-        if (images && Array.isArray(images)) {
-          await prisma.images.createMany({
-            data: images.map((image: any) => ({
-              ...image,
-              templateId: landingPage.id
-            }))
-          });
-        }
+        const aboutCtaButton = await prisma.ctaButton.create({
+          data: {
+            label: "Learn More About Us",
+            href: "/about"
+          }
+        });
 
-        // Create SocialLinks if provided
-        if (socialLinks && Array.isArray(socialLinks)) {
-          await prisma.socialLink.createMany({
-            data: socialLinks.map((link: any) => ({
-              ...link
-            }))
-          }).catch(() => {
-            // If createMany fails due to relation, try individual creates
-            return Promise.all(
-              socialLinks.map((link: any) => 
-                prisma.socialLink.create({
-                  data: {
-                    ...link,
-                    templates: {
-                      connect: { id: landingPage.id }
-                    }
-                  }
-                })
-              )
-            );
-          });
-        }
+        const servicesCtaButton = await prisma.ctaButton.create({
+          data: {
+            label: "View All Services",
+            href: "/services"
+          }
+        });
 
-        // Create ServiceAreas if provided
-        if (serviceAreas && Array.isArray(serviceAreas)) {
-          await Promise.all(
-            serviceAreas.map((area: any) => 
-              prisma.serviceArea.create({
-                data: {
-                  ...area,
-                  landingPages: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        const serviceAreaSectionCtaButton = await prisma.ctaButton.create({
+          data: {
+            label: "Contact Local Office",
+            href: "/contact"
+          }
+        });
 
-        // Create HeroSections if provided
-        if (heroSections && Array.isArray(heroSections)) {
-          await Promise.all(
-            heroSections.map((section: any) => 
-              prisma.heroSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        const companyOverviewCtaButton = await prisma.ctaButton.create({
+          data: {
+            label: "Get Started",
+            href: "/get-started"
+          }
+        });
 
-        // Create AboutSections if provided
-        if (aboutSections && Array.isArray(aboutSections)) {
-          await Promise.all(
-            aboutSections.map((section: any) => 
-              prisma.aboutSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create ServiceArea
+        const createdServiceArea = await prisma.serviceArea.create({
+          data: {
+            city: serviceArea.city,
+            region: serviceArea.region,
+            description: serviceArea.description,
+            ctaButtonId: serviceAreaCtaButton.id
+          }
+        });
 
-        // Create ServicesSections if provided
-        if (servicesSections && Array.isArray(servicesSections)) {
-          await Promise.all(
-            servicesSections.map((section: any) => 
-              prisma.servicesSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create SocialLink
+        const createdSocialLink = await prisma.socialLink.create({
+          data: socialLink
+        });
 
-        // Create TestimonialsSections if provided
-        if (testimonialsSections && Array.isArray(testimonialsSections)) {
-          await Promise.all(
-            testimonialsSections.map((section: any) => 
-              prisma.testimonialsSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create Image
+        const createdImage = await prisma.images.create({
+          data: image
+        });
 
-        // Create FAQSections if provided
-        if (faqSections && Array.isArray(faqSections)) {
-          await Promise.all(
-            faqSections.map((section: any) => 
-              prisma.fAQSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create HeroSection
+        const createdHeroSection = await prisma.heroSection.create({
+          data: {
+            title: heroSection.title,
+            subtitle: heroSection.subtitle,
+            description: heroSection.description
+          }
+        });
 
-        // Create ServiceAreaSections if provided
-        if (serviceAreaSections && Array.isArray(serviceAreaSections)) {
-          await Promise.all(
-            serviceAreaSections.map((section: any) => 
-              prisma.serviceAreaSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create AboutSection
+        const createdAboutSection = await prisma.aboutSection.create({
+          data: {
+            title: aboutSection.title,
+            description: aboutSection.description,
+            features: aboutSection.features || [],
+            ctaButtonId: aboutCtaButton.id
+          }
+        });
 
-        // Create CompanyOverviewSections if provided
-        if (companyOverviewSections && Array.isArray(companyOverviewSections)) {
-          await Promise.all(
-            companyOverviewSections.map((section: any) => 
-              prisma.companyOverviewSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create ServicesSection
+        const createdServicesSection = await prisma.servicesSection.create({
+          data: {
+            title: servicesSection.title,
+            description: servicesSection.description,
+            ctaButtonId: servicesCtaButton.id
+          }
+        });
 
-        // Create ServiceHighlightsSections if provided
-        if (serviceHighlightsSections && Array.isArray(serviceHighlightsSections)) {
-          await Promise.all(
-            serviceHighlightsSections.map((section: any) => 
-              prisma.serviceHighlightsSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create GallerySection
+        const createdGallerySection = await prisma.gallerySection.create({
+          data: gallerySection
+        });
 
-        // Create PreFooterSections if provided
-        if (preFooterSections && Array.isArray(preFooterSections)) {
-          await Promise.all(
-            preFooterSections.map((section: any) => 
-              prisma.preFooterSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create TestimonialsSection
+        const createdTestimonialsSection = await prisma.testimonialsSection.create({
+          data: testimonialsSection
+        });
 
-        // Create FooterSections if provided
-        if (footerSections && Array.isArray(footerSections)) {
-          await Promise.all(
-            footerSections.map((section: any) => 
-              prisma.footerSection.create({
-                data: {
-                  ...section,
-                  template: {
-                    connect: { id: landingPage.id }
-                  }
-                }
-              })
-            )
-          );
-        }
+        // Create FAQSection
+        const createdFAQSection = await prisma.fAQSection.create({
+          data: faqSection
+        });
+
+        // Create ServiceAreaSection
+        const createdServiceAreaSection = await prisma.serviceAreaSection.create({
+          data: {
+            title: serviceAreaSection.title,
+            description: serviceAreaSection.description,
+            ctaButtonId: serviceAreaSectionCtaButton.id
+          }
+        });
+
+        // Create BusinessDetailsSection
+        const createdBusinessDetailsSection = await prisma.businessDetailsSection.create({
+          data: {
+            title: businessDetailsSection.title,
+            sections: businessDetailsSection.sections ? {
+              create: businessDetailsSection.sections
+            } : undefined,
+            contactForm: businessDetailsSection.contactForm ? {
+              create: businessDetailsSection.contactForm
+            } : undefined,
+            map: businessDetailsSection.map ? {
+              create: businessDetailsSection.map
+            } : undefined
+          }
+        });
+
+        // Create CompanyOverviewSection
+        const createdCompanyOverviewSection = await prisma.companyOverviewSection.create({
+          data: {
+            title: companyOverviewSection.title,
+            sections: companyOverviewSection.sections ? {
+              create: companyOverviewSection.sections
+            } : undefined,
+            ctaButtonId: companyOverviewCtaButton.id
+          }
+        });
+
+        // Create ServiceHighlightsSection
+        const createdServiceHighlightsSection = await prisma.serviceHighlightsSection.create({
+          data: serviceHighlightsSection
+        });
+
+        // Create PreFooterSection
+        const createdPreFooterSection = await prisma.preFooterSection.create({
+          data: preFooterSection
+        });
+
+        // Create FooterSection
+        const createdFooterSection = await prisma.footerSection.create({
+          data: footerSection
+        });
+
+        // Now create the landing page with all section IDs
+        const landingPage = await prisma.landingPage.create({
+          data: {
+            templateId,
+            businessName,
+            businessContactId: finalBusinessContactId,
+            seoSettingsId: finalSeoSettingsId,
+            themeId: finalThemeId,
+            serviceAreaId: createdServiceArea.id,
+            socialLinkId: createdSocialLink.id,
+            imageId: createdImage.id,
+            heroSectionId: createdHeroSection.id,
+            aboutSectionId: createdAboutSection.id,
+            servicesSectionId: createdServicesSection.id,
+            gallerySectionId: createdGallerySection.id,
+            testimonialsSectionId: createdTestimonialsSection.id,
+            faqSectionId: createdFAQSection.id,
+            serviceAreaSectionId: createdServiceAreaSection.id,
+            businessDetailsSectionId: createdBusinessDetailsSection.id,
+            companyOverviewSectionId: createdCompanyOverviewSection.id,
+            serviceHighlightsSectionId: createdServiceHighlightsSection.id,
+            preFooterSectionId: createdPreFooterSection.id,
+            footerSectionId: createdFooterSection.id,
+            ...(githubUrl && { githubUrl })
+          }
+        });
+
+        // Return the complete landing page with all relations
+        return this.getLandingPageById(landingPage.id);
 
       } catch (sectionError) {
         console.error('Error creating sections:', sectionError);
-        // Don't throw here to avoid losing the main landing page creation
+        throw new Error(`Failed to create sections: ${sectionError instanceof Error ? sectionError.message : 'Unknown error'}`);
       }
-
-      // Return the complete landing page with all relations
-      return this.getLandingPageById(landingPage.id);
 
     } catch (error) {
       console.error('Error creating landing page:', error);
@@ -390,16 +415,22 @@ class LandingPageService {
           businessContact: true,
           seoSettings: true,
           theme: true,
-          heroSections: true,
-          aboutSections: true,
-          servicesSections: true,
-          testimonialsSections: true,
-          faqSections: true,
-          serviceAreaSections: true,
-          companyOverviewSections: true,
-          serviceHighlightsSections: true,
-          preFooterSections: true,
-          footerSections: true
+          // One-to-one sections
+          serviceArea: true,
+          socialLink: true,
+          image: true,
+          heroSection: true,
+          aboutSection: true,
+          servicesSection: true,
+          gallerySection: true,
+          testimonialsSection: true,
+          faqSection: true,
+          serviceAreaSection: true,
+          businessDetailsSection: true,
+          companyOverviewSection: true,
+          serviceHighlightsSection: true,
+          preFooterSection: true,
+          footerSection: true
         }
       });
 
@@ -412,19 +443,22 @@ class LandingPageService {
         businessContact,
         seoSettings,
         theme,
-        heroSections,
-        aboutSections,
-        servicesSections,
-        testimonialsSections,
-        faqSections,
-        serviceAreaSections,
-        companyOverviewSections,
-        serviceHighlightsSections,
-        preFooterSections,
-        footerSections,
-        images,
-        socialLinks,
-        serviceAreas,
+        // One-to-one section updates
+        serviceArea,
+        socialLink,
+        image,
+        heroSection,
+        aboutSection,
+        servicesSection,
+        gallerySection,
+        testimonialsSection,
+        faqSection,
+        serviceAreaSection,
+        businessDetailsSection,
+        companyOverviewSection,
+        serviceHighlightsSection,
+        preFooterSection,
+        footerSection,
         businessContactId,
         seoSettingsId,
         createdAt,
@@ -488,102 +522,69 @@ class LandingPageService {
               secondaryColor: theme.secondaryColor
             }
           });
-        } else if (existingLandingPage.theme) {
-          // Update existing theme if no ID provided
+        } else {
+          // Update existing theme using themeId from landing page
           await prisma.theme.update({
-            where: { id: existingLandingPage.theme.id },
+            where: { id: existingLandingPage.themeId },
             data: {
               primaryColor: theme.primaryColor,
               secondaryColor: theme.secondaryColor
             }
           });
-        } else {
-          // Create new theme
-          await prisma.theme.create({
-            data: {
-              primaryColor: theme.primaryColor,
-              secondaryColor: theme.secondaryColor,
-              landingPageId: id
-            }
-          });
         }
       }
 
-      // Handle heroSections - update existing ones
-      if (heroSections && Array.isArray(heroSections)) {
-        for (const section of heroSections) {
-          if (section.id) {
-            await prisma.heroSection.update({
-              where: { id: section.id },
-              data: {
-                title: section.title,
-                subtitle: section.subtitle,
-                description: section.description
-              }
-            });
+      // Handle individual section updates
+      if (heroSection && existingLandingPage.heroSection) {
+        await prisma.heroSection.update({
+          where: { id: existingLandingPage.heroSection.id },
+          data: {
+            title: heroSection.title,
+            subtitle: heroSection.subtitle,
+            description: heroSection.description
           }
-        }
+        });
       }
 
-      // Handle aboutSections - update existing ones
-      if (aboutSections && Array.isArray(aboutSections)) {
-        for (const section of aboutSections) {
-          if (section.id) {
-            await prisma.aboutSection.update({
-              where: { id: section.id },
-              data: {
-                title: section.title,
-                description: section.description,
-                features: section.features || []
-              }
-            });
+      if (aboutSection && existingLandingPage.aboutSection) {
+        await prisma.aboutSection.update({
+          where: { id: existingLandingPage.aboutSection.id },
+          data: {
+            title: aboutSection.title,
+            description: aboutSection.description,
+            features: aboutSection.features || []
           }
-        }
+        });
       }
 
-      // Handle servicesSections - update existing ones
-      if (servicesSections && Array.isArray(servicesSections)) {
-        for (const section of servicesSections) {
-          if (section.id) {
-            await prisma.servicesSection.update({
-              where: { id: section.id },
-              data: {
-                title: section.title,
-                description: section.description
-              }
-            });
+      if (servicesSection && existingLandingPage.servicesSection) {
+        await prisma.servicesSection.update({
+          where: { id: existingLandingPage.servicesSection.id },
+          data: {
+            title: servicesSection.title,
+            description: servicesSection.description
           }
-        }
+        });
       }
 
-      // Handle testimonialsSections - update existing ones
-      if (testimonialsSections && Array.isArray(testimonialsSections)) {
-        for (const section of testimonialsSections) {
-          if (section.id) {
-            await prisma.testimonialsSection.update({
-              where: { id: section.id },
-              data: {
-                title: section.title,
-                description: section.description
-              }
-            });
+      if (testimonialsSection && existingLandingPage.testimonialsSection) {
+        await prisma.testimonialsSection.update({
+          where: { id: existingLandingPage.testimonialsSection.id },
+          data: {
+            title: testimonialsSection.title,
+            description: testimonialsSection.description
           }
-        }
+        });
       }
 
-      // Handle faqSections - update existing ones
-      if (faqSections && Array.isArray(faqSections)) {
-        for (const section of faqSections) {
-          if (section.id) {
-            await prisma.fAQSection.update({
-              where: { id: section.id },
-              data: {
-                title: section.title,
-                description: section.description
-              }
-            });
+      if (faqSection && existingLandingPage.faqSection) {
+        await prisma.fAQSection.update({
+          where: { id: existingLandingPage.faqSection.id },
+          data: {
+            title: faqSection.title,
+            description: faqSection.description
           }
-        }
+        });
       }
 
       // Update the landing page with direct fields only

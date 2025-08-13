@@ -8,130 +8,149 @@ datasource db {
 }
 
 model LandingPage {
-  id                         String                      @id @default(uuid())
-  templateId                 String                     
-  businessName               String
-  githubUrl                  String?
-  serviceAreas               ServiceArea[]
-  socialLinks                SocialLink[]
-  images                     Images[]
-  heroSections               HeroSection[]
-  aboutSections              AboutSection[]
-  servicesSections           ServicesSection[]
-  gallerySections            GallerySection[]
-  testimonialsSections       TestimonialsSection[]
-  faqSections                FAQSection[]
-  serviceAreaSections        ServiceAreaSection[]
-  businessDetailsSections    BusinessDetailsSection[]
-  companyOverviewSections    CompanyOverviewSection[]
-  serviceHighlightsSections  ServiceHighlightsSection[]
-  preFooterSections          PreFooterSection[]
-  footerSections             FooterSection[]
-  theme                      Theme?
-  createdAt                  DateTime                    @default(now())
-  updatedAt                  DateTime                    @updatedAt
-  seoSettingsId              String?
-  businessContactId          String?
-  businessContact            BusinessContact?            @relation(fields: [businessContactId], references: [id])
-  seoSettings                SEOSettings?                @relation(fields: [seoSettingsId], references: [id])
+  id           String @id @default(uuid())
+  templateId   String
+  businessName String
+  githubUrl    String
+
+  // One-to-one section relationships (all required)
+  serviceAreaId              String @unique
+  socialLinkId               String @unique
+  imageId                    String @unique
+  heroSectionId              String @unique
+  aboutSectionId             String @unique
+  servicesSectionId          String @unique
+  gallerySectionId           String @unique
+  testimonialsSectionId      String @unique
+  faqSectionId               String @unique
+  serviceAreaSectionId       String @unique
+  businessDetailsSectionId   String @unique
+  companyOverviewSectionId   String @unique
+  serviceHighlightsSectionId String @unique
+  preFooterSectionId         String @unique
+  footerSectionId            String @unique
+
+  // Section relations
+  serviceArea              ServiceArea              @relation(fields: [serviceAreaId], references: [id])
+  socialLink               SocialLink               @relation(fields: [socialLinkId], references: [id])
+  image                    Images                   @relation(fields: [imageId], references: [id])
+  heroSection              HeroSection              @relation(fields: [heroSectionId], references: [id])
+  aboutSection             AboutSection             @relation(fields: [aboutSectionId], references: [id])
+  servicesSection          ServicesSection          @relation(fields: [servicesSectionId], references: [id])
+  gallerySection           GallerySection           @relation(fields: [gallerySectionId], references: [id])
+  testimonialsSection      TestimonialsSection      @relation(fields: [testimonialsSectionId], references: [id])
+  faqSection               FAQSection               @relation(fields: [faqSectionId], references: [id])
+  serviceAreaSection       ServiceAreaSection       @relation(fields: [serviceAreaSectionId], references: [id])
+  businessDetailsSection   BusinessDetailsSection   @relation(fields: [businessDetailsSectionId], references: [id])
+  companyOverviewSection   CompanyOverviewSection   @relation(fields: [companyOverviewSectionId], references: [id])
+  serviceHighlightsSection ServiceHighlightsSection @relation(fields: [serviceHighlightsSectionId], references: [id])
+  preFooterSection         PreFooterSection         @relation(fields: [preFooterSectionId], references: [id])
+  footerSection            FooterSection            @relation(fields: [footerSectionId], references: [id])
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  seoSettingsId     String
+  businessContactId String
+  themeId           String          @unique
+  theme             Theme           @relation(fields: [themeId], references: [id])
+  businessContact   BusinessContact @relation(fields: [businessContactId], references: [id])
+  seoSettings       SEOSettings     @relation(fields: [seoSettingsId], references: [id])
 }
 
 model SEOSettings {
-  id            String        @id @default(uuid())
-  title         String        @unique
-  description   String
-  keywords      String[]
-  favicon       String?       // image slot "favicon-01"
-  templates     LandingPage[]
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  keywords    String[]
+  favicon     String // image slot "favicon-01"
+  templates   LandingPage[]
 }
 
 model Images {
-  id         String      @id @default(uuid())
-  templateId String
-  imageId    String      @unique
-  title      String?
-  altText    String
-  image      String      // Assuming string URL/image reference
-  template   LandingPage @relation(fields: [templateId], references: [id])
+  id          String       @id @default(uuid())
+  imageId     String       @unique
+  title       String
+  altText     String
+  image       String // Assuming string URL/image reference
+  landingPage LandingPage?
 }
 
 model BusinessContact {
-  id               String            @id @default(uuid())
-  businessName     String
-  phone            String
-  emergencyPhone   String?
-  email            String
-  emergencyEmail   String?
-  street           String?
-  city             String?
-  state            String?
-  zipCode          String?
-  latitude         Float?
-  longitude        Float?
-  businessHours    BusinessHour[]
-  templates        LandingPage[]
+  id             String         @id @default(uuid())
+  businessName   String
+  phone          String
+  emergencyPhone String
+  email          String
+  emergencyEmail String
+  street         String
+  city           String
+  state          String
+  zipCode        String
+  latitude       Float
+  longitude      Float
+  businessHours  BusinessHour[]
+  templates      LandingPage[]
 }
 
 model BusinessHour {
   id                String          @id @default(uuid())
   day               String
-  hours             String?
+  hours             String
   isClosed          Boolean
   businessContactId String
   businessContact   BusinessContact @relation(fields: [businessContactId], references: [id])
 }
 
 model SocialLink {
-  id                String              @id @default(uuid())
-  platform          String
-  url               String
-  templates         LandingPage[]
-  preFooterSections PreFooterSection[]
+  id          String       @id @default(uuid())
+  platform    String
+  url         String
+  landingPage LandingPage?
 }
 
 model CtaButton {
-  id                        String                     @id @default(uuid())
-  label                     String
-  href                      String
-  services                  Service[]
-  galleryItems              GalleryItem[]
-  serviceAreas              ServiceArea[]
-  heroSections              HeroSection[]
-  aboutSections             AboutSection[]
-  servicesSections          ServicesSection[]
-  serviceAreaSections       ServiceAreaSection[]
-  companyOverviewSections   CompanyOverviewSection[]
+  id                      String                   @id @default(uuid())
+  label                   String
+  href                    String
+  services                Service[]
+  galleryItems            GalleryItem[]
+  serviceAreas            ServiceArea[]
+  heroSections            HeroSection[]
+  aboutSections           AboutSection[]
+  servicesSections        ServicesSection[]
+  serviceAreaSections     ServiceAreaSection[]
+  companyOverviewSections CompanyOverviewSection[]
 }
 
 model Service {
-  id              String           @id @default(uuid())
-  title           String
-  description     String?
-  features        String[]
-  ctaButtonId     String?
-  ctaButton       CtaButton?       @relation(fields: [ctaButtonId], references: [id])
+  id               String            @id @default(uuid())
+  title            String
+  description      String
+  features         String[]
+  ctaButtonId      String
+  ctaButton        CtaButton         @relation(fields: [ctaButtonId], references: [id])
   servicesSections ServicesSection[] @relation("ServicesSectionServices")
 }
 
 model GalleryItem {
-  id                  String                @id @default(uuid())
-  title               String
-  description         String?
-  image               String?               // Uses image slots "gallery-image-01" through "gallery-image-06"
-  ctaButtonId         String?
-  ctaButton           CtaButton?            @relation(fields: [ctaButtonId], references: [id])
-  category            String?
+  id                   String                @id @default(uuid())
+  title                String
+  description          String
+  image                String // Uses image slots "gallery-image-01" through "gallery-image-06"
+  ctaButtonId          String
+  ctaButton            CtaButton             @relation(fields: [ctaButtonId], references: [id])
+  category             String
   testimonialsSections TestimonialsSection[] @relation("TestimonialsSectionGalleryItems")
 }
 
 model Testimonial {
-  id                  String                @id @default(uuid())
-  name                String
-  role                String?
-  company             String?
-  industry            String?
-  text                String
-  image               String?               // Uses image slots "testimonial-avatar-01" through "testimonial-avatar-06"
+  id                   String                @id @default(uuid())
+  name                 String
+  role                 String
+  company              String
+  industry             String
+  text                 String
+  image                String // Uses image slots "testimonial-avatar-01" through "testimonial-avatar-06"
   testimonialsSections TestimonialsSection[] @relation("TestimonialsSectionTestimonials")
 }
 
@@ -139,20 +158,18 @@ model FAQItem {
   id          String       @id @default(uuid())
   question    String
   answer      String
-  category    String?
+  category    String
   faqSections FAQSection[] @relation("FAQSectionFAQItems")
 }
 
 model ServiceArea {
-  id                  String                @id @default(uuid())
-  city                String
-  region              String?
-  description         String?
-  ctaButtonId         String?
-  ctaButton           CtaButton?            @relation(fields: [ctaButtonId], references: [id])
-  serviceAreaSections ServiceAreaSection[]  @relation("ServiceAreaSectionServiceAreas")
-  footerServiceAreas  FooterServiceArea[]   @relation("FooterServiceAreaServiceAreas")
-  landingPages        LandingPage[]
+  id          String       @id @default(uuid())
+  city        String
+  region      String
+  description String
+  ctaButtonId String
+  ctaButton   CtaButton    @relation(fields: [ctaButtonId], references: [id])
+  landingPage LandingPage?
 }
 
 model Statistic {
@@ -163,159 +180,144 @@ model Statistic {
 }
 
 model FooterServiceArea {
-  id            String          @id @default(uuid())
-  region        String
-  services      String[]
+  id             String          @id @default(uuid())
+  region         String
+  services       String[]
   footerSections FooterSection[] @relation("FooterSectionServiceAreas")
-  serviceAreas  ServiceArea[]   @relation("FooterServiceAreaServiceAreas")
 }
 
 // Section Models
 model HeroSection {
-  id         String      @id @default(uuid())
-  title      String
-  subtitle   String?
-  description String?
-  ctaButtons CtaButton[]
-  templateId String
-  template   LandingPage @relation(fields: [templateId], references: [id])
+  id          String       @id @default(uuid())
+  title       String
+  subtitle    String
+  description String
+  ctaButtons  CtaButton[]
+  landingPage LandingPage?
 }
 
 model AboutSection {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   description String
   features    String[]
-  ctaButtonId String?
-  ctaButton   CtaButton?  @relation(fields: [ctaButtonId], references: [id])
-  templateId  String
-  template    LandingPage @relation(fields: [templateId], references: [id])
+  ctaButtonId String
+  ctaButton   CtaButton    @relation(fields: [ctaButtonId], references: [id])
+  landingPage LandingPage?
 }
 
 model ServicesSection {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
-  description String?
-  services    Service[]   @relation("ServicesSectionServices")
-  ctaButtonId String?
-  ctaButton   CtaButton?  @relation(fields: [ctaButtonId], references: [id])
-  templateId  String
-  template    LandingPage @relation(fields: [templateId], references: [id])
+  description String
+  services    Service[]    @relation("ServicesSectionServices")
+  ctaButtonId String
+  ctaButton   CtaButton    @relation(fields: [ctaButtonId], references: [id])
+  landingPage LandingPage?
 }
 
 model GallerySection {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
-  description String?
-  templateId  String
-  template    LandingPage @relation(fields: [templateId], references: [id])
+  description String
+  landingPage LandingPage?
 }
 
 model TestimonialsSection {
   id           String        @id @default(uuid())
   title        String
-  description  String?
+  description  String
   testimonials Testimonial[] @relation("TestimonialsSectionTestimonials")
   galleryItems GalleryItem[] @relation("TestimonialsSectionGalleryItems")
-  templateId   String
-  template     LandingPage   @relation(fields: [templateId], references: [id])
+  landingPage  LandingPage?
 }
 
 model FAQSection {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
-  description String?
-  faqs        FAQItem[]   @relation("FAQSectionFAQItems")
-  templateId  String
-  template    LandingPage @relation(fields: [templateId], references: [id])
+  description String
+  faqs        FAQItem[]    @relation("FAQSectionFAQItems")
+  landingPage LandingPage?
 }
 
 model ServiceAreaSection {
-  id           String        @id @default(uuid())
-  title        String
-  description  String?
-  serviceAreas ServiceArea[] @relation("ServiceAreaSectionServiceAreas")
-  ctaButtonId  String?
-  ctaButton    CtaButton?    @relation(fields: [ctaButtonId], references: [id])
-  templateId   String
-  template     LandingPage   @relation(fields: [templateId], references: [id])
+  id          String       @id @default(uuid())
+  title       String
+  description String
+  ctaButtonId String
+  ctaButton   CtaButton    @relation(fields: [ctaButtonId], references: [id])
+  landingPage LandingPage?
 }
 
 model BusinessDetailsSection {
-  id          String                        @id @default(uuid())
-  title       String?
+  id          String                     @id @default(uuid())
+  title       String
   sections    BusinessDetailSubSection[]
   contactForm BusinessContactForm?
   map         MapSettings?
-  templateId  String
-  template    LandingPage                   @relation(fields: [templateId], references: [id])
+  landingPage LandingPage?
 }
 
 model BusinessDetailSubSection {
-  id                       String                  @id @default(uuid())
-  title                    String?
-  description              String?
+  id                       String                 @id @default(uuid())
+  title                    String
+  description              String
   ctaTitle                 String
   businessDetailsSectionId String
   businessDetailsSection   BusinessDetailsSection @relation(fields: [businessDetailsSectionId], references: [id])
 }
 
 model BusinessContactForm {
-  id                       String                  @id @default(uuid())
-  title                    String?
-  businessDetailsSectionId String                  @unique
+  id                       String                 @id @default(uuid())
+  title                    String
+  businessDetailsSectionId String                 @unique
   businessDetailsSection   BusinessDetailsSection @relation(fields: [businessDetailsSectionId], references: [id])
 }
 
 model MapSettings {
-  id                       String                  @id @default(uuid())
-  latitude                 Float?
-  longitude                Float?
-  locationName             String?
-  businessDetailsSectionId String                  @unique
+  id                       String                 @id @default(uuid())
+  latitude                 Float
+  longitude                Float
+  locationName             String
+  businessDetailsSectionId String                 @unique
   businessDetailsSection   BusinessDetailsSection @relation(fields: [businessDetailsSectionId], references: [id])
 }
 
 model CompanyOverviewSection {
-  id          String                        @id @default(uuid())
-  title       String?
+  id          String                      @id @default(uuid())
+  title       String
   sections    CompanyOverviewSubSection[]
-  ctaButtonId String?
-  ctaButton   CtaButton?                    @relation(fields: [ctaButtonId], references: [id])
-  templateId  String
-  template    LandingPage                   @relation(fields: [templateId], references: [id])
+  ctaButtonId String
+  ctaButton   CtaButton                   @relation(fields: [ctaButtonId], references: [id])
+  landingPage LandingPage?
 }
 
 model CompanyOverviewSubSection {
-  id                       String                  @id @default(uuid())
-  title                    String?
-  description              String?
+  id                       String                 @id @default(uuid())
+  title                    String
+  description              String
   companyOverviewSectionId String
   companyOverviewSection   CompanyOverviewSection @relation(fields: [companyOverviewSectionId], references: [id])
 }
 
 model ServiceHighlightsSection {
-  id         String      @id @default(uuid())
-  title      String
-  statistics Statistic[] @relation("ServiceHighlightsSectionStatistics")
-  templateId String
-  template   LandingPage @relation(fields: [templateId], references: [id])
+  id          String       @id @default(uuid())
+  title       String
+  statistics  Statistic[]  @relation("ServiceHighlightsSectionStatistics")
+  landingPage LandingPage?
 }
 
 model PreFooterSection {
-  id          String        @id @default(uuid())
-  description String?
-  socialLinks SocialLink[]
-  templateId  String
-  template    LandingPage   @relation(fields: [templateId], references: [id])
+  id          String       @id @default(uuid())
+  description String
+  landingPage LandingPage?
 }
 
 model FooterSection {
   id           String              @id @default(uuid())
   serviceAreas FooterServiceArea[] @relation("FooterSectionServiceAreas")
-  copyright    String?
-  templateId   String
-  template     LandingPage         @relation(fields: [templateId], references: [id])
+  copyright    String
+  landingPage  LandingPage?
 }
 
 // Webhook Models
@@ -332,13 +334,13 @@ model WebhookConfig {
 model WebhookLog {
   id           String   @id @default(uuid())
   webhookId    String
-  event        String   // "created" or "updated"
+  event        String // "created" or "updated"
   templateId   String
-  githubUrl    String?
+  githubUrl    String
   payload      Json
-  status       String   // "success", "failed", "pending"
-  statusCode   Int?
-  errorMessage String?
+  status       String // "success", "failed", "pending"
+  statusCode   Int
+  errorMessage String
   sentAt       DateTime @default(now())
   retryCount   Int      @default(0)
 }
@@ -346,8 +348,7 @@ model WebhookLog {
 // Embedded Object Types converted to separate models
 model Theme {
   id             String       @id @default(uuid())
-  primaryColor   String?
-  secondaryColor String?
-  landingPageId  String       @unique
-  landingPage    LandingPage  @relation(fields: [landingPageId], references: [id])
+  primaryColor   String
+  secondaryColor String
+  landingPage    LandingPage?
 }

@@ -42,15 +42,15 @@ const Label: React.FC<{ children: React.ReactNode; required?: boolean }> = ({
   children, 
   required 
 }) => (
-  <label className="block text-sm font-medium text-gray-700 mb-1">
+  <label className="block text-sm font-medium text-slate-200 mb-2">
     {children}
-    {required && <span className="text-red-500 ml-1">*</span>}
+    {required && <span className="text-red-400 ml-1">*</span>}
   </label>
 );
 
 const ErrorMessage: React.FC<{ error?: string }> = ({ error }) => {
   if (!error) return null;
-  return <p className="mt-1 text-sm text-red-600">{error}</p>;
+  return <p className="mt-1 text-sm text-red-400">{error}</p>;
 };
 
 // Text Input Component
@@ -72,8 +72,8 @@ export const TextInput: React.FC<TextInputProps> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-          error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''
+        className={`w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+          error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : ''
         }`}
       />
       <ErrorMessage error={error} />
@@ -100,8 +100,8 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
-        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical ${
-          error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''
+        className={`w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical ${
+          error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : ''
         }`}
       />
       <ErrorMessage error={error} />
@@ -125,8 +125,8 @@ export const SelectInput: React.FC<SelectInputProps> = ({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-          error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''
+        className={`w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+          error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : ''
         }`}
       >
         <option value="">Select {label}</option>
@@ -156,9 +156,9 @@ export const CheckboxInput: React.FC<CheckboxInputProps> = ({
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-600 bg-slate-700 rounded"
         />
-        <label className="ml-2 block text-sm text-gray-700">
+        <label className="ml-2 block text-sm text-slate-200">
           {label}
         </label>
       </div>
@@ -184,15 +184,15 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
           type="color"
           value={value || '#000000'}
           onChange={(e) => onChange(e.target.value)}
-          className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
+          className="h-10 w-20 border border-slate-600 bg-slate-700 rounded cursor-pointer"
         />
         <input
           type="text"
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
           placeholder="#000000"
-          className={`flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-            error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''
+          className={`flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+            error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : ''
           }`}
         />
       </div>
@@ -222,9 +222,9 @@ export const Button: React.FC<{
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors';
   
   const variants = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500',
-    secondary: 'bg-gray-600 hover:bg-gray-700 text-white focus:ring-gray-500',
-    outline: 'border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 focus:ring-blue-500',
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 shadow-lg hover:shadow-xl',
+    secondary: 'bg-slate-600 hover:bg-slate-700 text-white focus:ring-slate-500',
+    outline: 'border border-slate-600 bg-slate-700 hover:bg-slate-600 text-slate-100 focus:ring-blue-500',
     danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500'
   };
   
@@ -254,7 +254,7 @@ export const Card: React.FC<{
   className?: string;
 }> = ({ children, className = '' }) => {
   return (
-    <div className={`bg-white shadow rounded-lg border border-gray-200 ${className}`}>
+    <div className={`bg-slate-800 shadow-xl rounded-xl border border-slate-700 ${className}`}>
       {children}
     </div>
   );

@@ -57,11 +57,11 @@ class WebhookService {
           webhookId: webhook.id,
           event: payload.event,
           templateId: payload.templateId,
-          githubUrl: payload.githubUrl,
+          githubUrl: payload.githubUrl || '',
           payload: payload as any,
           status: response.ok ? 'success' : 'failed',
           statusCode: response.status,
-          errorMessage: response.ok ? null : await response.text(),
+          errorMessage: response.ok ? '' : await response.text(),
           retryCount: 0
         }
       });
@@ -72,10 +72,10 @@ class WebhookService {
           webhookId: webhook.id,
           event: payload.event,
           templateId: payload.templateId,
-          githubUrl: payload.githubUrl,
+          githubUrl: payload.githubUrl || '',
           payload: payload as any,
           status: 'failed',
-          statusCode: null,
+          statusCode: 0,
           errorMessage: error instanceof Error ? error.message : 'Unknown error',
           retryCount: 0
         }

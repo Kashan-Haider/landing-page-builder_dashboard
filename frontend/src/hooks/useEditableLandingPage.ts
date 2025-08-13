@@ -1,6 +1,36 @@
 // hooks/useEditableLandingPage.ts
 import { useState, useCallback } from 'react';
-import { LandingPage } from '../components/LandingPageDashboard';
+
+// Define LandingPage interface locally since we can't import from the dashboard component
+interface LandingPage {
+  id: string;
+  templateId: string;
+  businessName: string;
+  githubUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+  seoSettingsId?: string;
+  businessContactId?: string;
+  businessContact?: any;
+  seoSettings?: any;
+  theme?: any;
+  // One-to-one section relationships
+  serviceArea?: any;
+  socialLink?: any;
+  image?: any;
+  heroSection?: any;
+  aboutSection?: any;
+  servicesSection?: any;
+  gallerySection?: any;
+  testimonialsSection?: any;
+  faqSection?: any;
+  serviceAreaSection?: any;
+  businessDetailsSection?: any;
+  companyOverviewSection?: any;
+  serviceHighlightsSection?: any;
+  preFooterSection?: any;
+  footerSection?: any;
+}
 
 interface UseEditableLandingPageProps {
   initialLandingPage: LandingPage;
@@ -27,14 +57,14 @@ export const useEditableLandingPage = ({
   const hasUnsavedChanges = JSON.stringify(landingPage) !== JSON.stringify(originalLandingPage);
 
   const updateField = useCallback((field: string, value: any) => {
-    setLandingPage(prev => ({
+    setLandingPage((prev: LandingPage) => ({
       ...prev,
       [field]: value
     }));
   }, []);
 
   const updateNestedField = useCallback((parent: string, index: number, field: string, value: any) => {
-    setLandingPage(prev => {
+    setLandingPage((prev: LandingPage) => {
       const updatedParent = [...(prev as any)[parent]];
       updatedParent[index] = {
         ...updatedParent[index],
@@ -49,14 +79,14 @@ export const useEditableLandingPage = ({
   }, []);
 
   const addNewItem = useCallback((section: string, item: any) => {
-    setLandingPage(prev => ({
+    setLandingPage((prev: LandingPage) => ({
       ...prev,
       [section]: [...(prev as any)[section], item]
     }));
   }, []);
 
   const removeItem = useCallback((section: string, index: number) => {
-    setLandingPage(prev => {
+    setLandingPage((prev: LandingPage) => {
       const updatedSection = [...(prev as any)[section]];
       updatedSection.splice(index, 1);
       return {

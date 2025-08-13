@@ -97,9 +97,10 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
   value = [],
   itemDefinition,
   onChange,
-  path,
+  path: _path, // Path parameter for future extensibility
   error
 }) => {
+  // Note: _path is reserved for future use when implementing nested field paths
   const addItem = () => {
     const newItem = Object.keys(itemDefinition).reduce((acc, key) => {
       const fieldDef = itemDefinition[key];

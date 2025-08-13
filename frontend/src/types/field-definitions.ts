@@ -337,6 +337,244 @@ export const LANDING_PAGE_FIELDS: Record<string, FieldDefinition> = {
         validation: z.string().optional()
       }
     }
+  },
+
+  // One-to-one Hero Section
+  'heroSection.title': {
+    key: 'title',
+    label: 'Hero Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1).max(200)
+  },
+  'heroSection.subtitle': {
+    key: 'subtitle',
+    label: 'Hero Subtitle',
+    type: 'text',
+    validation: z.string().max(300).optional()
+  },
+  'heroSection.description': {
+    key: 'description',
+    label: 'Hero Description',
+    type: 'textarea',
+    validation: z.string().optional()
+  },
+
+  // One-to-one About Section
+  'aboutSection.title': {
+    key: 'title',
+    label: 'About Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'aboutSection.description': {
+    key: 'description',
+    label: 'About Description',
+    type: 'textarea',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'aboutSection.features': {
+    key: 'features',
+    label: 'Features',
+    type: 'array-text'
+  },
+
+  // One-to-one Services Section
+  'servicesSection.title': {
+    key: 'title',
+    label: 'Services Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'servicesSection.description': {
+    key: 'description',
+    label: 'Services Description',
+    type: 'textarea',
+    validation: z.string().optional()
+  },
+
+  // One-to-one Gallery Section
+  'gallerySection.title': {
+    key: 'title',
+    label: 'Gallery Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'gallerySection.description': {
+    key: 'description',
+    label: 'Gallery Description',
+    type: 'textarea',
+    validation: z.string().optional()
+  },
+
+  // One-to-one Testimonials Section
+  'testimonialsSection.title': {
+    key: 'title',
+    label: 'Testimonials Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'testimonialsSection.description': {
+    key: 'description',
+    label: 'Testimonials Description',
+    type: 'textarea',
+    validation: z.string().optional()
+  },
+
+  // One-to-one FAQ Section
+  'faqSection.title': {
+    key: 'title',
+    label: 'FAQ Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'faqSection.description': {
+    key: 'description',
+    label: 'FAQ Description',
+    type: 'textarea',
+    validation: z.string().optional()
+  },
+
+  // One-to-one Service Area Section
+  'serviceAreaSection.title': {
+    key: 'title',
+    label: 'Service Area Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'serviceAreaSection.description': {
+    key: 'description',
+    label: 'Service Area Description',
+    type: 'textarea',
+    validation: z.string().optional()
+  },
+
+  // One-to-one Business Details Section
+  'businessDetailsSection.title': {
+    key: 'title',
+    label: 'Business Details Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+
+  // One-to-one Company Overview Section
+  'companyOverviewSection.title': {
+    key: 'title',
+    label: 'Company Overview Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+
+  // One-to-one Service Highlights Section
+  'serviceHighlightsSection.title': {
+    key: 'title',
+    label: 'Service Highlights Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+
+  // One-to-one Pre-Footer Section
+  'preFooterSection.description': {
+    key: 'description',
+    label: 'Pre-Footer Description',
+    type: 'textarea',
+    required: true,
+    validation: z.string().min(1)
+  },
+
+  // One-to-one Footer Section
+  'footerSection.copyright': {
+    key: 'copyright',
+    label: 'Copyright Text',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+
+  // Service Area fields
+  'serviceArea.city': {
+    key: 'city',
+    label: 'City',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'serviceArea.region': {
+    key: 'region',
+    label: 'Region',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'serviceArea.description': {
+    key: 'description',
+    label: 'Service Area Description',
+    type: 'textarea',
+    required: true,
+    validation: z.string().min(1)
+  },
+
+  // Social Link fields
+  'socialLink.platform': {
+    key: 'platform',
+    label: 'Platform',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'facebook', label: 'Facebook' },
+      { value: 'twitter', label: 'Twitter' },
+      { value: 'instagram', label: 'Instagram' },
+      { value: 'linkedin', label: 'LinkedIn' },
+      { value: 'youtube', label: 'YouTube' },
+      { value: 'tiktok', label: 'TikTok' }
+    ]
+  },
+  'socialLink.url': {
+    key: 'url',
+    label: 'Social Media URL',
+    type: 'url',
+    required: true,
+    validation: z.string().url()
+  },
+
+  // Image fields
+  'image.imageId': {
+    key: 'imageId',
+    label: 'Image ID',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'image.title': {
+    key: 'title',
+    label: 'Image Title',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'image.altText': {
+    key: 'altText',
+    label: 'Alt Text',
+    type: 'text',
+    required: true,
+    validation: z.string().min(1)
+  },
+  'image.image': {
+    key: 'image',
+    label: 'Image URL',
+    type: 'image',
+    required: true,
+    validation: z.string().url()
   }
 };
 
