@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",          // Use modern JavaScript output
+      "module": "CommonJS",        // Use CommonJS module system (compatible with Node.js)
+      "strict": true,              // Enable strict type-checking options
+      "esModuleInterop": true,     // Allow default imports from CommonJS modules
+      "skipLibCheck": true,        // Skip type checking of declaration files for faster builds
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["./**/*.ts"]       // Include all TypeScript files in this directory and subdirectories
+  }
+  
