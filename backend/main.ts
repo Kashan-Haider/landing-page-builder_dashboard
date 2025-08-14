@@ -4,6 +4,7 @@ import cors from 'cors';
 import landingPageRoutes from './routes/landingPageRoutes';
 import webhookRoutes from './routes/webhookRoutes';
 import { ApiResponse } from './types';
+import { handleServiceError } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -52,16 +53,13 @@ app.use('*', (req, res) => {
   res.status(404).json(response);
 });
 
+// Global error handler - must be last middleware
 app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error('Error:', error);
+  console.error('Unhandled error:', error);
   
-  const response: ApiResponse = {
-    success: false,
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
-  };
-  
-  res.status(500).json(response);
+  // Use consistent error handling
+  const message = process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong';
+  handleServiceError(error, res, 'Internal server error');
 });
 
 process.on('SIGTERM', () => {

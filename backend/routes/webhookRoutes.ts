@@ -1,77 +1,37 @@
 import express from 'express';
 import { webhookService } from '../services/webhookService';
-import { ApiResponse, WebhookConfig } from '../types';
+import { WebhookConfig } from '../types';
+import { 
+  asyncHandler, 
+  sendSuccess, 
+  handleServiceError 
+} from '../middleware/errorHandler';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  try {
-    const webhook = await webhookService.createWebhook(req.body);
-    
-    res.status(201).json({
-      success: true,
-      data: webhook
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: 'Failed to create webhook',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+// Create new webhook
+router.post('/', asyncHandler(async (req, res) => {
+  const webhook = await webhookService.createWebhook(req.body);
+  sendSuccess(res, webhook, 'Webhook created successfully', 201);
+}));
 
-router.get('/', async (req, res) => {
-  try {
-    const webhooks = await webhookService.getWebhooks();
-    
-    res.json({
-      success: true,
-      data: webhooks
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch webhooks',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+// Get all webhooks
+router.get('/', asyncHandler(async (req, res) => {
+  const webhooks = await webhookService.getWebhooks();
+  sendSuccess(res, webhooks, 'Webhooks fetched successfully');
+}));
 
-router.patch('/:id/toggle', async (req, res) => {
-  try {
-    const webhook = await webhookService.toggleWebhook(req.params.id);
-    
-    res.json({
-      success: true,
-      data: webhook
-    });
-  } catch (error) {
-    const statusCode = error instanceof Error && error.message.includes('not found') ? 404 : 500;
-    res.status(statusCode).json({
-      success: false,
-      error: 'Failed to toggle webhook',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+// Toggle webhook active status
+router.patch('/:id/toggle', asyncHandler(async (req, res) => {
+  const webhook = await webhookService.toggleWebhook(req.params.id);
+  sendSuccess(res, webhook, 'Webhook status updated successfully');
+}));
 
-router.get('/logs', async (req, res) => {
-  try {
-    const webhookId = req.query.webhookId as string;
-    const logs = await webhookService.getWebhookLogs(webhookId);
-    
-    res.json({
-      success: true,
-      data: logs
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch webhook logs',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+// Get webhook logs
+router.get('/logs', asyncHandler(async (req, res) => {
+  const webhookId = req.query.webhookId as string;
+  const logs = await webhookService.getWebhookLogs(webhookId);
+  sendSuccess(res, logs, 'Webhook logs fetched successfully');
+}));
 
 export default router;

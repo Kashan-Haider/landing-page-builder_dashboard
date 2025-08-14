@@ -1,110 +1,51 @@
 import express from 'express';
 import { landingPageService } from '../services/landingPageService';
-import { ApiResponse, CreateLandingPageData } from '../types';
+import { CreateLandingPageData } from '../types';
+import { 
+  asyncHandler, 
+  sendSuccess, 
+  handleServiceError 
+} from '../middleware/errorHandler';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  try {
-    const landingPages = await landingPageService.getAllLandingPages();
-    const response: ApiResponse = {
-      success: true,
-      data: landingPages,
-      message: 'Landing pages fetched successfully'
-    };
-    res.json(response);
-  } catch (error) {
-    const response: ApiResponse = {
-      success: false,
-      error: 'Failed to fetch landing pages',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    };
-    res.status(500).json(response);
-  }
-});
+// Get all landing pages
+router.get('/', asyncHandler(async (req, res) => {
+  const landingPages = await landingPageService.getAllLandingPages();
+  sendSuccess(res, landingPages, 'Landing pages fetched successfully');
+}));
 
-router.get('/:id', async (req, res) => {
-  try {
-    const landingPage = await landingPageService.getLandingPageById(req.params.id);
-    if (!landingPage) {
-      return res.status(404).json({
-        success: false,
-        error: 'Landing page not found'
-      });
-    }
-    
-    res.json({
-      success: true,
-      data: landingPage
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch landing page',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
+// Get landing page by ID
+router.get('/:id', asyncHandler(async (req, res) => {
+  const landingPage = await landingPageService.getLandingPageById(req.params.id);
+  
+  if (!landingPage) {
+    return handleServiceError(new Error('Landing page not found'), res, 'Failed to fetch landing page');
   }
-});
+  
+  sendSuccess(res, landingPage, 'Landing page fetched successfully');
+}));
 
-router.post('/', async (req, res) => {
-  try {
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({
-        success: false,
-        error: 'Request body is empty'
-      });
-    }
-    
-    const landingPage = await landingPageService.createLandingPage(req.body);
-    
-    res.status(201).json({
-      success: true,
-      data: landingPage
-    });
-  } catch (error) {
-    const statusCode = error instanceof Error && error.message.includes('required') ? 400 : 500;
-    res.status(statusCode).json({
-      success: false,
-      error: 'Failed to create landing page',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
+// Create new landing page
+router.post('/', asyncHandler(async (req, res) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return handleServiceError(new Error('Request body is empty'), res, 'Failed to create landing page');
   }
-});
+  
+  const landingPage = await landingPageService.createLandingPage(req.body);
+  sendSuccess(res, landingPage, 'Landing page created successfully', 201);
+}));
 
-router.put('/:id', async (req, res) => {
-  try {
-    const landingPage = await landingPageService.updateLandingPage(req.params.id, req.body);
-    
-    res.json({
-      success: true,
-      data: landingPage
-    });
-  } catch (error) {
-    const statusCode = error instanceof Error && error.message.includes('not found') ? 404 : 500;
-    res.status(statusCode).json({
-      success: false,
-      error: 'Failed to update landing page',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+// Update landing page
+router.put('/:id', asyncHandler(async (req, res) => {
+  const landingPage = await landingPageService.updateLandingPage(req.params.id, req.body);
+  sendSuccess(res, landingPage, 'Landing page updated successfully');
+}));
 
-router.delete('/:id', async (req, res) => {
-  try {
-    await landingPageService.deleteLandingPage(req.params.id);
-    
-    res.json({
-      success: true,
-      message: 'Landing page deleted successfully'
-    });
-  } catch (error) {
-    const statusCode = error instanceof Error && error.message.includes('not found') ? 404 : 500;
-    res.status(statusCode).json({
-      success: false,
-      error: 'Failed to delete landing page',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+// Delete landing page
+router.delete('/:id', asyncHandler(async (req, res) => {
+  await landingPageService.deleteLandingPage(req.params.id);
+  sendSuccess(res, null, 'Landing page deleted successfully');
+}));
 
 export default router;
