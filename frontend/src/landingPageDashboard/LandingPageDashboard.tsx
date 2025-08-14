@@ -667,7 +667,7 @@ const Dashboard: React.FC = () => {
                                     Platforms ({socialLink.socialPlatforms.length})
                                   </label>
                                   <div className="space-y-3">
-                                    {socialLink.socialPlatforms.map((platform: any, index: number) => (
+                                    {socialLink.socialPlatforms.map((platform: any) => (
                                       <div
                                         key={platform.id}
                                         className="p-3 bg-slate-600 border border-slate-500 rounded-lg"
