@@ -6,8 +6,19 @@ import {
   sendSuccess, 
   handleServiceError 
 } from '../middleware/errorHandler';
+import { validateBody } from '../middleware/validation';
+import { 
+  createLandingPageSchema, 
+  updateLandingPageSchema 
+} from '../validation/schemas';
+import { z } from 'zod';
 
 const router = express.Router();
+
+// Parameter validation schema
+const idParamsSchema = z.object({
+  id: z.string().min(1, 'ID is required')
+});
 
 // Get all landing pages
 router.get('/', asyncHandler(async (req, res) => {
@@ -27,20 +38,22 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 // Create new landing page
-router.post('/', asyncHandler(async (req, res) => {
-  if (!req.body || Object.keys(req.body).length === 0) {
-    return handleServiceError(new Error('Request body is empty'), res, 'Failed to create landing page');
-  }
-  
-  const landingPage = await landingPageService.createLandingPage(req.body);
-  sendSuccess(res, landingPage, 'Landing page created successfully', 201);
-}));
+router.post('/', 
+  validateBody(createLandingPageSchema),
+  asyncHandler(async (req, res) => {
+    const landingPage = await landingPageService.createLandingPage(req.body);
+    sendSuccess(res, landingPage, 'Landing page created successfully', 201);
+  })
+);
 
 // Update landing page
-router.put('/:id', asyncHandler(async (req, res) => {
-  const landingPage = await landingPageService.updateLandingPage(req.params.id, req.body);
-  sendSuccess(res, landingPage, 'Landing page updated successfully');
-}));
+router.put('/:id',
+  validateBody(updateLandingPageSchema),
+  asyncHandler(async (req, res) => {
+    const landingPage = await landingPageService.updateLandingPage(req.params.id, req.body);
+    sendSuccess(res, landingPage, 'Landing page updated successfully');
+  })
+);
 
 // Delete landing page
 router.delete('/:id', asyncHandler(async (req, res) => {

@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { CreateLandingPageData } from '../types';
 import { webhookService } from './webhookService';
+import type { CreateLandingPageInput } from '../validation/schemas';
 import { v4 as uuidv4 } from 'uuid';
 
 const prisma = new PrismaClient();
@@ -35,15 +36,7 @@ const FULL_LANDING_PAGE_INCLUDES = {
   FooterSection: true
 };
 
-// Required sections that must be present in the data
-const REQUIRED_SECTIONS = [
-  'serviceArea', 'socialLink', 'image', 'heroSection', 'aboutSection',
-  'servicesSection', 'gallerySection', 'testimonialsSection', 'faqSection',
-  'serviceAreaSection', 'businessDetailsSection', 'companyOverviewSection',
-  'serviceHighlightsSection', 'preFooterSection', 'footerSection'
-];
-
-// Default CTA button configurations
+// Default CTA button configurations (create once and reuse)
 const DEFAULT_CTA_BUTTONS = [
   { label: "View Service Area", href: "/service-areas" },
   { label: "Learn More About Us", href: "/about" },
@@ -53,236 +46,45 @@ const DEFAULT_CTA_BUTTONS = [
 ];
 
 /**
- * Validates that all required data is present for creating a landing page
+ * Get or create default CTA buttons (reuse existing ones)
  */
-function validateLandingPageData(data: any): void {
-  if (!data.templateId || !data.businessName) {
-    throw new Error('templateId and businessName are required');
+async function getOrCreateCtaButtons() {
+  const existingButtons = await prisma.ctaButton.findMany({
+    where: {
+      label: { in: DEFAULT_CTA_BUTTONS.map(btn => btn.label) }
+    }
+  });
+
+  // If we have all buttons, return them
+  if (existingButtons.length === DEFAULT_CTA_BUTTONS.length) {
+    return {
+      serviceArea: existingButtons.find(b => b.label === "View Service Area")!.id,
+      about: existingButtons.find(b => b.label === "Learn More About Us")!.id,
+      services: existingButtons.find(b => b.label === "View All Services")!.id,
+      serviceAreaSection: existingButtons.find(b => b.label === "Contact Local Office")!.id,
+      companyOverview: existingButtons.find(b => b.label === "Get Started")!.id
+    };
   }
 
-  const missingSections = REQUIRED_SECTIONS.filter(section => !data[section]);
-  if (missingSections.length > 0) {
-    throw new Error(`Missing required sections: ${missingSections.join(', ')}`);
-  }
-}
+  // Create missing buttons
+  const missingButtons = DEFAULT_CTA_BUTTONS.filter(
+    btn => !existingButtons.some(existing => existing.label === btn.label)
+  );
 
-/**
- * Creates or retrieves business contact, SEO settings, and theme
- */
-async function setupBasicEntities(data: any) {
-  const results = {
-    businessContactId: data.businessContactId,
-    seoSettingsId: data.seoSettingsId,
-    themeId: data.themeId
-  };
-
-  // Create business contact if not provided
-  if (!results.businessContactId && data.businessContact) {
-    const businessHours = data.businessContact.businessHours || [];
-    const { businessHours: _, ...contactData } = data.businessContact;
-
-    const contact = await prisma.businessContact.create({
-      data: {
-        id: uuidv4(),
-        ...contactData,
-        BusinessHour: {
-          create: businessHours.map((hour: any) => ({ id: uuidv4(), ...hour }))
-        }
-      }
-    });
-    results.businessContactId = contact.id;
-  }
-
-  // Create SEO settings if not provided
-  if (!results.seoSettingsId && data.seoSettings) {
-    const seo = await prisma.sEOSettings.create({
-      data: { id: uuidv4(), ...data.seoSettings }
-    });
-    results.seoSettingsId = seo.id;
-  }
-
-  // Create theme if not provided
-  if (!results.themeId && data.theme) {
-    const themeData = data.theme.create || data.theme;
-    const theme = await prisma.theme.create({
-      data: { id: uuidv4(), ...themeData }
-    });
-    results.themeId = theme.id;
-  }
-
-  // Validate that we have all required entities
-  if (!results.businessContactId || !results.seoSettingsId || !results.themeId) {
-    throw new Error('businessContact, seoSettings, and theme are required');
-  }
-
-  return results;
-}
-
-/**
- * Creates the default CTA buttons for the landing page
- */
-async function createCtaButtons() {
-  const buttons = await Promise.all(
-    DEFAULT_CTA_BUTTONS.map(button => 
-      prisma.ctaButton.create({
-        data: { id: uuidv4(), ...button }
-      })
+  const newButtons = await Promise.all(
+    missingButtons.map(button => 
+      prisma.ctaButton.create({ data: { id: uuidv4(), ...button } })
     )
   );
 
-  return {
-    serviceArea: buttons[0].id,
-    about: buttons[1].id,
-    services: buttons[2].id,
-    serviceAreaSection: buttons[3].id,
-    companyOverview: buttons[4].id
-  };
-}
-
-/**
- * Creates a service area with CTA button
- */
-async function createServiceArea(serviceAreaData: any, ctaButtonId: string) {
-  return prisma.serviceArea.create({
-    data: {
-      id: uuidv4(),
-      city: serviceAreaData.city,
-      region: serviceAreaData.region,
-      description: serviceAreaData.description,
-      ctaButtonId
-    }
-  });
-}
-
-/**
- * Creates social links with platforms
- */
-async function createSocialLink(socialLinkData: any) {
-  return prisma.socialLink.create({
-    data: {
-      id: uuidv4(),
-      name: socialLinkData.name || 'Social Links',
-      socialPlatforms: socialLinkData.socialPlatforms ? {
-        create: socialLinkData.socialPlatforms.map((platform: any) => ({
-          id: uuidv4(),
-          platform: platform.platform,
-          url: platform.url
-        }))
-      } : undefined
-    }
-  });
-}
-
-/**
- * Creates image pool with images
- */
-async function createImagePool(imageData: any) {
-  const images = imageData.images || [imageData];
+  const allButtons = [...existingButtons, ...newButtons];
   
-  return prisma.imagesPool.create({
-    data: {
-      id: uuidv4(),
-      name: imageData.name || 'Landing Page Images',
-      description: imageData.description || 'Images for this landing page',
-      updatedAt: new Date(),
-      Image: {
-        create: images.map((img: any) => ({
-          id: uuidv4(),
-          imageId: img.imageId,
-          title: img.title,
-          altText: img.altText,
-          imageUrl: img.imageUrl || img.image,
-          category: img.category || 'hero',
-          description: img.description,
-          updatedAt: new Date()
-        }))
-      }
-    }
-  });
-}
-
-/**
- * Creates all page sections with their respective CTA buttons
- */
-async function createPageSections(data: any, ctaButtonIds: any) {
-  const {
-    heroSection, aboutSection, servicesSection, gallerySection,
-    testimonialsSection, faqSection, serviceAreaSection,
-    businessDetailsSection, companyOverviewSection,
-    serviceHighlightsSection, preFooterSection, footerSection
-  } = data;
-
-  // Create sections that need CTA buttons
-  const sectionsWithCta = await Promise.all([
-    prisma.heroSection.create({
-      data: { id: uuidv4(), ...heroSection }
-    }),
-    prisma.aboutSection.create({
-      data: {
-        id: uuidv4(),
-        ...aboutSection,
-        features: aboutSection.features || [],
-        ctaButtonId: ctaButtonIds.about
-      }
-    }),
-    prisma.servicesSection.create({
-      data: {
-        id: uuidv4(),
-        ...servicesSection,
-        ctaButtonId: ctaButtonIds.services
-      }
-    }),
-    prisma.serviceAreaSection.create({
-      data: {
-        id: uuidv4(),
-        ...serviceAreaSection,
-        ctaButtonId: ctaButtonIds.serviceAreaSection
-      }
-    }),
-    prisma.companyOverviewSection.create({
-      data: {
-        id: uuidv4(),
-        title: companyOverviewSection.title,
-        CompanyOverviewSubSection: companyOverviewSection.sections ? {
-          create: companyOverviewSection.sections.map((section: any) => ({ id: uuidv4(), ...section }))
-        } : undefined,
-        ctaButtonId: ctaButtonIds.companyOverview
-      }
-    })
-  ]);
-
-  // Create simple sections without CTA buttons
-  const simpleSections = await Promise.all([
-    prisma.gallerySection.create({ data: { id: uuidv4(), ...gallerySection } }),
-    prisma.testimonialsSection.create({ data: { id: uuidv4(), ...testimonialsSection } }),
-    prisma.fAQSection.create({ data: { id: uuidv4(), ...faqSection } }),
-    prisma.businessDetailsSection.create({
-      data: {
-        id: uuidv4(),
-        title: businessDetailsSection.title,
-        BusinessDetailSubSection: businessDetailsSection.sections ? {
-          create: businessDetailsSection.sections.map((section: any) => ({ id: uuidv4(), ...section }))
-        } : undefined
-      }
-    }),
-    prisma.serviceHighlightsSection.create({ data: { id: uuidv4(), ...serviceHighlightsSection } }),
-    prisma.preFooterSection.create({ data: { id: uuidv4(), ...preFooterSection } }),
-    prisma.footerSection.create({ data: { id: uuidv4(), ...footerSection } })
-  ]);
-
   return {
-    hero: sectionsWithCta[0],
-    about: sectionsWithCta[1],
-    services: sectionsWithCta[2],
-    serviceAreaSection: sectionsWithCta[3],
-    companyOverview: sectionsWithCta[4],
-    gallery: simpleSections[0],
-    testimonials: simpleSections[1],
-    faq: simpleSections[2],
-    businessDetails: simpleSections[3],
-    serviceHighlights: simpleSections[4],
-    preFooter: simpleSections[5],
-    footer: simpleSections[6]
+    serviceArea: allButtons.find(b => b.label === "View Service Area")!.id,
+    about: allButtons.find(b => b.label === "Learn More About Us")!.id,
+    services: allButtons.find(b => b.label === "View All Services")!.id,
+    serviceAreaSection: allButtons.find(b => b.label === "Contact Local Office")!.id,
+    companyOverview: allButtons.find(b => b.label === "Get Started")!.id
   };
 }
 
@@ -315,72 +117,204 @@ class LandingPageService {
   }
 
   /**
-   * Creates a new landing page with all required sections
-   * This method orchestrates the entire creation process:
-   * 1. Validates input data
-   * 2. Creates basic entities (contact, SEO, theme)
-   * 3. Creates CTA buttons
-   * 4. Creates service area and social links
-   * 5. Creates image pool
-   * 6. Creates all page sections
-   * 7. Creates the main landing page record
-   * 8. Triggers webhooks
+   * Creates a new landing page using a transaction and simplified logic
+   * Major improvements over original: validation, reusable CTAs, transaction safety
    */
-  async createLandingPage(data: any) {
+  async createLandingPage(data: CreateLandingPageInput) {
     try {
-      // Step 1: Validate input
-      validateLandingPageData(data);
+      return await prisma.$transaction(async (tx) => {
+        // Get or create reusable CTA buttons
+        const ctaButtonIds = await getOrCreateCtaButtons();
 
-      // Step 2: Setup basic entities (contact, SEO, theme)
-      const basicEntities = await setupBasicEntities(data);
+        // Create basic entities first if they don't exist
+        let businessContactId = data.businessContactId;
+        let seoSettingsId = data.seoSettingsId;
+        let themeId = data.themeId;
 
-      // Step 3: Create CTA buttons
-      const ctaButtonIds = await createCtaButtons();
-
-      // Step 4: Create service area and social links
-      const [serviceArea, socialLink, imagePool] = await Promise.all([
-        createServiceArea(data.serviceArea, ctaButtonIds.serviceArea),
-        createSocialLink(data.socialLink),
-        createImagePool(data.image)
-      ]);
-
-      // Step 5: Create all page sections
-      const sections = await createPageSections(data, ctaButtonIds);
-
-      // Step 6: Create the main landing page record
-      const landingPage = await prisma.landingPage.create({
-        data: {
-          id: uuidv4(),
-          templateId: data.templateId,
-          businessName: data.businessName,
-          ...basicEntities,
-          socialLinkId: socialLink.id,
-          imagePoolId: imagePool.id,
-          heroSectionId: sections.hero.id,
-          aboutSectionId: sections.about.id,
-          servicesSectionId: sections.services.id,
-          gallerySectionId: sections.gallery.id,
-          testimonialsSectionId: sections.testimonials.id,
-          faqSectionId: sections.faq.id,
-          serviceAreaSectionId: sections.serviceAreaSection.id,
-          businessDetailsSectionId: sections.businessDetails.id,
-          companyOverviewSectionId: sections.companyOverview.id,
-          serviceHighlightsSectionId: sections.serviceHighlights.id,
-          preFooterSectionId: sections.preFooter.id,
-          footerSectionId: sections.footer.id,
-          updatedAt: new Date(),
-          ...(data.githubUrl && { githubUrl: data.githubUrl })
+        if (!businessContactId && data.businessContact) {
+          const businessContact = await tx.businessContact.create({
+            data: {
+              id: uuidv4(),
+              ...data.businessContact,
+              BusinessHour: data.businessContact.businessHours ? {
+                create: data.businessContact.businessHours.map(hour => ({
+                  id: uuidv4(),
+                  ...hour
+                }))
+              } : undefined
+            }
+          });
+          businessContactId = businessContact.id;
         }
-      });
 
-      // Step 7: Trigger webhooks
-      await webhookService.triggerWebhooks('created', {
-        templateId: landingPage.templateId,
-        githubUrl: landingPage.githubUrl
-      });
+        if (!seoSettingsId && data.seoSettings) {
+          const seoSettings = await tx.sEOSettings.create({
+            data: {
+              id: uuidv4(),
+              ...data.seoSettings
+            }
+          });
+          seoSettingsId = seoSettings.id;
+        }
 
-      // Return the complete landing page
-      return this.getLandingPageById(landingPage.id);
+        if (!themeId && data.theme) {
+          const theme = await tx.theme.create({
+            data: {
+              id: uuidv4(),
+              ...data.theme
+            }
+          });
+          themeId = theme.id;
+        }
+
+        // Create social link with platforms
+        const socialLink = await tx.socialLink.create({
+          data: {
+            id: uuidv4(),
+            name: data.socialLink.name || 'Social Links',
+            socialPlatforms: data.socialLink.socialPlatforms ? {
+              create: data.socialLink.socialPlatforms.map(platform => ({
+                id: uuidv4(),
+                ...platform
+              }))
+            } : undefined
+          }
+        });
+
+        // Create image pool with images
+        const imagePool = await tx.imagesPool.create({
+          data: {
+            id: uuidv4(),
+            name: data.image.name || 'Landing Page Images',
+            description: data.image.description || 'Images for this landing page',
+            updatedAt: new Date(),
+            Image: {
+              create: data.image.images.map(img => ({
+                id: uuidv4(),
+                imageId: img.imageId,
+                title: img.title,
+                altText: img.altText,
+                imageUrl: img.imageUrl,
+                category: img.category || 'hero',
+                description: img.description,
+                updatedAt: new Date()
+              }))
+            }
+          }
+        });
+
+        // Create all sections in parallel
+        const [heroSection, aboutSection, servicesSection, gallerySection, 
+               testimonialsSection, faqSection, serviceAreaSection,
+               businessDetailsSection, companyOverviewSection, 
+               serviceHighlightsSection, preFooterSection, footerSection] = await Promise.all([
+          tx.heroSection.create({ data: { id: uuidv4(), ...data.heroSection } }),
+          tx.aboutSection.create({ 
+            data: { 
+              id: uuidv4(), 
+              ...data.aboutSection, 
+              ctaButtonId: ctaButtonIds.about 
+            } 
+          }),
+          tx.servicesSection.create({ 
+            data: { 
+              id: uuidv4(), 
+              ...data.servicesSection, 
+              ctaButtonId: ctaButtonIds.services 
+            } 
+          }),
+          tx.gallerySection.create({ data: { id: uuidv4(), ...data.gallerySection } }),
+          tx.testimonialsSection.create({ data: { id: uuidv4(), ...data.testimonialsSection } }),
+          tx.fAQSection.create({ data: { id: uuidv4(), ...data.faqSection } }),
+          tx.serviceAreaSection.create({ 
+            data: { 
+              id: uuidv4(), 
+              ...data.serviceAreaSection, 
+              ctaButtonId: ctaButtonIds.serviceAreaSection 
+            } 
+          }),
+          tx.businessDetailsSection.create({
+            data: {
+              id: uuidv4(),
+              title: data.businessDetailsSection.title,
+              BusinessDetailSubSection: data.businessDetailsSection.sections ? {
+                create: data.businessDetailsSection.sections.map(section => ({
+                  id: uuidv4(),
+                  ...section
+                }))
+              } : undefined
+            }
+          }),
+          tx.companyOverviewSection.create({
+            data: {
+              id: uuidv4(),
+              title: data.companyOverviewSection.title,
+              ctaButtonId: ctaButtonIds.companyOverview,
+              CompanyOverviewSubSection: data.companyOverviewSection.sections ? {
+                create: data.companyOverviewSection.sections.map(section => ({
+                  id: uuidv4(),
+                  ...section
+                }))
+              } : undefined
+            }
+          }),
+          tx.serviceHighlightsSection.create({ data: { id: uuidv4(), ...data.serviceHighlightsSection } }),
+          tx.preFooterSection.create({ data: { id: uuidv4(), ...data.preFooterSection } }),
+          tx.footerSection.create({ data: { id: uuidv4(), ...data.footerSection } })
+        ]);
+
+        // Create service area linked to landing page
+        const serviceArea = await tx.serviceArea.create({
+          data: {
+            id: uuidv4(),
+            ...data.serviceArea,
+            ctaButtonId: ctaButtonIds.serviceArea
+          }
+        });
+
+        // Create the main landing page record
+        const landingPage = await tx.landingPage.create({
+          data: {
+            id: uuidv4(),
+            templateId: data.templateId,
+            businessName: data.businessName,
+            githubUrl: data.githubUrl || '',
+            businessContactId: businessContactId!,
+            seoSettingsId: seoSettingsId!,
+            themeId: themeId!,
+            socialLinkId: socialLink.id,
+            imagePoolId: imagePool.id,
+            heroSectionId: heroSection.id,
+            aboutSectionId: aboutSection.id,
+            servicesSectionId: servicesSection.id,
+            gallerySectionId: gallerySection.id,
+            testimonialsSectionId: testimonialsSection.id,
+            faqSectionId: faqSection.id,
+            serviceAreaSectionId: serviceAreaSection.id,
+            businessDetailsSectionId: businessDetailsSection.id,
+            companyOverviewSectionId: companyOverviewSection.id,
+            serviceHighlightsSectionId: serviceHighlightsSection.id,
+            preFooterSectionId: preFooterSection.id,
+            footerSectionId: footerSection.id,
+            updatedAt: new Date()
+          },
+          include: FULL_LANDING_PAGE_INCLUDES
+        });
+
+        // Update service area to link to landing page
+        await tx.serviceArea.update({
+          where: { id: serviceArea.id },
+          data: { landingPageId: landingPage.id }
+        });
+
+        // Trigger webhooks
+        await webhookService.triggerWebhooks('created', {
+          templateId: landingPage.templateId,
+          githubUrl: landingPage.githubUrl
+        });
+
+        return landingPage;
+      });
     } catch (error) {
       throw error;
     }
