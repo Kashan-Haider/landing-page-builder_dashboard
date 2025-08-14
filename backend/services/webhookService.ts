@@ -10,13 +10,10 @@ class WebhookService {
     githubUrl?: string;
   }) {
     try {
-      // Get active webhooks that listen to this specific event
       const webhooks = await prisma.webhookConfig.findMany({
         where: {
           isActive: true,
-          events: {
-            has: event
-          }
+          events: { has: event }
         }
       });
 
@@ -29,7 +26,6 @@ class WebhookService {
         timestamp: new Date().toISOString()
       };
 
-      // Send all webhooks concurrently
       await Promise.allSettled(
         webhooks.map(webhook => this.sendWebhook(webhook, payload))
       );
@@ -60,7 +56,6 @@ class WebhookService {
           retryCount: 0
         }
       });
-
     } catch (error) {
       await prisma.webhookLog.create({
         data: {
@@ -79,7 +74,6 @@ class WebhookService {
     }
   }
 
-  // CRUD operations
   async createWebhook(data: Omit<WebhookConfig, 'id' | 'isActive'>) {
     try {
       return await prisma.webhookConfig.create({
@@ -91,7 +85,6 @@ class WebhookService {
         }
       });
     } catch (error) {
-      console.error('Error creating webhook:', error);
       throw new Error(`Failed to create webhook: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -102,7 +95,6 @@ class WebhookService {
         orderBy: { createdAt: 'desc' } 
       });
     } catch (error) {
-      console.error('Error fetching webhooks:', error);
       throw new Error('Failed to fetch webhooks');
     }
   }
@@ -119,7 +111,6 @@ class WebhookService {
         data: { isActive: !webhook.isActive }
       });
     } catch (error) {
-      console.error('Error toggling webhook:', error);
       throw new Error(`Failed to toggle webhook: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -132,7 +123,6 @@ class WebhookService {
         take: 100
       });
     } catch (error) {
-      console.error('Error fetching webhook logs:', error);
       throw new Error('Failed to fetch webhook logs');
     }
   }

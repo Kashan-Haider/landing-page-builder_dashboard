@@ -1,5 +1,3 @@
-// types/index.ts
-
 export interface BusinessHour {
   day: string;
   hours: string;

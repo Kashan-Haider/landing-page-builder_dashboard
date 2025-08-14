@@ -38,25 +38,15 @@ const Dashboard: React.FC = () => {
     handleDeletePage,
     confirmDelete,
     cancelDelete,
-  } = useDeleteConfirmation(deletePage, (error) => {
-    console.error("Delete error:", error);
-    // You can add toast notifications here
-  });
+  } = useDeleteConfirmation(deletePage, () => {});
 
-  // Handle saving data from dynamic form
   const handleSaveFromDynamicForm = async (data: Partial<LandingPage>) => {
     if (!selectedPage) return;
 
     try {
-      console.log('Dashboard: Starting save operation with data:', data);
       const updatedPageFromServer = await savePage(selectedPage.id, data);
-      console.log('Dashboard: Received updated page from server:', updatedPageFromServer);
-      
-      // Update the local state with the server response to ensure consistency
       updatePage(updatedPageFromServer);
-      console.log('Dashboard: Local state updated successfully');
     } catch (err) {
-      console.error('Dashboard: Error saving page:', err);
       throw err;
     }
   };
@@ -69,7 +59,6 @@ const Dashboard: React.FC = () => {
     return <ErrorDisplay error={error} onRetry={refreshPages} />;
   }
 
-  // If we're in edit mode and have a selected page, show the dynamic form
   if (viewMode === "edit" && selectedPage) {
     return (
       <DynamicLandingPageForm
@@ -96,7 +85,6 @@ const Dashboard: React.FC = () => {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Landing Pages List */}
           <div className="lg:col-span-1">
             <LandingPageList
               pages={filteredPages}
@@ -105,7 +93,6 @@ const Dashboard: React.FC = () => {
             />
           </div>
 
-          {/* Landing Page Details */}
           <div className="lg:col-span-2">
             {selectedPage ? (
               <LandingPageDetails page={selectedPage} />
@@ -116,7 +103,6 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
         isOpen={showDeleteConfirm}
         page={pageToDelete}

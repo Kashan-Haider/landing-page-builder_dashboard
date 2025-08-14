@@ -25,7 +25,6 @@ export const useLandingPages = (): UseLandingPagesReturn => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch landing pages from API
   const fetchLandingPages = async () => {
     try {
       setLoading(true);
@@ -34,32 +33,24 @@ export const useLandingPages = (): UseLandingPagesReturn => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const apiResponse = await response.json();
-      console.log('API Response:', apiResponse); // Debug log
 
-      // Handle the new API response structure {success, data, message}
       const data = apiResponse.success && apiResponse.data ? apiResponse.data : apiResponse;
-      // Ensure data is an array
       const pagesArray = Array.isArray(data) ? data : [];
       setLandingPages(pagesArray);
       setFilteredPages(pagesArray);
     } catch (err) {
       setError('Failed to fetch landing pages');
-      console.error('Error fetching landing pages:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Initial fetch
   useEffect(() => {
     fetchLandingPages();
   }, []);
 
-  // Filter pages based on search term
   useEffect(() => {
-    // Ensure landingPages is an array before filtering
     if (!Array.isArray(landingPages)) {
-      console.warn('landingPages is not an array:', landingPages);
       return;
     }
 
@@ -76,7 +67,6 @@ export const useLandingPages = (): UseLandingPagesReturn => {
     }
   }, [searchTerm, landingPages]);
 
-  // Update a page in the local state
   const updatePage = (updatedPage: LandingPage) => {
     const updatedPages = landingPages.map((page) =>
       page.id === updatedPage.id ? updatedPage : page
@@ -88,7 +78,6 @@ export const useLandingPages = (): UseLandingPagesReturn => {
     }
   };
 
-  // Delete a page from local state
   const deletePage = (pageId: string) => {
     const updatedPages = landingPages.filter((page) => page.id !== pageId);
     setLandingPages(updatedPages);
