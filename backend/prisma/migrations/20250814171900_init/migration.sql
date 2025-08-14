@@ -4,9 +4,8 @@ CREATE TABLE "public"."LandingPage" (
     "templateId" TEXT NOT NULL,
     "businessName" TEXT NOT NULL,
     "githubUrl" TEXT NOT NULL,
-    "serviceAreaId" TEXT NOT NULL,
     "socialLinkId" TEXT NOT NULL,
-    "imageId" TEXT NOT NULL,
+    "imagePoolId" TEXT NOT NULL,
     "heroSectionId" TEXT NOT NULL,
     "aboutSectionId" TEXT NOT NULL,
     "servicesSectionId" TEXT NOT NULL,
@@ -40,14 +39,18 @@ CREATE TABLE "public"."SEOSettings" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Images" (
+CREATE TABLE "public"."ImagesPool" (
     "id" TEXT NOT NULL,
     "imageId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "altText" TEXT NOT NULL,
-    "image" TEXT NOT NULL,
+    "imageUrl" TEXT NOT NULL,
+    "category" TEXT,
+    "description" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Images_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ImagesPool_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -150,6 +153,7 @@ CREATE TABLE "public"."ServiceArea" (
     "region" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "ctaButtonId" TEXT NOT NULL,
+    "landingPageId" TEXT,
 
     CONSTRAINT "ServiceArea_pkey" PRIMARY KEY ("id")
 );
@@ -418,13 +422,10 @@ CREATE TABLE "public"."_FooterSectionServiceAreas" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "LandingPage_serviceAreaId_key" ON "public"."LandingPage"("serviceAreaId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "LandingPage_socialLinkId_key" ON "public"."LandingPage"("socialLinkId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "LandingPage_imageId_key" ON "public"."LandingPage"("imageId");
+CREATE UNIQUE INDEX "LandingPage_imagePoolId_key" ON "public"."LandingPage"("imagePoolId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "LandingPage_heroSectionId_key" ON "public"."LandingPage"("heroSectionId");
@@ -466,7 +467,7 @@ CREATE UNIQUE INDEX "LandingPage_footerSectionId_key" ON "public"."LandingPage"(
 CREATE UNIQUE INDEX "LandingPage_themeId_key" ON "public"."LandingPage"("themeId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Images_imageId_key" ON "public"."Images"("imageId");
+CREATE UNIQUE INDEX "ImagesPool_imageId_key" ON "public"."ImagesPool"("imageId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "BusinessContactForm_businessDetailsSectionId_key" ON "public"."BusinessContactForm"("businessDetailsSectionId");
@@ -496,13 +497,10 @@ CREATE INDEX "_ServiceHighlightsSectionStatistics_B_index" ON "public"."_Service
 CREATE INDEX "_FooterSectionServiceAreas_B_index" ON "public"."_FooterSectionServiceAreas"("B");
 
 -- AddForeignKey
-ALTER TABLE "public"."LandingPage" ADD CONSTRAINT "LandingPage_serviceAreaId_fkey" FOREIGN KEY ("serviceAreaId") REFERENCES "public"."ServiceArea"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "public"."LandingPage" ADD CONSTRAINT "LandingPage_socialLinkId_fkey" FOREIGN KEY ("socialLinkId") REFERENCES "public"."SocialLink"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."LandingPage" ADD CONSTRAINT "LandingPage_imageId_fkey" FOREIGN KEY ("imageId") REFERENCES "public"."Images"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."LandingPage" ADD CONSTRAINT "LandingPage_imagePoolId_fkey" FOREIGN KEY ("imagePoolId") REFERENCES "public"."ImagesPool"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."LandingPage" ADD CONSTRAINT "LandingPage_heroSectionId_fkey" FOREIGN KEY ("heroSectionId") REFERENCES "public"."HeroSection"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -560,6 +558,9 @@ ALTER TABLE "public"."GalleryItem" ADD CONSTRAINT "GalleryItem_ctaButtonId_fkey"
 
 -- AddForeignKey
 ALTER TABLE "public"."ServiceArea" ADD CONSTRAINT "ServiceArea_ctaButtonId_fkey" FOREIGN KEY ("ctaButtonId") REFERENCES "public"."CtaButton"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."ServiceArea" ADD CONSTRAINT "ServiceArea_landingPageId_fkey" FOREIGN KEY ("landingPageId") REFERENCES "public"."LandingPage"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."AboutSection" ADD CONSTRAINT "AboutSection_ctaButtonId_fkey" FOREIGN KEY ("ctaButtonId") REFERENCES "public"."CtaButton"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

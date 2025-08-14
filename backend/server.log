@@ -1,0 +1,45 @@
+nohup: ignoring input
+
+> backend@1.0.0 dev /home/zephyr/Data/Projects/TLD/landing-page-builder/v2/landing_page_builder_dashboard/backend
+> nodemon main.ts
+
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node main.ts`[39m
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at errorOrDestroy (node:internal/streams/destroy:239:7)
+    at node:internal/fs/streams:272:9
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:672:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+
+Node.js v22.13.0
+ ELIFECYCLE  Command failed with exit code 1.
+[dotenv@17.2.1] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at Function.listen (/home/zephyr/Data/Projects/TLD/landing-page-builder/v2/landing_page_builder_dashboard/backend/node_modules/.pnpm/express@4.21.2/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/home/zephyr/Data/Projects/TLD/landing-page-builder/v2/landing_page_builder_dashboard/backend/main.ts:87:5)
+    at Module._compile (node:internal/modules/cjs/loader:1562:14)
+    at Module.m._compile (/home/zephyr/Data/Projects/TLD/landing-page-builder/v2/landing_page_builder_dashboard/backend/node_modules/.pnpm/ts-node@10.9.2_@types+node@24.2.1_typescript@5.9.2/node_modules/ts-node/src/index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1699:10
+    at Object.require.extensions.<computed> [as .ts] (/home/zephyr/Data/Projects/TLD/landing-page-builder/v2/landing_page_builder_dashboard/backend/node_modules/.pnpm/ts-node@10.9.2_@types+node@24.2.1_typescript@5.9.2/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1313:32) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}

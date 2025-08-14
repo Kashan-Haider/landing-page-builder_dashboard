@@ -64,8 +64,7 @@
       "enterprise software",
       "business automation",
       "acme corp"
-    ],
-    "favicon": "https://cdn.acmecorp.com/favicon.ico"
+    ]
   },
   
   "theme": {
@@ -76,19 +75,52 @@
   "serviceArea": {
     "city": "San Francisco",
     "region": "California",
-    "description": "We proudly serve the entire San Francisco Bay Area including San Jose, Oakland, and surrounding communities with our comprehensive business solutions."
+    "description": "We proudly serve the entire San Francisco Bay Area including San Jose, Oakland, and surrounding communities with our comprehensive business solutions.",
+    "ctaButton": {
+      "label": "Contact Us Today",
+      "href": "/contact"
+    }
   },
   
   "socialLink": {
-    "platform": "LinkedIn",
-    "url": "https://linkedin.com/company/acme-corp-solutions"
+    "name": "Acme Corp Social Media",
+    "socialPlatforms": [
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/company/acme-corp-solutions"
+      }
+    ]
   },
   
   "image": {
-    "imageId": "hero-banner-2025",
-    "title": "Acme Corp Solutions Hero Banner",
-    "altText": "Professional team collaboration at Acme Corp Solutions office",
-    "image": "https://cdn.acmecorp.com/images/hero-banner-2025.jpg"
+    "name": "Acme Corp Landing Page Images",
+    "description": "Collection of images used across the Acme Corp Solutions landing page",
+    "images": [
+      {
+        "imageId": "hero-banner-2025",
+        "title": "Acme Corp Solutions Hero Banner",
+        "altText": "Professional team collaboration at Acme Corp Solutions office",
+        "imageUrl": "https://cdn.acmecorp.com/images/hero-banner-2025.jpg",
+        "category": "hero",
+        "description": "Main hero banner image for Acme Corp Solutions landing page"
+      },
+      {
+        "imageId": "about-team-2025",
+        "title": "Acme Corp Team Photo",
+        "altText": "The professional team at Acme Corp Solutions",
+        "imageUrl": "https://cdn.acmecorp.com/images/team-photo-2025.jpg",
+        "category": "about",
+        "description": "Team photo for the about section"
+      },
+      {
+        "imageId": "office-space-2025",
+        "title": "Acme Corp Office",
+        "altText": "Modern office space of Acme Corp Solutions",
+        "imageUrl": "https://cdn.acmecorp.com/images/office-space-2025.jpg",
+        "category": "gallery",
+        "description": "Office space image for gallery section"
+      }
+    ]
   },
   
   "heroSection": {
@@ -107,12 +139,20 @@
       "Certified Technology Experts",
       "Award-Winning Customer Service",
       "Proven ROI Track Record"
-    ]
+    ],
+    "ctaButton": {
+      "label": "Learn More About Us",
+      "href": "/about"
+    }
   },
   
   "servicesSection": {
     "title": "Our Core Services",
-    "description": "We offer a comprehensive suite of business technology services designed to meet your organization's unique needs and drive measurable results."
+    "description": "We offer a comprehensive suite of business technology services designed to meet your organization's unique needs and drive measurable results.",
+    "ctaButton": {
+      "label": "View All Services",
+      "href": "/services"
+    }
   },
   
   "gallerySection": {
@@ -132,7 +172,11 @@
   
   "serviceAreaSection": {
     "title": "Areas We Serve",
-    "description": "Acme Corp Solutions proudly serves businesses across the San Francisco Bay Area and beyond, delivering world-class technology solutions to organizations of all sizes."
+    "description": "Acme Corp Solutions proudly serves businesses across the San Francisco Bay Area and beyond, delivering world-class technology solutions to organizations of all sizes.",
+    "ctaButton": {
+      "label": "Find Your Area",
+      "href": "/service-areas"
+    }
   },
   
   "businessDetailsSection": {
@@ -183,7 +227,11 @@
         "title": "Our Approach",
         "description": "We combine deep industry knowledge with cutting-edge technology to deliver customized solutions that address your specific business challenges and objectives."
       }
-    ]
+    ],
+    "ctaButton": {
+      "label": "Start Your Journey",
+      "href": "/get-started"
+    }
   },
   
   "serviceHighlightsSection": {

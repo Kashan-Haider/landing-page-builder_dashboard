@@ -66,12 +66,6 @@ export const LANDING_PAGE_FIELDS: Record<string, FieldDefinition> = {
     type: 'array-text',
     validation: z.array(z.string()).max(10)
   },
-  'seoSettings.favicon': {
-    key: 'favicon',
-    label: 'Favicon URL',
-    type: 'image',
-    validation: z.string().url().optional()
-  },
 
   // Business Contact Fields
   'businessContact.businessName': {
@@ -525,26 +519,40 @@ export const LANDING_PAGE_FIELDS: Record<string, FieldDefinition> = {
   },
 
   // Social Link fields
-  'socialLink.platform': {
-    key: 'platform',
-    label: 'Platform',
-    type: 'select',
+  'socialLink.name': {
+    key: 'name',
+    label: 'Social Links Group Name',
+    type: 'text',
     required: true,
-    options: [
-      { value: 'facebook', label: 'Facebook' },
-      { value: 'twitter', label: 'Twitter' },
-      { value: 'instagram', label: 'Instagram' },
-      { value: 'linkedin', label: 'LinkedIn' },
-      { value: 'youtube', label: 'YouTube' },
-      { value: 'tiktok', label: 'TikTok' }
-    ]
+    validation: z.string().min(1)
   },
-  'socialLink.url': {
-    key: 'url',
-    label: 'Social Media URL',
-    type: 'url',
-    required: true,
-    validation: z.string().url()
+  'socialLink.socialPlatforms': {
+    key: 'socialPlatforms',
+    label: 'Social Platforms',
+    type: 'array-object',
+    arrayItemType: {
+      platform: {
+        key: 'platform',
+        label: 'Platform',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'facebook', label: 'Facebook' },
+          { value: 'twitter', label: 'Twitter' },
+          { value: 'instagram', label: 'Instagram' },
+          { value: 'linkedin', label: 'LinkedIn' },
+          { value: 'youtube', label: 'YouTube' },
+          { value: 'tiktok', label: 'TikTok' }
+        ]
+      },
+      url: {
+        key: 'url',
+        label: 'Social Media URL',
+        type: 'url',
+        required: true,
+        validation: z.string().url()
+      }
+    }
   },
 
   // Image fields
