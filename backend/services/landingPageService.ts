@@ -514,8 +514,16 @@ class LandingPageService {
           Theme: true,
           // Updated sections
           ServiceArea: true,
-          SocialLink: true,
-          ImagesPool: true,
+          SocialLink: {
+            include: {
+              socialPlatforms: true
+            }
+          },
+          ImagesPool: {
+            include: {
+              Image: true
+            }
+          },
           HeroSection: true,
           AboutSection: true,
           ServicesSection: true,
@@ -578,31 +586,60 @@ class LandingPageService {
         ...directFields
       } = data;
 
-      // Start with basic field updates
-      const updatePayload: any = {
-        ...directFields
-      };
+      // Start with basic field updates - only include direct LandingPage fields
+      const updatePayload: any = {};
+      
+      // Only add basic LandingPage fields to updatePayload
+      const allowedDirectFields = ['templateId', 'businessName', 'githubUrl'];
+      allowedDirectFields.forEach(field => {
+        if (directFields[field] !== undefined) {
+          updatePayload[field] = directFields[field];
+        }
+      });
+      
+      // Always set updatedAt
+      updatePayload.updatedAt = new Date();
 
       // Handle businessContact relation
       if (businessContact && businessContact.id) {
-        // Update existing business contact
-        const { businessHours, ...contactData } = businessContact;
+        console.log('Updating business contact:', businessContact);
+        
+        // Extract BusinessHour data (capitalized from server) and businessHours (camelCase from form)
+        const { 
+          businessHours, 
+          BusinessHour, 
+          ...contactData 
+        } = businessContact;
+        
+        // Remove any nested relationship data that shouldn't be in the update
+        const cleanContactData = { ...contactData };
+        delete cleanContactData.BusinessHour;
+        delete cleanContactData.businessHours;
+        
+        console.log('Clean contact data for update:', cleanContactData);
+        
         await prisma.businessContact.update({
           where: { id: businessContact.id },
-          data: contactData
+          data: cleanContactData
         });
         
-        // Handle business hours if provided
-        if (businessHours && Array.isArray(businessHours)) {
+        // Handle business hours if provided (check both possible field names)
+        const hoursData = businessHours || BusinessHour;
+        if (hoursData && Array.isArray(hoursData)) {
+          console.log('Updating business hours:', hoursData);
+          
           // Delete existing business hours and create new ones
           await prisma.businessHour.deleteMany({
             where: { businessContactId: businessContact.id }
           });
           
-          if (businessHours.length > 0) {
+          if (hoursData.length > 0) {
             await prisma.businessHour.createMany({
-              data: businessHours.map(hour => ({
-                ...hour,
+              data: hoursData.map(hour => ({
+                id: hour.id || uuidv4(),
+                day: hour.day,
+                hours: hour.hours,
+                isClosed: hour.isClosed,
                 businessContactId: businessContact.id
               }))
             });
@@ -682,94 +719,186 @@ class LandingPageService {
         }
       }
       
+      // Handle socialLink updates
+      if (socialLink && existingLandingPage.SocialLink) {
+        // Update social link basic info
+        await prisma.socialLink.update({
+          where: { id: existingLandingPage.SocialLink.id },
+          data: {
+            name: socialLink.name || existingLandingPage.SocialLink.name
+          }
+        });
+        
+        // Handle social platforms
+        if (socialLink.socialPlatforms && Array.isArray(socialLink.socialPlatforms)) {
+          // Delete existing social platforms
+          await prisma.socialPlatform.deleteMany({
+            where: { socialLinkId: existingLandingPage.SocialLink.id }
+          });
+          
+          // Create new social platforms
+          if (socialLink.socialPlatforms.length > 0) {
+            await prisma.socialPlatform.createMany({
+              data: socialLink.socialPlatforms.map((platform: any) => ({
+                id: uuidv4(),
+                platform: platform.platform,
+                url: platform.url,
+                socialLinkId: existingLandingPage.SocialLink.id
+              }))
+            });
+          }
+        }
+      }
+      
       // Handle serviceAreas updates (one-to-many)
       if (serviceAreas && Array.isArray(serviceAreas)) {
+        console.log('Processing service areas:', serviceAreas);
+        
+        // Validate and filter service areas
+        const validServiceAreas = serviceAreas.filter(serviceArea => {
+          // Validate required fields
+          if (!serviceArea.city || !serviceArea.region || !serviceArea.description) {
+            console.warn('Skipping invalid service area:', serviceArea);
+            return false;
+          }
+          
+          // Validate minimum content length (no single characters)
+          if (serviceArea.city.trim().length < 2 || 
+              serviceArea.region.trim().length < 2 || 
+              serviceArea.description.trim().length < 5) {
+            console.warn('Skipping service area with insufficient content:', serviceArea);
+            return false;
+          }
+          
+          return true;
+        });
+        
+        console.log('Valid service areas after filtering:', validServiceAreas);
+        
         // Delete existing service areas for this landing page
         await prisma.serviceArea.deleteMany({
           where: { landingPageId: existingLandingPage.id }
         });
         
-        // Create new service areas
-        if (serviceAreas.length > 0) {
-          for (const serviceArea of serviceAreas) {
-            // Create CTA button for service area if it doesn't exist
+        // Create new service areas only if we have valid ones
+        if (validServiceAreas.length > 0) {
+          for (const serviceArea of validServiceAreas) {
+            // Always create a CTA button for each service area
             let ctaButtonId = serviceArea.ctaButtonId;
-            if (!ctaButtonId && serviceArea.ctaButton) {
+            
+            if (!ctaButtonId) {
+              // Create a default CTA button if none provided
               const ctaButton = await prisma.ctaButton.create({
                 data: {
                   id: uuidv4(),
-                  label: serviceArea.ctaButton.label || 'Learn More',
-                  href: serviceArea.ctaButton.href || '#'
+                  label: serviceArea.ctaButton?.label || `Learn More About ${serviceArea.city}`,
+                  href: serviceArea.ctaButton?.href || `/service-areas/${serviceArea.city.toLowerCase().replace(/\s+/g, '-')}`
                 }
               });
               ctaButtonId = ctaButton.id;
             }
             
+            // Ensure ctaButtonId is not undefined
+            if (!ctaButtonId) {
+              throw new Error(`Failed to create or find CTA button for service area: ${serviceArea.city}`);
+            }
+            
+            console.log('Creating service area with CTA button:', { city: serviceArea.city, ctaButtonId });
+            
             await prisma.serviceArea.create({
               data: {
                 id: uuidv4(),
-                city: serviceArea.city,
-                region: serviceArea.region,
-                description: serviceArea.description,
+                city: serviceArea.city.trim(),
+                region: serviceArea.region.trim(),
+                description: serviceArea.description.trim(),
                 ctaButtonId: ctaButtonId,
                 landingPageId: existingLandingPage.id
               }
             });
           }
+        } else {
+          console.log('No valid service areas to create');
         }
       }
 
-      // Handle individual section updates
+      // Handle individual section updates with validation
       if (heroSection && existingLandingPage.HeroSection) {
-        await prisma.heroSection.update({
-          where: { id: existingLandingPage.HeroSection.id },
-          data: {
-            title: heroSection.title,
-            subtitle: heroSection.subtitle,
-            description: heroSection.description
-          }
-        });
+        // Validate hero section data
+        if (heroSection.title && heroSection.title.trim().length >= 3) {
+          await prisma.heroSection.update({
+            where: { id: existingLandingPage.HeroSection.id },
+            data: {
+              title: heroSection.title.trim(),
+              subtitle: heroSection.subtitle ? heroSection.subtitle.trim() : heroSection.subtitle,
+              description: heroSection.description ? heroSection.description.trim() : heroSection.description
+            }
+          });
+        } else {
+          console.warn('Skipping hero section update due to invalid title:', heroSection.title);
+        }
       }
 
       if (aboutSection && existingLandingPage.AboutSection) {
-        await prisma.aboutSection.update({
-          where: { id: existingLandingPage.AboutSection.id },
-          data: {
-            title: aboutSection.title,
-            description: aboutSection.description,
-            features: aboutSection.features || []
-          }
-        });
+        // Validate about section data
+        if (aboutSection.title && aboutSection.title.trim().length >= 3) {
+          await prisma.aboutSection.update({
+            where: { id: existingLandingPage.AboutSection.id },
+            data: {
+              title: aboutSection.title.trim(),
+              description: aboutSection.description ? aboutSection.description.trim() : aboutSection.description,
+              features: Array.isArray(aboutSection.features) ? 
+                aboutSection.features.filter((f: any) => f && f.trim().length >= 3).map((f: any) => f.trim()) : 
+                aboutSection.features || []
+            }
+          });
+        } else {
+          console.warn('Skipping about section update due to invalid title:', aboutSection.title);
+        }
       }
 
       if (servicesSection && existingLandingPage.ServicesSection) {
-        await prisma.servicesSection.update({
-          where: { id: existingLandingPage.ServicesSection.id },
-          data: {
-            title: servicesSection.title,
-            description: servicesSection.description
-          }
-        });
+        // Validate services section data
+        if (servicesSection.title && servicesSection.title.trim().length >= 3) {
+          await prisma.servicesSection.update({
+            where: { id: existingLandingPage.ServicesSection.id },
+            data: {
+              title: servicesSection.title.trim(),
+              description: servicesSection.description ? servicesSection.description.trim() : servicesSection.description
+            }
+          });
+        } else {
+          console.warn('Skipping services section update due to invalid title:', servicesSection.title);
+        }
       }
 
       if (testimonialsSection && existingLandingPage.TestimonialsSection) {
-        await prisma.testimonialsSection.update({
-          where: { id: existingLandingPage.TestimonialsSection.id },
-          data: {
-            title: testimonialsSection.title,
-            description: testimonialsSection.description
-          }
-        });
+        // Validate testimonials section data
+        if (testimonialsSection.title && testimonialsSection.title.trim().length >= 3) {
+          await prisma.testimonialsSection.update({
+            where: { id: existingLandingPage.TestimonialsSection.id },
+            data: {
+              title: testimonialsSection.title.trim(),
+              description: testimonialsSection.description ? testimonialsSection.description.trim() : testimonialsSection.description
+            }
+          });
+        } else {
+          console.warn('Skipping testimonials section update due to invalid title:', testimonialsSection.title);
+        }
       }
 
       if (faqSection && existingLandingPage.FAQSection) {
-        await prisma.fAQSection.update({
-          where: { id: existingLandingPage.FAQSection.id },
-          data: {
-            title: faqSection.title,
-            description: faqSection.description
-          }
-        });
+        // Validate FAQ section data
+        if (faqSection.title && faqSection.title.trim().length >= 3) {
+          await prisma.fAQSection.update({
+            where: { id: existingLandingPage.FAQSection.id },
+            data: {
+              title: faqSection.title.trim(),
+              description: faqSection.description ? faqSection.description.trim() : faqSection.description
+            }
+          });
+        } else {
+          console.warn('Skipping FAQ section update due to invalid title:', faqSection.title);
+        }
       }
 
       // Update the landing page with direct fields only

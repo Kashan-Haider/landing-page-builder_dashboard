@@ -467,3 +467,186 @@ export const ServiceAreasForm: React.FC<NestedSectionProps> = ({
     </div>
   );
 };
+
+export const SocialLinksForm: React.FC<NestedSectionProps> = ({
+  data,
+  onChange
+}) => {
+  const socialLink = data?.socialLink || { name: 'Social Links Group', socialPlatforms: [] };
+  const socialPlatforms = socialLink.socialPlatforms || [];
+  
+  const addSocialPlatform = () => {
+    const newPlatform = {
+      id: `platform-${Date.now()}`,
+      platform: '',
+      url: ''
+    };
+    const updatedPlatforms = [...socialPlatforms, newPlatform];
+    onChange('socialLink', { 
+      ...socialLink, 
+      socialPlatforms: updatedPlatforms 
+    });
+  };
+  
+  const removeSocialPlatform = (index: number) => {
+    const updatedPlatforms = socialPlatforms.filter((_: any, i: number) => i !== index);
+    onChange('socialLink', { 
+      ...socialLink, 
+      socialPlatforms: updatedPlatforms 
+    });
+  };
+  
+  const updateSocialPlatform = (index: number, field: string, value: string) => {
+    const updatedPlatforms = [...socialPlatforms];
+    updatedPlatforms[index] = { ...updatedPlatforms[index], [field]: value };
+    onChange('socialLink', { 
+      ...socialLink, 
+      socialPlatforms: updatedPlatforms 
+    });
+  };
+
+  const updateSocialLinkName = (name: string) => {
+    onChange('socialLink', { 
+      ...socialLink, 
+      name 
+    });
+  };
+  
+  const platformOptions = [
+    { value: 'facebook', label: 'Facebook' },
+    { value: 'twitter', label: 'Twitter' },
+    { value: 'instagram', label: 'Instagram' },
+    { value: 'linkedin', label: 'LinkedIn' },
+    { value: 'youtube', label: 'YouTube' },
+    { value: 'tiktok', label: 'TikTok' },
+    { value: 'pinterest', label: 'Pinterest' },
+    { value: 'snapchat', label: 'Snapchat' },
+    { value: 'discord', label: 'Discord' },
+    { value: 'telegram', label: 'Telegram' },
+  ];
+  
+  return (
+    <div className="space-y-6">
+      <h3 className="text-3xl font-bold mb-8 text-slate-100 flex items-center gap-3">
+        <div className="w-2 h-8 bg-blue-500 rounded-full"></div>
+        Social Links
+      </h3>
+      
+      {/* Social Links Group Name */}
+      <div className="space-y-4 mb-8">
+        <div>
+          <label className="block text-sm font-medium text-slate-200 mb-2">
+            Social Links Group Name
+          </label>
+          <input
+            type="text"
+            value={socialLink.name || ''}
+            onChange={(e) => updateSocialLinkName(e.target.value)}
+            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="e.g., Main Social Links, Footer Links, etc."
+          />
+        </div>
+      </div>
+      
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <h4 className="text-xl font-semibold text-slate-100">
+            Social Platforms ({socialPlatforms.length})
+          </h4>
+          <button
+            type="button"
+            onClick={addSocialPlatform}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Add Social Platform
+          </button>
+        </div>
+        
+        <div className="space-y-4">
+          {socialPlatforms.map((platform: any, index: number) => (
+            <div key={platform.id || index} className="p-6 bg-slate-700 border border-slate-600 rounded-lg">
+              <div className="flex justify-between items-center mb-4">
+                <h5 className="font-medium text-slate-100">Social Platform {index + 1}</h5>
+                <button
+                  type="button"
+                  onClick={() => removeSocialPlatform(index)}
+                  className="text-red-400 hover:text-red-300 p-1"
+                  title="Remove social platform"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-200 mb-2">
+                    Platform
+                  </label>
+                  <select
+                    value={platform.platform || ''}
+                    onChange={(e) => updateSocialPlatform(index, 'platform', e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">Select Platform</option>
+                    {platformOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-200 mb-2">
+                    URL
+                  </label>
+                  <input
+                    type="url"
+                    value={platform.url || ''}
+                    onChange={(e) => updateSocialPlatform(index, 'url', e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+              
+              {/* Platform Preview */}
+              {platform.platform && platform.url && (
+                <div className="mt-4 p-3 bg-slate-800 rounded border border-slate-500">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                    <span className="text-slate-300 text-sm capitalize">{platform.platform}</span>
+                    <span className="text-slate-500 text-sm">→</span>
+                    <a 
+                      href={platform.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-blue-400 text-sm hover:text-blue-300 truncate"
+                    >
+                      {platform.url}
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+          
+          {socialPlatforms.length === 0 && (
+            <div className="text-center py-12 bg-slate-700/50 border border-slate-600 rounded-lg border-dashed">
+              <svg className="mx-auto h-12 w-12 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              <p className="text-slate-300 mb-2">No social platforms added yet</p>
+              <p className="text-slate-400 text-sm">Click "Add Social Platform" to start building your social media presence</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

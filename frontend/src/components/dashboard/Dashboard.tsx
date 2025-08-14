@@ -48,11 +48,15 @@ const Dashboard: React.FC = () => {
     if (!selectedPage) return;
 
     try {
-      await savePage(selectedPage.id, data);
-      const updatedPage = { ...selectedPage, ...data };
-      updatePage(updatedPage);
+      console.log('Dashboard: Starting save operation with data:', data);
+      const updatedPageFromServer = await savePage(selectedPage.id, data);
+      console.log('Dashboard: Received updated page from server:', updatedPageFromServer);
+      
+      // Update the local state with the server response to ensure consistency
+      updatePage(updatedPageFromServer);
+      console.log('Dashboard: Local state updated successfully');
     } catch (err) {
-      console.error("Error saving:", err);
+      console.error('Dashboard: Error saving page:', err);
       throw err;
     }
   };

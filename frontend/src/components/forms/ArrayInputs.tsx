@@ -51,7 +51,7 @@ export const ArrayTextInput: React.FC<ArrayTextInputProps> = ({
 
   return (
     <div className="space-y-2 mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-slate-200 mb-1">
         {label}
       </label>
       
@@ -147,7 +147,7 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
             value={fieldValue || ''}
             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
             placeholder={fieldDef.placeholder}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
           />
         );
 
@@ -158,7 +158,7 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
             placeholder={fieldDef.placeholder}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
+            className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
           />
         );
 
@@ -167,7 +167,7 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
           <select
             value={fieldValue || ''}
             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
           >
             <option value="">Select {fieldDef.label}</option>
             {fieldDef.options?.map((option) => (
@@ -185,9 +185,9 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
               type="checkbox"
               checked={fieldValue || false}
               onChange={(e) => updateItem(index, fieldKey, e.target.checked)}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-500 rounded"
             />
-            <label className="ml-2 block text-sm text-gray-700">
+            <label className="ml-2 block text-sm text-slate-200">
               {fieldDef.label}
             </label>
           </div>
@@ -209,7 +209,7 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
             type="text"
             value={fieldValue || ''}
             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
           />
         );
     }
@@ -217,14 +217,14 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
 
   return (
     <div className="space-y-4 mb-6">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-slate-200 mb-2">
         {label}
       </label>
       
       {value.map((item, index) => (
-        <Card key={item.id || index} className="p-4">
+        <Card key={item.id || index} className="p-4 bg-slate-700 border-slate-600">
           <div className="flex justify-between items-center mb-4">
-            <h4 className="font-medium text-gray-900">
+            <h4 className="font-medium text-slate-100">
               {label.slice(0, -1)} {index + 1}
             </h4>
             <Button
@@ -248,7 +248,7 @@ export const ArrayObjectInput: React.FC<ArrayObjectInputProps> = ({
 
               return (
                 <div key={fieldKey}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-slate-200 mb-1">
                     {fieldDef.label}
                     {fieldDef.required && <span className="text-red-500 ml-1">*</span>}
                   </label>

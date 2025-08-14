@@ -1,36 +1,45 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Save, ArrowLeft } from "lucide-react";
 import { Button, Card } from "../ui/inputs";
-import { SectionForm, BusinessContactForm, ImagePoolForm, ServiceAreasForm } from "./SectionForm";
-import { setNestedValue } from "../../types/field-definitions";
+import { SectionForm, BusinessContactForm, ImagePoolForm, ServiceAreasForm, SocialLinksForm } from "./SectionForm";
+import { setNestedValue } from "../../utils/field-helpers";
+import type { LandingPage } from '../../types/landingPageDataTypes';
 
-interface LandingPage {
-  id: string;
-  templateId: string;
-  businessName: string;
-  githubUrl?: string;
-  businessContact?: any;
-  seoSettings?: any;
-  theme?: any;
-  // Section relationships
-  serviceAreas?: any[]; // One-to-many
-  socialLink?: any;
-  imagePool?: any;
-  heroSection?: any;
-  aboutSection?: any;
-  servicesSection?: any;
-  gallerySection?: any;
-  testimonialsSection?: any;
-  faqSection?: any;
-  serviceAreaSection?: any;
-  businessDetailsSection?: any;
-  companyOverviewSection?: any;
-  serviceHighlightsSection?: any;
-  preFooterSection?: any;
-  footerSection?: any;
-  createdAt: string;
-  updatedAt: string;
-}
+// Transform server data (capitalized) to form data (camelCase)
+const transformServerDataForForm = (serverData: LandingPage): LandingPage => {
+  const formData = { ...serverData };
+  
+  // Map capitalized server fields to camelCase form fields
+  const fieldMappings = {
+    'BusinessContact': 'businessContact',
+    'SEOSettings': 'seoSettings',
+    'Theme': 'theme',
+    'ServiceArea': 'serviceAreas',
+    'SocialLink': 'socialLink',
+    'ImagesPool': 'imagePool',
+    'HeroSection': 'heroSection',
+    'AboutSection': 'aboutSection',
+    'ServicesSection': 'servicesSection',
+    'GallerySection': 'gallerySection',
+    'TestimonialsSection': 'testimonialsSection',
+    'FAQSection': 'faqSection',
+    'ServiceAreaSection': 'serviceAreaSection',
+    'BusinessDetailsSection': 'businessDetailsSection',
+    'CompanyOverviewSection': 'companyOverviewSection',
+    'ServiceHighlightsSection': 'serviceHighlightsSection',
+    'PreFooterSection': 'preFooterSection',
+    'FooterSection': 'footerSection'
+  };
+  
+  // Transform server fields to form fields
+  Object.entries(fieldMappings).forEach(([serverKey, formKey]) => {
+    if (serverData[serverKey as keyof LandingPage]) {
+      (formData as any)[formKey] = serverData[serverKey as keyof LandingPage];
+    }
+  });
+  
+  return formData;
+};
 
 interface DynamicLandingPageFormProps {
   landingPage: LandingPage;
@@ -44,7 +53,24 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
   onBack,
 }) => {
   const [activeSection, setActiveSection] = useState("basic");
-  const [localData, setLocalData] = useState<LandingPage>(landingPage);
+  
+  // Transform server data to form format and memoize it
+  const formData = useMemo(() => {
+    console.log('Form: Raw server data:', landingPage);
+    console.log('Form: Raw server ServiceArea:', landingPage.ServiceArea);
+    const transformed = transformServerDataForForm(landingPage);
+    console.log('Form: Transformed data for form:', transformed);
+    console.log('Form: Transformed serviceAreas:', transformed.serviceAreas);
+    return transformed;
+  }, [landingPage]);
+  
+  const [localData, setLocalData] = useState<LandingPage>(formData);
+  
+  // Update localData when formData changes (e.g., when landingPage prop updates)
+  React.useEffect(() => {
+    console.log('Form: Updating localData with new formData:', formData);
+    setLocalData(formData);
+  }, [formData]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -78,9 +104,9 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
       fields: [], // Will be handled by specialized form
     },
     {
-      id: "socialLink",
-      label: "Social Link",
-      fields: ["socialLink.platform", "socialLink.url"],
+      id: "socialLinks",
+      label: "Social Links",
+      fields: [], // Will be handled by specialized form
     },
     {
       id: "imagePool",
@@ -174,15 +200,21 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
   // Handle manual save
   const handleSave = async () => {
     try {
+      console.log('Form: Starting save process with data:', localData);
       setIsSaving(true);
       setSaveError(null);
       setSaveSuccess(false);
+      
       await onSave(localData);
+      
+      console.log('Form: Save operation completed successfully');
       setSaveSuccess(true);
       // Auto-hide success message after 3 seconds
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : "Failed to save");
+      console.error('Form: Save operation failed:', error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to save";
+      setSaveError(errorMessage);
     } finally {
       setIsSaving(false);
     }
@@ -210,6 +242,14 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
       case "serviceAreas":
         return (
           <ServiceAreasForm
+            data={localData}
+            onChange={handleFieldChange}
+          />
+        );
+      
+      case "socialLinks":
+        return (
+          <SocialLinksForm
             data={localData}
             onChange={handleFieldChange}
           />
