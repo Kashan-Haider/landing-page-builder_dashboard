@@ -1,0 +1,331 @@
+{
+  "id": "acme-business-services-2025",
+  "templateId": "premium-business-template",
+  "businessName": "Acme Professional Business Solutions",
+  "githubUrl": "https://github.com/acme-business/landing-page",
+  "status": "published",
+  
+  "content": {
+    "hero": {
+      "title": "Transform Your Business with Professional Excellence",
+      "subtitle": "Leading Business Solutions Provider Since 2014",
+      "description": "We partner with ambitious companies to accelerate growth, optimize operations, and achieve sustainable success through innovative strategies and cutting-edge digital solutions. Join over 500+ satisfied clients who have transformed their businesses with our expert guidance.",
+      "ctaButtons": [
+        {"label": "Start Your Transformation", "href": "/contact", "style": "primary"},
+        {"label": "Explore Our Services", "href": "/services", "style": "secondary"}
+      ]
+    },
+    "about": {
+      "title": "About Acme Professional Solutions",
+      "description": "Founded in 2014, Acme Professional Solutions has grown from a small consulting firm to a comprehensive business transformation partner. Our team of 50+ certified experts combines deep industry knowledge with innovative technology solutions to deliver measurable results for businesses of all sizes. We've successfully completed over 1,200 projects across 15 industries, helping companies increase revenue by an average of 35% within the first year of partnership.",
+      "features": [
+        "Certified Business Consultants", 
+        "Award-Winning Digital Solutions", 
+        "24/7 Customer Support", 
+        "Proven ROI Track Record",
+        "Industry-Leading Security Standards",
+        "Scalable Growth Strategies",
+        "Data-Driven Decision Making",
+        "Custom Technology Integration"
+      ],
+      "ctaButton": {"label": "Schedule Free Consultation", "href": "/contact"}
+    },
+    "services": {
+      "title": "Comprehensive Business Solutions",
+      "description": "Our full-spectrum approach covers every aspect of business optimization, from strategic consulting to digital transformation. Each service is tailored to your unique challenges and goals, ensuring maximum impact and sustainable growth.",
+      "services": [
+        {
+          "name": "Strategic Business Consulting",
+          "description": "Comprehensive business analysis and strategic planning to accelerate growth and optimize operations for long-term success.",
+          "features": [
+            "Market Analysis & Competitive Intelligence", 
+            "Growth Strategy Development", 
+            "Process Optimization & Automation",
+            "Financial Planning & Forecasting",
+            "Risk Assessment & Mitigation",
+            "Performance Metrics & KPI Development"
+          ],
+          "price": "Starting at $2,500/month"
+        },
+        {
+          "name": "Digital Transformation & Marketing",
+          "description": "End-to-end digital solutions including website development, SEO, social media marketing, and e-commerce optimization.",
+          "features": [
+            "Custom Website Development", 
+            "Search Engine Optimization (SEO)", 
+            "Pay-Per-Click Advertising (PPC)",
+            "Social Media Marketing",
+            "Content Strategy & Creation",
+            "E-commerce Integration",
+            "Marketing Automation",
+            "Analytics & Reporting"
+          ],
+          "price": "Starting at $1,800/month"
+        },
+        {
+          "name": "Technology Integration & Support",
+          "description": "Custom software solutions, system integrations, and ongoing technical support to streamline your operations.",
+          "features": [
+            "Custom Software Development",
+            "System Integration & Migration",
+            "Cloud Infrastructure Setup",
+            "Database Optimization",
+            "Security Implementation",
+            "24/7 Technical Support",
+            "Training & Documentation"
+          ],
+          "price": "Starting at $3,200/month"
+        },
+        {
+          "name": "Financial Planning & Analysis",
+          "description": "Expert financial guidance including budgeting, forecasting, investment planning, and performance analysis.",
+          "features": [
+            "Financial Health Assessment",
+            "Budget Planning & Forecasting",
+            "Investment Strategy Development",
+            "Cash Flow Optimization",
+            "Tax Planning & Compliance",
+            "Financial Reporting & Analysis"
+          ],
+          "price": "Starting at $1,500/month"
+        }
+      ]
+    },
+    "gallery": {
+      "title": "Our Impact in Action",
+      "description": "Explore our portfolio of successful projects, meet our expert team, and see highlights from industry events and client celebrations. Each image tells a story of transformation and success.",
+      "categories": [
+        "client-success-stories", 
+        "team-expertise", 
+        "industry-events", 
+        "office-culture", 
+        "technology-solutions", 
+        "award-ceremonies"
+      ]
+    },
+    "testimonials": {
+      "title": "Success Stories from Our Valued Clients",
+      "description": "Don't just take our word for it. Hear directly from business leaders who have experienced remarkable growth and transformation through our partnership. These testimonials represent real results from real businesses.",
+      "testimonials": [
+        {
+          "name": "Sarah Johnson",
+          "role": "CEO & Founder",
+          "company": "TechStart Innovations",
+          "text": "Acme transformed our startup from a struggling tech company to a market leader. Their strategic guidance helped us secure $2.5M in funding and increase our customer base by 400% in just 18 months. The ROI on their services has been incredible.",
+          "rating": 5
+        },
+        {
+          "name": "Michael Chen",
+          "role": "Operations Director",
+          "company": "GlobalManufacturing Corp",
+          "text": "The process optimization strategies implemented by Acme reduced our operational costs by 32% while improving product quality. Their team's expertise in lean manufacturing and digital integration was exactly what we needed.",
+          "rating": 5
+        },
+        {
+          "name": "Emily Rodriguez",
+          "role": "Marketing VP",
+          "company": "Retail Dynamics LLC",
+          "text": "Our online sales increased by 275% after implementing Acme's digital marketing strategy. Their data-driven approach and creative campaigns have consistently delivered exceptional results quarter after quarter.",
+          "rating": 5
+        },
+        {
+          "name": "David Thompson",
+          "role": "Chief Financial Officer",
+          "company": "Heritage Financial Group",
+          "text": "Acme's financial planning expertise helped us navigate a challenging market transition. Their forecasting accuracy and strategic recommendations resulted in a 45% improvement in our profit margins.",
+          "rating": 5
+        }
+      ]
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Get instant answers to the most common questions about our services, processes, and partnership approach. Can't find what you're looking for? Our team is always ready to provide personalized answers.",
+      "questions": [
+        {
+          "question": "How long does a typical business transformation project take?",
+          "answer": "Project timelines vary based on scope and complexity. Strategic consulting projects typically take 3-6 months, while comprehensive digital transformations can range from 6-12 months. We provide detailed timelines during our initial consultation and maintain transparent communication throughout the process.",
+          "category": "general"
+        },
+        {
+          "question": "What industries do you specialize in?",
+          "answer": "We work across 15+ industries including technology, manufacturing, retail, healthcare, finance, real estate, and professional services. Our diverse expertise allows us to bring cross-industry best practices to every client engagement.",
+          "category": "services"
+        },
+        {
+          "question": "How do you measure and guarantee ROI?",
+          "answer": "We establish clear KPIs and success metrics at the project onset. Our average client sees a 35% revenue increase within the first year. While we can't guarantee specific results due to market variables, we do offer performance-based pricing options and will work with you until objectives are met.",
+          "category": "results"
+        },
+        {
+          "question": "Do you offer ongoing support after project completion?",
+          "answer": "Absolutely! We provide comprehensive post-implementation support including 24/7 technical assistance, quarterly performance reviews, strategy updates, and training for your team. Our goal is long-term partnership success.",
+          "category": "support"
+        },
+        {
+          "question": "What makes Acme different from other consulting firms?",
+          "answer": "Our unique combination of strategic expertise, technical implementation capabilities, and ongoing support sets us apart. Unlike traditional consultants who only provide recommendations, we stay involved through execution and beyond to ensure sustainable results.",
+          "category": "general"
+        },
+        {
+          "question": "Can you work with businesses of any size?",
+          "answer": "Yes! We've successfully partnered with startups, mid-market companies, and enterprise organizations. Our scalable approach and flexible service packages ensure we can meet the needs of businesses at any stage of growth.",
+          "category": "services"
+        }
+      ]
+    },
+    "contact": {
+      "title": "Ready to Transform Your Business?",
+      "description": "Take the first step toward unprecedented growth and success. Schedule your complimentary consultation today and discover how our proven strategies can accelerate your business transformation. Our experts are standing by to discuss your unique challenges and opportunities.",
+      "showMap": true
+    },
+    "footer": {
+      "copyright": "© 2025 Acme Professional Business Solutions. All rights reserved. Transforming businesses worldwide since 2014.",
+      "links": [
+        {"text": "Privacy Policy", "href": "/privacy"},
+        {"text": "Terms of Service", "href": "/terms"},
+        {"text": "Cookie Policy", "href": "/cookies"},
+        {"text": "Accessibility Statement", "href": "/accessibility"},
+        {"text": "Careers", "href": "/careers"},
+        {"text": "Press & Media", "href": "/press"}
+      ]
+    }
+  },
+  
+  "seoData": {
+    "title": "Acme Professional Business Solutions - Expert Consulting & Digital Transformation Services",
+    "description": "Transform your business with Acme's proven consulting, digital marketing, and technology solutions. 500+ successful clients, 35% average revenue increase. Start your free consultation today.",
+    "keywords": [
+      "business consulting", 
+      "digital transformation", 
+      "strategic planning", 
+      "business growth", 
+      "process optimization", 
+      "digital marketing", 
+      "technology integration", 
+      "financial planning", 
+      "management consulting", 
+      "business automation", 
+      "ROI optimization", 
+      "enterprise solutions"
+    ],
+    "favicon": "https://cdn.acmeprofessional.com/assets/favicon.ico",
+    "ogImage": "https://cdn.acmeprofessional.com/assets/og-image-business-transformation.jpg"
+  },
+  
+  "themeData": {
+    "primaryColor": "#1e3a8a",
+    "secondaryColor": "#64748b",
+    "fontFamily": "Inter, system-ui, -apple-system, sans-serif",
+    "logoUrl": "https://cdn.acmeprofessional.com/assets/acme-logo-2025.svg"
+  },
+  
+  "businessData": {
+    "phone": "+1 (555) 123-ACME",
+    "email": "hello@acmeprofessional.com",
+    "emergencyPhone": "+1 (555) 911-HELP",
+    "emergencyEmail": "urgent@acmeprofessional.com",
+    "address": {
+      "street": "1247 Professional Plaza, Suite 2500",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10001",
+      "country": "United States"
+    },
+    "coordinates": {
+      "latitude": 40.7589,
+      "longitude": -73.9851
+    },
+    "hours": [
+      {"day": "Monday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
+      {"day": "Tuesday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
+      {"day": "Wednesday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
+      {"day": "Thursday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
+      {"day": "Friday", "hours": "8:00 AM - 6:00 PM EST", "isClosed": false},
+      {"day": "Saturday", "hours": "10:00 AM - 4:00 PM EST (By Appointment)", "isClosed": false},
+      {"day": "Sunday", "hours": "Emergency Consultations Only", "isClosed": true}
+    ],
+    "socialLinks": [
+      {"platform": "linkedin", "url": "https://linkedin.com/company/acme-professional-solutions"},
+      {"platform": "twitter", "url": "https://twitter.com/acmeprofessional"},
+      {"platform": "facebook", "url": "https://facebook.com/acmeprofessionalsolutions"},
+      {"platform": "instagram", "url": "https://instagram.com/acmeprofessional"},
+      {"platform": "youtube", "url": "https://youtube.com/c/acmeprofessionalsolutions"}
+    ],
+    "serviceAreas": [
+      {
+        "city": "New York", 
+        "region": "Manhattan & Outer Boroughs", 
+        "description": "Full-service business consulting and digital transformation for NYC metro area including on-site visits and local market expertise."
+      },
+      {
+        "city": "Boston", 
+        "region": "Greater Boston Area", 
+        "description": "Strategic consulting and technology solutions for Boston's thriving business ecosystem with dedicated regional specialists."
+      },
+      {
+        "city": "Philadelphia", 
+        "region": "Philadelphia & Suburbs", 
+        "description": "Comprehensive business services for the Philadelphia region including manufacturing, healthcare, and financial services expertise."
+      },
+      {
+        "city": "Washington", 
+        "region": "DC Metro Area", 
+        "description": "Government contracting expertise and enterprise solutions for businesses in the Washington DC metropolitan area."
+      },
+      {
+        "city": "Remote", 
+        "region": "Nationwide Virtual Services", 
+        "description": "Complete digital consulting and transformation services available remotely across all 50 states with virtual collaboration tools."
+      }
+    ]
+  },
+  
+  "images": [
+    {
+      "id": "hero-img-1",
+      "title": "Modern Business Headquarters",
+      "altText": "Acme Professional Solutions modern office building with glass facade in Manhattan",
+      "imageUrl": "https://cdn.acmeprofessional.com/images/hero-headquarters-2025.jpg",
+      "category": "hero"
+    },
+    {
+      "id": "about-img-1", 
+      "title": "Executive Team Strategic Planning",
+      "altText": "Acme leadership team collaborating on strategic business planning in modern conference room",
+      "imageUrl": "https://cdn.acmeprofessional.com/images/team-strategic-planning.jpg",
+      "category": "about"
+    },
+    {
+      "id": "services-img-1",
+      "title": "Digital Transformation Workshop",
+      "altText": "Acme consultants leading client workshop on digital transformation strategies",
+      "imageUrl": "https://cdn.acmeprofessional.com/images/digital-transformation-workshop.jpg",
+      "category": "services"
+    },
+    {
+      "id": "testimonials-img-1",
+      "title": "Client Success Celebration",
+      "altText": "Happy clients celebrating business growth milestones with Acme consulting team",
+      "imageUrl": "https://cdn.acmeprofessional.com/images/client-success-celebration.jpg",
+      "category": "testimonials"
+    },
+    {
+      "id": "gallery-img-1",
+      "title": "Technology Innovation Lab",
+      "altText": "State-of-the-art technology lab where Acme develops custom business solutions",
+      "imageUrl": "https://cdn.acmeprofessional.com/images/innovation-lab-technology.jpg",
+      "category": "gallery"
+    },
+    {
+      "id": "contact-img-1",
+      "title": "Professional Consultation Room",
+      "altText": "Modern consultation room where Acme meets with prospective clients for initial assessments",
+      "imageUrl": "https://cdn.acmeprofessional.com/images/consultation-room-modern.jpg",
+      "category": "contact"
+    }
+  ],
+  
+  "createdAt": "2025-01-15T10:00:00Z",
+  "updatedAt": "2025-08-15T16:53:00Z",
+  "publishedAt": "2025-01-15T15:30:00Z"
+}
