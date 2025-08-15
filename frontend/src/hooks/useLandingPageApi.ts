@@ -1,125 +1,208 @@
 import { useState } from 'react';
-import type { LandingPage } from '../types/landingPageDataTypes';
+import type { LandingPage, Image, ApiResponse } from '../types/landingPageDataTypes';
 
 interface UseLandingPageApiReturn {
-  saveLoading: boolean;
-  deleteLoading: boolean;
+  loading: boolean;
+  error: string | null;
+  
+  // Landing Page operations
+  getLandingPage: (id: string) => Promise<LandingPage>;
+  getAllLandingPages: () => Promise<LandingPage[]>;
+  createLandingPage: (data: Partial<LandingPage>) => Promise<LandingPage>;
+  updateLandingPage: (id: string, data: Partial<LandingPage>) => Promise<LandingPage>;
+  deleteLandingPage: (id: string) => Promise<void>;
+  
+  // Status operations
+  publishLandingPage: (id: string) => Promise<LandingPage>;
+  unpublishLandingPage: (id: string) => Promise<LandingPage>;
+  archiveLandingPage: (id: string) => Promise<LandingPage>;
+  
+  // Image operations
+  uploadImage: (landingPageId: string, formData: FormData) => Promise<Image>;
+  updateImage: (imageId: string, data: Partial<Image>) => Promise<Image>;
+  deleteImage: (imageId: string) => Promise<void>;
+  
+  // Legacy compatibility
   savePage: (pageId: string, data: Partial<LandingPage>) => Promise<LandingPage>;
   deletePage: (pageId: string) => Promise<void>;
 }
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
-const transformServerDataForForm = (serverData: LandingPage): LandingPage => {
-  const formData = { ...serverData };
+const handleApiResponse = async <T>(response: Response): Promise<T> => {
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ message: 'Network error occurred' }));
+    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+  }
   
-  const fieldMappings = {
-    'BusinessContact': 'businessContact',
-    'SEOSettings': 'seoSettings',
-    'Theme': 'theme',
-    'ServiceArea': 'serviceAreas',
-    'SocialLink': 'socialLink',
-    'ImagesPool': 'imagePool',
-    'HeroSection': 'heroSection',
-    'AboutSection': 'aboutSection',
-    'ServicesSection': 'servicesSection',
-    'GallerySection': 'gallerySection',
-    'TestimonialsSection': 'testimonialsSection',
-    'FAQSection': 'faqSection',
-    'ServiceAreaSection': 'serviceAreaSection',
-    'BusinessDetailsSection': 'businessDetailsSection',
-    'CompanyOverviewSection': 'companyOverviewSection',
-    'ServiceHighlightsSection': 'serviceHighlightsSection',
-    'PreFooterSection': 'preFooterSection',
-    'FooterSection': 'footerSection'
-  };
+  const result: ApiResponse<T> = await response.json();
   
-  Object.entries(fieldMappings).forEach(([serverKey, formKey]) => {
-    if (serverData[serverKey as keyof LandingPage]) {
-      (formData as any)[formKey] = serverData[serverKey as keyof LandingPage];
-    }
-  });
+  if (!result.success) {
+    throw new Error(result.error || result.message || 'Operation failed');
+  }
   
-  return formData;
-};
-
-const transformFormDataForBackend = (formData: Partial<LandingPage>) => {
-  const sectionFields = [
-    'businessContact', 'seoSettings', 'theme', 'serviceAreas', 'socialLink', 'imagePool',
-    'heroSection', 'aboutSection', 'servicesSection', 'gallerySection', 'testimonialsSection',
-    'faqSection', 'serviceAreaSection', 'businessDetailsSection', 'companyOverviewSection',
-    'serviceHighlightsSection', 'preFooterSection', 'footerSection'
-  ];
-  
-  const allowedFields = ['businessName', 'templateId', 'githubUrl', ...sectionFields];
-  const filteredData: any = {};
-  
-  allowedFields.forEach(field => {
-    if (formData[field as keyof LandingPage] !== undefined) {
-      filteredData[field] = formData[field as keyof LandingPage];
-    }
-  });
-  
-  return filteredData;
+  return result.data as T;
 };
 
 export const useLandingPageApi = (): UseLandingPageApiReturn => {
-  const [saveLoading, setSaveLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const savePage = async (pageId: string, data: Partial<LandingPage>): Promise<LandingPage> => {
-    setSaveLoading(true);
+  const makeRequest = async <T>(requestFn: () => Promise<T>): Promise<T> => {
+    setLoading(true);
+    setError(null);
     try {
-      const transformedData = transformFormDataForBackend(data);
-      
-      const response = await fetch(`${API_BASE_URL}/landing-pages/${pageId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(transformedData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Unknown error occurred' }));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (!result.success) {
-        throw new Error(result.message || 'Save operation failed');
-      }
-      
-      return result.data;
+      return await requestFn();
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
       throw err;
     } finally {
-      setSaveLoading(false);
+      setLoading(false);
     }
   };
 
-  const deletePage = async (pageId: string) => {
-    setDeleteLoading(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/landing-pages/${pageId}`, {
+  // Landing Page operations
+  const getLandingPage = async (id: string): Promise<LandingPage> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages/${id}`);
+      return handleApiResponse<LandingPage>(response);
+    });
+  };
+
+  const getAllLandingPages = async (): Promise<LandingPage[]> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages`);
+      return handleApiResponse<LandingPage[]>(response);
+    });
+  };
+
+  const createLandingPage = async (data: Partial<LandingPage>): Promise<LandingPage> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return handleApiResponse<LandingPage>(response);
+    });
+  };
+
+  const updateLandingPage = async (id: string, data: Partial<LandingPage>): Promise<LandingPage> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return handleApiResponse<LandingPage>(response);
+    });
+  };
+
+  const deleteLandingPage = async (id: string): Promise<void> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages/${id}`, {
         method: 'DELETE',
       });
+      await handleApiResponse<void>(response);
+    });
+  };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-    } catch (err) {
-      throw err;
-    } finally {
-      setDeleteLoading(false);
-    }
+  // Status operations
+  const publishLandingPage = async (id: string): Promise<LandingPage> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages/${id}/publish`, {
+        method: 'POST',
+      });
+      return handleApiResponse<LandingPage>(response);
+    });
+  };
+
+  const unpublishLandingPage = async (id: string): Promise<LandingPage> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages/${id}/unpublish`, {
+        method: 'POST',
+      });
+      return handleApiResponse<LandingPage>(response);
+    });
+  };
+
+  const archiveLandingPage = async (id: string): Promise<LandingPage> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages/${id}/archive`, {
+        method: 'POST',
+      });
+      return handleApiResponse<LandingPage>(response);
+    });
+  };
+
+  // Image operations
+  const uploadImage = async (landingPageId: string, formData: FormData): Promise<Image> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/landing-pages/${landingPageId}/images`, {
+        method: 'POST',
+        body: formData,
+      });
+      return handleApiResponse<Image>(response);
+    });
+  };
+
+  const updateImage = async (imageId: string, data: Partial<Image>): Promise<Image> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/images/${imageId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return handleApiResponse<Image>(response);
+    });
+  };
+
+  const deleteImage = async (imageId: string): Promise<void> => {
+    return makeRequest(async () => {
+      const response = await fetch(`${API_BASE_URL}/images/${imageId}`, {
+        method: 'DELETE',
+      });
+      await handleApiResponse<void>(response);
+    });
+  };
+
+  // Legacy compatibility methods
+  const savePage = async (pageId: string, data: Partial<LandingPage>): Promise<LandingPage> => {
+    return updateLandingPage(pageId, data);
+  };
+
+  const deletePage = async (pageId: string): Promise<void> => {
+    return deleteLandingPage(pageId);
   };
 
   return {
-    saveLoading,
-    deleteLoading,
+    loading,
+    error,
+    
+    // Landing Page operations
+    getLandingPage,
+    getAllLandingPages,
+    createLandingPage,
+    updateLandingPage,
+    deleteLandingPage,
+    
+    // Status operations
+    publishLandingPage,
+    unpublishLandingPage,
+    archiveLandingPage,
+    
+    // Image operations
+    uploadImage,
+    updateImage,
+    deleteImage,
+    
+    // Legacy compatibility
     savePage,
     deletePage,
+    
+    // Legacy loading states (for backward compatibility)
+    saveLoading: loading,
+    deleteLoading: loading,
   };
 };

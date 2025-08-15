@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen" style={{ background: 'var(--gradient-dark)' }}>
       <DashboardHeader
         selectedPage={selectedPage}
         onEdit={() => setViewMode("edit")}

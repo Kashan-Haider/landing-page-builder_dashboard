@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { LandingPage } from '../types/landingPageDataTypes';
+import { useLandingPageApi } from './useLandingPageApi';
 
 interface UseLandingPagesReturn {
   landingPages: LandingPage[];
@@ -15,33 +16,22 @@ interface UseLandingPagesReturn {
   refreshPages: () => Promise<void>;
 }
 
-const API_BASE_URL = 'http://localhost:3000/api';
-
 export const useLandingPages = (): UseLandingPagesReturn => {
   const [landingPages, setLandingPages] = useState<LandingPage[]>([]);
   const [filteredPages, setFilteredPages] = useState<LandingPage[]>([]);
   const [selectedPage, setSelectedPage] = useState<LandingPage | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  
+  const { getAllLandingPages, loading, error } = useLandingPageApi();
 
   const fetchLandingPages = async () => {
     try {
-      setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/landing-pages`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const apiResponse = await response.json();
-
-      const data = apiResponse.success && apiResponse.data ? apiResponse.data : apiResponse;
-      const pagesArray = Array.isArray(data) ? data : [];
-      setLandingPages(pagesArray);
-      setFilteredPages(pagesArray);
+      const pages = await getAllLandingPages();
+      setLandingPages(pages);
+      setFilteredPages(pages);
     } catch (err) {
-      setError('Failed to fetch landing pages');
-    } finally {
-      setLoading(false);
+      // Error is already handled by the API hook
+      console.error('Failed to fetch landing pages:', err);
     }
   };
 

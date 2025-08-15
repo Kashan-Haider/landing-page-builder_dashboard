@@ -10,10 +10,10 @@ class WebhookService {
     githubUrl?: string;
   }) {
     try {
-      const webhooks = await prisma.webhookConfig.findMany({
-        where: {
-          isActive: true,
-          events: { has: event }
+      const webhooks = await prisma.webhook.findMany({
+        where: { 
+          isActive: true, 
+          events: { has: event } 
         }
       });
 
@@ -47,13 +47,10 @@ class WebhookService {
           id: uuidv4(),
           webhookId: webhook.id,
           event: payload.event,
-          templateId: payload.templateId,
-          githubUrl: payload.githubUrl || '',
           payload: payload as any,
           status: response.ok ? 'success' : 'failed',
           statusCode: response.status,
-          errorMessage: response.ok ? '' : await response.text(),
-          retryCount: 0
+          error: response.ok ? undefined : await response.text()
         }
       });
     } catch (error) {
@@ -62,13 +59,10 @@ class WebhookService {
           id: uuidv4(),
           webhookId: webhook.id,
           event: payload.event,
-          templateId: payload.templateId,
-          githubUrl: payload.githubUrl || '',
           payload: payload as any,
           status: 'failed',
           statusCode: 0,
-          errorMessage: error instanceof Error ? error.message : 'Unknown error',
-          retryCount: 0
+          error: error instanceof Error ? error.message : 'Unknown error'
         }
       });
     }
@@ -76,7 +70,7 @@ class WebhookService {
 
   async createWebhook(data: Omit<WebhookConfig, 'id' | 'isActive'>) {
     try {
-      return await prisma.webhookConfig.create({
+      return await prisma.webhook.create({
         data: { 
           id: uuidv4(),
           ...data, 
@@ -91,7 +85,7 @@ class WebhookService {
 
   async getWebhooks() {
     try {
-      return await prisma.webhookConfig.findMany({ 
+      return await prisma.webhook.findMany({ 
         orderBy: { createdAt: 'desc' } 
       });
     } catch (error) {
@@ -101,12 +95,12 @@ class WebhookService {
 
   async toggleWebhook(id: string) {
     try {
-      const webhook = await prisma.webhookConfig.findUnique({ where: { id } });
+      const webhook = await prisma.webhook.findUnique({ where: { id } });
       if (!webhook) {
         throw new Error('Webhook not found');
       }
       
-      return await prisma.webhookConfig.update({
+      return await prisma.webhook.update({
         where: { id },
         data: { isActive: !webhook.isActive }
       });

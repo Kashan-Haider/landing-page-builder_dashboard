@@ -1,6 +1,5 @@
 import express from 'express';
 import { landingPageService } from '../services/landingPageService';
-import { CreateLandingPageData } from '../types';
 import { 
   asyncHandler, 
   sendSuccess, 
@@ -9,16 +8,11 @@ import {
 import { validateBody } from '../middleware/validation';
 import { 
   createLandingPageSchema, 
-  updateLandingPageSchema 
+  updateLandingPageSchema,
+  createImageSchema
 } from '../validation/schemas';
-import { z } from 'zod';
 
 const router = express.Router();
-
-// Parameter validation schema
-const idParamsSchema = z.object({
-  id: z.string().min(1, 'ID is required')
-});
 
 // Get all landing pages
 router.get('/', asyncHandler(async (req, res) => {
@@ -57,8 +51,47 @@ router.put('/:id',
 
 // Delete landing page
 router.delete('/:id', asyncHandler(async (req, res) => {
-  await landingPageService.deleteLandingPage(req.params.id);
-  sendSuccess(res, null, 'Landing page deleted successfully');
+  const result = await landingPageService.deleteLandingPage(req.params.id);
+  sendSuccess(res, result, 'Landing page deleted successfully');
+}));
+
+// Publish landing page
+router.post('/:id/publish', asyncHandler(async (req, res) => {
+  const landingPage = await landingPageService.publishLandingPage(req.params.id);
+  sendSuccess(res, landingPage, 'Landing page published successfully');
+}));
+
+// Unpublish landing page
+router.post('/:id/unpublish', asyncHandler(async (req, res) => {
+  const landingPage = await landingPageService.unpublishLandingPage(req.params.id);
+  sendSuccess(res, landingPage, 'Landing page unpublished successfully');
+}));
+
+// Archive landing page
+router.post('/:id/archive', asyncHandler(async (req, res) => {
+  const landingPage = await landingPageService.archiveLandingPage(req.params.id);
+  sendSuccess(res, landingPage, 'Landing page archived successfully');
+}));
+
+// Get images for landing page
+router.get('/:id/images', asyncHandler(async (req, res) => {
+  const images = await landingPageService.getImages(req.params.id);
+  sendSuccess(res, images, 'Images fetched successfully');
+}));
+
+// Add image to landing page
+router.post('/:id/images',
+  validateBody(createImageSchema),
+  asyncHandler(async (req, res) => {
+    const image = await landingPageService.addImage(req.params.id, req.body);
+    sendSuccess(res, image, 'Image added successfully', 201);
+  })
+);
+
+// Delete image from landing page
+router.delete('/images/:imageId', asyncHandler(async (req, res) => {
+  const result = await landingPageService.deleteImage(req.params.imageId);
+  sendSuccess(res, result, 'Image deleted successfully');
 }));
 
 export default router;

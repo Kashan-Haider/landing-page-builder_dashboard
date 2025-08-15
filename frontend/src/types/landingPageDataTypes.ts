@@ -3,207 +3,157 @@ export interface LandingPage {
   templateId: string;
   businessName: string;
   githubUrl?: string;
+  status: 'draft' | 'published' | 'archived';
+  content: LandingPageContent;
+  seoData: SEOData;
+  themeData: ThemeData;
+  businessData: BusinessData;
+  images: Image[];
   createdAt: string;
   updatedAt: string;
-  seoSettingsId?: string;
-  businessContactId?: string;
-  themeId?: string;
-  // Backend returns capitalized field names
-  BusinessContact?: BusinessContact;
-  SEOSettings?: SEOSettings;
-  Theme?: Theme;
-  // Section relationships (Backend capitalized names)
-  ServiceArea?: ServiceArea[]; // One-to-many
-  SocialLink?: SocialLink;
-  ImagesPool?: ImagePool;
-  HeroSection?: HeroSection;
-  AboutSection?: AboutSection;
-  ServicesSection?: ServicesSection;
-  GallerySection?: GallerySection;
-  TestimonialsSection?: TestimonialsSection;
-  FAQSection?: FAQSection;
-  ServiceAreaSection?: ServiceAreaSection;
-  BusinessDetailsSection?: BusinessDetailsSection;
-  CompanyOverviewSection?: CompanyOverviewSection;
-  ServiceHighlightsSection?: ServiceHighlightsSection;
-  PreFooterSection?: PreFooterSection;
-  FooterSection?: FooterSection;
-  // Legacy field names for backwards compatibility (optional)
-  businessContact?: BusinessContact;
-  seoSettings?: SEOSettings;
-  theme?: Theme;
-  serviceAreas?: ServiceArea[];
-  socialLink?: SocialLink;
-  imagePool?: ImagePool;
-  heroSection?: HeroSection;
-  aboutSection?: AboutSection;
-  servicesSection?: ServicesSection;
-  gallerySection?: GallerySection;
-  testimonialsSection?: TestimonialsSection;
-  faqSection?: FAQSection;
-  serviceAreaSection?: ServiceAreaSection;
-  businessDetailsSection?: BusinessDetailsSection;
-  companyOverviewSection?: CompanyOverviewSection;
-  serviceHighlightsSection?: ServiceHighlightsSection;
-  preFooterSection?: PreFooterSection;
-  footerSection?: FooterSection;
+  publishedAt?: string;
 }
 
-interface BusinessContact {
-  id: string;
-  businessName: string;
-  phone: string;
-  emergencyPhone?: string;
-  email: string;
-  emergencyEmail?: string;
-  street?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  latitude?: number;
-  longitude?: number;
-  BusinessHour?: BusinessHour[];
+export interface LandingPageContent {
+  hero: {
+    title: string;
+    subtitle: string;
+    description: string;
+    ctaButtons?: Array<{
+      label: string;
+      href: string;
+      style: 'primary' | 'secondary';
+    }>;
+  };
+  about: {
+    title: string;
+    description: string;
+    features: string[];
+    ctaButton?: {
+      label: string;
+      href: string;
+    };
+  };
+  services: {
+    title: string;
+    description: string;
+    services: Array<{
+      name: string;
+      description: string;
+      features: string[];
+      price?: string;
+    }>;
+  };
+  gallery: {
+    title: string;
+    description: string;
+    categories: string[];
+  };
+  testimonials: {
+    title: string;
+    description: string;
+    testimonials: Array<{
+      name: string;
+      role: string;
+      company: string;
+      text: string;
+      rating?: number;
+    }>;
+  };
+  faq: {
+    title: string;
+    description: string;
+    questions: Array<{
+      question: string;
+      answer: string;
+      category: string;
+    }>;
+  };
+  contact: {
+    title: string;
+    description: string;
+    showMap?: boolean;
+  };
+  footer: {
+    copyright: string;
+    links?: Array<{
+      text: string;
+      href: string;
+    }>;
+  };
 }
 
-interface BusinessHour {
-  id: string;
-  day: string;
-  hours: string;
-  isClosed: boolean;
-  businessContactId: string;
-}
-
-interface SEOSettings {
-  id: string;
+export interface SEOData {
   title: string;
   description: string;
   keywords: string[];
   favicon?: string;
+  ogImage?: string;
 }
 
-interface HeroSection {
-  id: string;
-  title: string;
-  subtitle?: string;
-  description?: string;
+export interface ThemeData {
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily?: string;
+  logoUrl?: string;
 }
 
-interface AboutSection {
-  id: string;
-  title: string;
-  description: string;
-  features: string[];
+export interface BusinessData {
+  phone: string;
+  email: string;
+  emergencyPhone?: string;
+  emergencyEmail?: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country?: string;
+  };
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+  hours: Array<{
+    day: string;
+    hours: string;
+    isClosed: boolean;
+  }>;
+  socialLinks: Array<{
+    platform: string;
+    url: string;
+  }>;
+  serviceAreas: Array<{
+    city: string;
+    region: string;
+    description: string;
+  }>;
 }
 
-interface ServicesSection {
+export interface Image {
   id: string;
-  title: string;
-  description?: string;
-}
-
-interface Theme {
-  id: string;
-  primaryColor?: string;
-  secondaryColor?: string;
-}
-
-interface ServiceArea {
-  id: string;
-  city: string;
-  region: string;
-  description: string;
-}
-
-interface SocialPlatform {
-  id: string;
-  platform: string;
-  url: string;
-  socialLinkId?: string;
-}
-
-interface SocialLink {
-  id: string;
-  name: string;
-  createdAt?: string;
-  updatedAt?: string;
-  socialPlatforms?: SocialPlatform[];
-  // Legacy fields for backwards compatibility
-  platform?: string;
-  url?: string;
-}
-
-interface Image {
-  id: string;
-  imageId: string;
+  landingPageId: string;
   title: string;
   altText: string;
   imageUrl: string;
-  category?: string;
-  description?: string;
-  imagePoolId: string;
-  createdAt?: string;
-  updatedAt?: string;
+  category: string;
+  createdAt: string;
 }
 
-interface ImagePool {
-  id: string;
-  name: string;
-  description?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  Image?: Image[]; // Backend uses capitalized field name
-  images?: Image[]; // Legacy field for backwards compatibility
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message: string;
 }
 
-interface GallerySection {
-  id: string;
-  title: string;
-  description?: string;
+export interface FormState {
+  isLoading: boolean;
+  error: string | null;
+  success: boolean;
 }
 
-interface TestimonialsSection {
-  id: string;
-  title: string;
-  description?: string;
-}
-
-interface FAQSection {
-  id: string;
-  title: string;
-  description?: string;
-}
-
-interface ServiceAreaSection {
-  id: string;
-  title: string;
-  description?: string;
-}
-
-interface BusinessDetailsSection {
-  id: string;
-  title: string;
-  sections?: any[];
-  contactForm?: any;
-  map?: any;
-}
-
-interface CompanyOverviewSection {
-  id: string;
-  title: string;
-  sections?: any[];
-}
-
-interface ServiceHighlightsSection {
-  id: string;
-  title: string;
-}
-
-interface PreFooterSection {
-  id: string;
-  description: string;
-}
-
-interface FooterSection {
-  id: string;
-  copyright: string;
+export interface ValidationError {
+  field: string;
+  message: string;
 }

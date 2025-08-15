@@ -1,215 +1,164 @@
-export interface BusinessHour {
-  day: string;
-  hours: string;
-  isClosed: boolean;
-}
-
-export interface BusinessContact {
-  id?: string;
+export interface LandingPage {
+  id: string;
+  templateId: string;
   businessName: string;
-  phone: string;
-  emergencyPhone: string;
-  email: string;
-  emergencyEmail: string;
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  latitude: number;
-  longitude: number;
-  businessHours?: BusinessHour[];
+  githubUrl?: string;
+  status: 'draft' | 'published' | 'archived';
+  content: LandingPageContent;
+  seoData: SEOData;
+  themeData: ThemeData;
+  businessData: BusinessData;
+  images: Image[];
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt?: Date;
 }
 
-export interface SEOSettings {
-  id?: string;
+export interface LandingPageContent {
+  hero: {
+    title: string;
+    subtitle: string;
+    description: string;
+    ctaButtons?: Array<{
+      label: string;
+      href: string;
+      style: 'primary' | 'secondary';
+    }>;
+  };
+  about: {
+    title: string;
+    description: string;
+    features: string[];
+    ctaButton?: {
+      label: string;
+      href: string;
+    };
+  };
+  services: {
+    title: string;
+    description: string;
+    services: Array<{
+      name: string;
+      description: string;
+      features: string[];
+      price?: string;
+    }>;
+  };
+  gallery: {
+    title: string;
+    description: string;
+    categories: string[];
+  };
+  testimonials: {
+    title: string;
+    description: string;
+    testimonials: Array<{
+      name: string;
+      role: string;
+      company: string;
+      text: string;
+      rating?: number;
+    }>;
+  };
+  faq: {
+    title: string;
+    description: string;
+    questions: Array<{
+      question: string;
+      answer: string;
+      category: string;
+    }>;
+  };
+  contact: {
+    title: string;
+    description: string;
+    showMap?: boolean;
+  };
+  footer: {
+    copyright: string;
+    links?: Array<{
+      text: string;
+      href: string;
+    }>;
+  };
+}
+
+export interface SEOData {
   title: string;
   description: string;
   keywords: string[];
+  favicon?: string;
+  ogImage?: string;
 }
 
-export interface Theme {
-  id?: string;
+export interface ThemeData {
   primaryColor: string;
   secondaryColor: string;
+  fontFamily?: string;
+  logoUrl?: string;
 }
 
-export interface CtaButton {
-  id?: string;
-  label: string;
-  href: string;
-}
-
-export interface ServiceArea {
-  id?: string;
-  city: string;
-  region: string;
-  description: string;
-  ctaButtonId?: string;
-  ctaButton?: CtaButton;
-}
-
-export interface SocialPlatform {
-  id?: string;
-  platform: string;
-  url: string;
-  socialLinkId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface SocialLink {
-  id?: string;
-  name: string;
-  socialPlatforms?: SocialPlatform[];
-  createdAt?: string;
-  updatedAt?: string;
+export interface BusinessData {
+  phone: string;
+  email: string;
+  emergencyPhone?: string;
+  emergencyEmail?: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country?: string;
+  };
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+  hours: Array<{
+    day: string;
+    hours: string;
+    isClosed: boolean;
+  }>;
+  socialLinks: Array<{
+    platform: string;
+    url: string;
+  }>;
+  serviceAreas: Array<{
+    city: string;
+    region: string;
+    description: string;
+  }>;
 }
 
 export interface Image {
-  id?: string;
-  imageId: string;
+  id: string;
+  landingPageId: string;
   title: string;
   altText: string;
   imageUrl: string;
-  category?: string;
-  description?: string;
-  imagePoolId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface ImagesPool {
-  id?: string;
-  name: string;
-  description?: string;
-  images?: Image[];
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface HeroSection {
-  id?: string;
-  title: string;
-  subtitle: string;
-  description: string;
-}
-
-export interface AboutSection {
-  id?: string;
-  title: string;
-  description: string;
-  features: string[];
-}
-
-export interface ServicesSection {
-  id?: string;
-  title: string;
-  description: string;
-}
-
-export interface GallerySection {
-  id?: string;
-  title: string;
-  description: string;
-}
-
-export interface TestimonialsSection {
-  id?: string;
-  title: string;
-  description: string;
-}
-
-export interface FAQSection {
-  id?: string;
-  title: string;
-  description: string;
-}
-
-export interface ServiceAreaSection {
-  id?: string;
-  title: string;
-  description: string;
-}
-
-export interface BusinessDetailSubSection {
-  title: string;
-  description: string;
-  ctaTitle: string;
-}
-
-export interface BusinessContactForm {
-  title: string;
-}
-
-export interface MapSettings {
-  latitude: number;
-  longitude: number;
-  locationName: string;
-}
-
-export interface BusinessDetailsSection {
-  id?: string;
-  title: string;
-  sections?: BusinessDetailSubSection[];
-  contactForm?: BusinessContactForm;
-  map?: MapSettings;
-}
-
-export interface CompanyOverviewSubSection {
-  title: string;
-  description: string;
-}
-
-export interface CompanyOverviewSection {
-  id?: string;
-  title: string;
-  sections?: CompanyOverviewSubSection[];
-}
-
-export interface ServiceHighlightsSection {
-  id?: string;
-  title: string;
-}
-
-export interface PreFooterSection {
-  id?: string;
-  description: string;
-}
-
-export interface FooterSection {
-  id?: string;
-  copyright: string;
+  category: string;
+  createdAt: Date;
 }
 
 export interface CreateLandingPageData {
   templateId: string;
   businessName: string;
   githubUrl?: string;
-  
-  // Relations - either provide ID or full object
-  businessContact?: BusinessContact;
-  businessContactId?: string;
-  seoSettings?: SEOSettings;
-  seoSettingsId?: string;
-  theme?: Theme;
-  themeId?: string;
-  
-  // Required sections
-  serviceArea: ServiceArea;
-  socialLink: SocialLink;
-  image: ImagesPool;
-  heroSection: HeroSection;
-  aboutSection: AboutSection;
-  servicesSection: ServicesSection;
-  gallerySection: GallerySection;
-  testimonialsSection: TestimonialsSection;
-  faqSection: FAQSection;
-  serviceAreaSection: ServiceAreaSection;
-  businessDetailsSection: BusinessDetailsSection;
-  companyOverviewSection: CompanyOverviewSection;
-  serviceHighlightsSection: ServiceHighlightsSection;
-  preFooterSection: PreFooterSection;
-  footerSection: FooterSection;
+  content: LandingPageContent;
+  seoData: SEOData;
+  themeData: ThemeData;
+  businessData: BusinessData;
+}
+
+export interface UpdateLandingPageData {
+  templateId?: string;
+  businessName?: string;
+  githubUrl?: string;
+  status?: 'draft' | 'published' | 'archived';
+  content?: Partial<LandingPageContent>;
+  seoData?: Partial<SEOData>;
+  themeData?: Partial<ThemeData>;
+  businessData?: Partial<BusinessData>;
 }
 
 export interface WebhookPayload {

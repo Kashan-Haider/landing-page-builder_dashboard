@@ -13,27 +13,32 @@ export const FieldDisplay: React.FC<FieldDisplayProps> = ({
 }) => {
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-slate-200 mb-2">
+      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-tertiary)' }}>
         {label}
       </label>
-      <div className="p-3 bg-slate-700 border border-slate-600 rounded-lg min-h-[40px] flex items-center">
+      <div className="p-3 metallic-bg rounded-lg min-h-[40px] flex items-center border" style={{ borderColor: 'var(--border-secondary)' }}>
         {type === 'array' ? (
           Array.isArray(value) && value.length > 0 ? (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-2">
               {value.map((item, index) => (
                 <span
                   key={index}
-                  className="bg-blue-600/20 border border-blue-500/30 text-blue-300 px-2 py-1 rounded-md text-sm"
+                  className="px-3 py-1 rounded-full text-sm font-medium border"
+                  style={{ 
+                    backgroundColor: 'var(--accent-primary)',
+                    borderColor: 'var(--accent-secondary)',
+                    color: 'var(--text-primary)'
+                  }}
                 >
                   {item}
                 </span>
               ))}
             </div>
           ) : (
-            <span className="text-slate-400">No items</span>
+            <span style={{ color: 'var(--text-muted)' }}>No items</span>
           )
         ) : (
-          <span className={value ? "text-slate-100" : "text-slate-400"}>
+          <span style={{ color: value ? 'var(--text-secondary)' : 'var(--text-muted)' }}>
             {value || "Not set"}
           </span>
         )}
