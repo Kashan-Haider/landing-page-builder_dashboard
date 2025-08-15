@@ -93,9 +93,7 @@ export const contentSchema = z.object({
 export const seoDataSchema = z.object({
   title: z.string().min(1, 'SEO title is required'),
   description: z.string().min(1, 'SEO description is required'),
-  keywords: z.array(z.string()).default([]),
-  favicon: z.string().url().optional(),
-  ogImage: z.string().url().optional()
+  keywords: z.array(z.string()).default([])
 });
 
 export const themeDataSchema = z.object({

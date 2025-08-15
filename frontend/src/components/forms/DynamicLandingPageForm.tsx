@@ -788,18 +788,6 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
               onChange={(value) => handleFieldChange('seoData.keywords', value)}
               placeholder="Enter a keyword"
             />
-            <TextInput
-              label="Favicon URL"
-              value={getNestedValue(localData, 'seoData.favicon')}
-              onChange={(value) => handleFieldChange('seoData.favicon', value)}
-              placeholder="URL to favicon image"
-            />
-            <TextInput
-              label="OG Image URL"
-              value={getNestedValue(localData, 'seoData.ogImage')}
-              onChange={(value) => handleFieldChange('seoData.ogImage', value)}
-              placeholder="URL to Open Graph image"
-            />
           </div>
         );
       

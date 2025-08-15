@@ -87,8 +87,6 @@ export interface SEOData {
   title: string;
   description: string;
   keywords: string[];
-  favicon?: string;
-  ogImage?: string;
 }
 
 export interface ThemeData {

@@ -115,8 +115,6 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
                 <FieldDisplay label="Title" value={page.seoData.title} />
                 <FieldDisplay label="Description" value={page.seoData.description} />
                 <FieldDisplay label="Keywords" value={page.seoData.keywords} type="array" />
-                <FieldDisplay label="Favicon" value={page.seoData.favicon} />
-                <FieldDisplay label="OG Image" value={page.seoData.ogImage} />
               </div>
             </div>
           )}
