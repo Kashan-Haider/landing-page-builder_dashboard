@@ -68,6 +68,14 @@ class LandingPageService {
           seoData: data.seoData,
           themeData: data.themeData,
           businessData: data.businessData,
+          images: {
+            create: data.images.map((img) => ({
+              slotName: img.slotName,
+              title: img.title,
+              altText: img.altText,
+              imageUrl: img.imageUrl,
+            })),
+          },
         },
         include: {
           images: true,
@@ -83,6 +91,7 @@ class LandingPageService {
         console.warn("Webhook trigger failed:", webhookError);
       }
 
+      console.log(landingPage);
       return landingPage;
     } catch (error) {
       console.error("Error creating landing page:", error);

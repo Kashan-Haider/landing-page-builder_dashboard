@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface CTAButton {
   label: string;
@@ -55,7 +55,6 @@ interface FAQSection {
 interface GallerySection {
   title: string;
   description: string;
-  categories: string[];
 }
 
 interface ContactSection {
@@ -80,7 +79,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
       <svg
         key={star}
         className={`w-4 h-4 ${
-          star <= rating ? 'text-yellow-400' : 'text-gray-600'
+          star <= rating ? "text-yellow-400" : "text-gray-600"
         }`}
         fill="currentColor"
         viewBox="0 0 20 20"
@@ -93,20 +92,26 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
 
 const AboutSectionRenderer: React.FC<{ data: AboutSection }> = ({ data }) => (
   <div className="space-y-4">
-    <h3 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
+    <h3 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>
       {data.title}
     </h3>
-    <p style={{ color: 'var(--text-secondary)' }}>{data.description}</p>
+    <p style={{ color: "var(--text-secondary)" }}>{data.description}</p>
     {data.features && data.features.length > 0 && (
       <div>
-        <h4 className="font-semibold mb-2" style={{ color: 'var(--text-tertiary)' }}>
+        <h4
+          className="font-semibold mb-2"
+          style={{ color: "var(--text-tertiary)" }}
+        >
           Features:
         </h4>
         <ul className="grid grid-cols-2 gap-2">
           {data.features.map((feature, index) => (
             <li key={index} className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--accent-primary)' }} />
-              <span style={{ color: 'var(--text-secondary)' }}>{feature}</span>
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: "var(--accent-primary)" }}
+              />
+              <span style={{ color: "var(--text-secondary)" }}>{feature}</span>
             </li>
           ))}
         </ul>
@@ -122,34 +127,50 @@ const AboutSectionRenderer: React.FC<{ data: AboutSection }> = ({ data }) => (
   </div>
 );
 
-const ServicesSectionRenderer: React.FC<{ data: ServicesSection }> = ({ data }) => (
+const ServicesSectionRenderer: React.FC<{ data: ServicesSection }> = ({
+  data,
+}) => (
   <div className="space-y-6">
     <div>
-      <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+      <h3
+        className="text-xl font-bold mb-2"
+        style={{ color: "var(--text-primary)" }}
+      >
         {data.title}
       </h3>
-      <p style={{ color: 'var(--text-secondary)' }}>{data.description}</p>
+      <p style={{ color: "var(--text-secondary)" }}>{data.description}</p>
     </div>
     <div className="grid gap-4">
       {data.services.map((service, index) => (
         <div key={index} className="card-metallic p-4">
           <div className="flex justify-between items-start mb-3">
-            <h4 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+            <h4
+              className="font-semibold"
+              style={{ color: "var(--text-primary)" }}
+            >
               {service.name}
             </h4>
             {service.price && (
               <span className="silver-text font-bold">{service.price}</span>
             )}
           </div>
-          <p className="mb-3" style={{ color: 'var(--text-secondary)' }}>
+          <p className="mb-3" style={{ color: "var(--text-secondary)" }}>
             {service.description}
           </p>
           {service.features && service.features.length > 0 && (
             <ul className="space-y-1">
               {service.features.map((feature, fIndex) => (
                 <li key={fIndex} className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent-primary)' }} />
-                  <span className="text-sm" style={{ color: 'var(--text-tertiary)' }}>{feature}</span>
+                  <div
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: "var(--accent-primary)" }}
+                  />
+                  <span
+                    className="text-sm"
+                    style={{ color: "var(--text-tertiary)" }}
+                  >
+                    {feature}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -160,29 +181,37 @@ const ServicesSectionRenderer: React.FC<{ data: ServicesSection }> = ({ data }) 
   </div>
 );
 
-const TestimonialsSectionRenderer: React.FC<{ data: TestimonialsSection }> = ({ data }) => (
+const TestimonialsSectionRenderer: React.FC<{ data: TestimonialsSection }> = ({
+  data,
+}) => (
   <div className="space-y-6">
     <div>
-      <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+      <h3
+        className="text-xl font-bold mb-2"
+        style={{ color: "var(--text-primary)" }}
+      >
         {data.title}
       </h3>
-      <p style={{ color: 'var(--text-secondary)' }}>{data.description}</p>
+      <p style={{ color: "var(--text-secondary)" }}>{data.description}</p>
     </div>
     <div className="space-y-4">
       {data.testimonials.map((testimonial, index) => (
         <div key={index} className="card-metallic p-4">
           <div className="flex items-start justify-between mb-3">
             <div>
-              <h4 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+              <h4
+                className="font-semibold"
+                style={{ color: "var(--text-primary)" }}
+              >
                 {testimonial.name}
               </h4>
-              <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
+              <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
                 {testimonial.role} at {testimonial.company}
               </p>
             </div>
             <StarRating rating={testimonial.rating} />
           </div>
-          <p style={{ color: 'var(--text-secondary)' }}>"{testimonial.text}"</p>
+          <p style={{ color: "var(--text-secondary)" }}>"{testimonial.text}"</p>
         </div>
       ))}
     </div>
@@ -192,21 +221,32 @@ const TestimonialsSectionRenderer: React.FC<{ data: TestimonialsSection }> = ({ 
 const FAQSectionRenderer: React.FC<{ data: FAQSection }> = ({ data }) => (
   <div className="space-y-6">
     <div>
-      <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+      <h3
+        className="text-xl font-bold mb-2"
+        style={{ color: "var(--text-primary)" }}
+      >
         {data.title}
       </h3>
-      <p style={{ color: 'var(--text-secondary)' }}>{data.description}</p>
+      <p style={{ color: "var(--text-secondary)" }}>{data.description}</p>
     </div>
     <div className="space-y-3">
       {data.questions.map((faq, index) => (
         <div key={index} className="card-metallic p-4">
-          <h4 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
+          <h4
+            className="font-semibold mb-2"
+            style={{ color: "var(--text-primary)" }}
+          >
             {faq.question}
           </h4>
-          <p style={{ color: 'var(--text-secondary)' }}>{faq.answer}</p>
+          <p style={{ color: "var(--text-secondary)" }}>{faq.answer}</p>
           {faq.category && (
-            <span className="inline-block mt-2 px-2 py-1 text-xs rounded" 
-                  style={{ backgroundColor: 'var(--bg-quaternary)', color: 'var(--text-muted)' }}>
+            <span
+              className="inline-block mt-2 px-2 py-1 text-xs rounded"
+              style={{
+                backgroundColor: "var(--bg-quaternary)",
+                color: "var(--text-muted)",
+              }}
+            >
               {faq.category}
             </span>
           )}
@@ -216,40 +256,38 @@ const FAQSectionRenderer: React.FC<{ data: FAQSection }> = ({ data }) => (
   </div>
 );
 
-const GallerySectionRenderer: React.FC<{ data: GallerySection }> = ({ data }) => (
+const GallerySectionRenderer: React.FC<{ data: GallerySection }> = ({
+  data,
+}) => (
   <div className="space-y-4">
     <div>
-      <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+      <h3
+        className="text-xl font-bold mb-2"
+        style={{ color: "var(--text-primary)" }}
+      >
         {data.title}
       </h3>
-      <p style={{ color: 'var(--text-secondary)' }}>{data.description}</p>
-    </div>
-    <div>
-      <h4 className="font-semibold mb-2" style={{ color: 'var(--text-tertiary)' }}>
-        Categories:
-      </h4>
-      <div className="flex flex-wrap gap-2">
-        {data.categories.map((category, index) => (
-          <span key={index} className="btn-metallic px-3 py-1 rounded-full text-sm">
-            {category}
-          </span>
-        ))}
-      </div>
+      <p style={{ color: "var(--text-secondary)" }}>{data.description}</p>
     </div>
   </div>
 );
 
-const ContactSectionRenderer: React.FC<{ data: ContactSection }> = ({ data }) => (
+const ContactSectionRenderer: React.FC<{ data: ContactSection }> = ({
+  data,
+}) => (
   <div className="space-y-4">
     <div>
-      <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+      <h3
+        className="text-xl font-bold mb-2"
+        style={{ color: "var(--text-primary)" }}
+      >
         {data.title}
       </h3>
-      <p style={{ color: 'var(--text-secondary)' }}>{data.description}</p>
+      <p style={{ color: "var(--text-secondary)" }}>{data.description}</p>
     </div>
     {data.showMap && (
       <div className="card-metallic p-4">
-        <p style={{ color: 'var(--text-tertiary)' }}>
+        <p style={{ color: "var(--text-tertiary)" }}>
           📍 Map integration enabled
         </p>
       </div>
@@ -259,16 +297,22 @@ const ContactSectionRenderer: React.FC<{ data: ContactSection }> = ({ data }) =>
 
 const FooterSectionRenderer: React.FC<{ data: FooterSection }> = ({ data }) => (
   <div className="space-y-4">
-    <p style={{ color: 'var(--text-secondary)' }}>{data.copyright}</p>
+    <p style={{ color: "var(--text-secondary)" }}>{data.copyright}</p>
     <div>
-      <h4 className="font-semibold mb-2" style={{ color: 'var(--text-tertiary)' }}>
+      <h4
+        className="font-semibold mb-2"
+        style={{ color: "var(--text-tertiary)" }}
+      >
         Footer Links:
       </h4>
       <div className="flex flex-wrap gap-4">
         {data.links.map((link, index) => (
-          <a key={index} href={link.href} 
-             className="hover:underline" 
-             style={{ color: 'var(--accent-primary)' }}>
+          <a
+            key={index}
+            href={link.href}
+            className="hover:underline"
+            style={{ color: "var(--accent-primary)" }}
+          >
             {link.text}
           </a>
         ))}
@@ -277,36 +321,45 @@ const FooterSectionRenderer: React.FC<{ data: FooterSection }> = ({ data }) => (
   </div>
 );
 
-export const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({ 
-  sectionKey, 
-  sectionValue 
+export const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({
+  sectionKey,
+  sectionValue,
 }) => {
-  if (!sectionValue || typeof sectionValue !== 'object') {
+  if (!sectionValue || typeof sectionValue !== "object") {
     return (
       <div className="card-metallic p-4">
-        <h5 className="font-medium mb-2" style={{ color: 'var(--text-tertiary)' }}>
-          {sectionKey.replace(/([A-Z])/g, ' $1').trim()} Section
+        <h5
+          className="font-medium mb-2"
+          style={{ color: "var(--text-tertiary)" }}
+        >
+          {sectionKey.replace(/([A-Z])/g, " $1").trim()} Section
         </h5>
-        <p style={{ color: 'var(--text-muted)' }}>No content available</p>
+        <p style={{ color: "var(--text-muted)" }}>No content available</p>
       </div>
     );
   }
 
   const renderContent = () => {
     switch (sectionKey) {
-      case 'about':
+      case "about":
         return <AboutSectionRenderer data={sectionValue as AboutSection} />;
-      case 'services':
-        return <ServicesSectionRenderer data={sectionValue as ServicesSection} />;
-      case 'testimonials':
-        return <TestimonialsSectionRenderer data={sectionValue as TestimonialsSection} />;
-      case 'faq':
+      case "services":
+        return (
+          <ServicesSectionRenderer data={sectionValue as ServicesSection} />
+        );
+      case "testimonials":
+        return (
+          <TestimonialsSectionRenderer
+            data={sectionValue as TestimonialsSection}
+          />
+        );
+      case "faq":
         return <FAQSectionRenderer data={sectionValue as FAQSection} />;
-      case 'gallery':
+      case "gallery":
         return <GallerySectionRenderer data={sectionValue as GallerySection} />;
-      case 'contact':
+      case "contact":
         return <ContactSectionRenderer data={sectionValue as ContactSection} />;
-      case 'footer':
+      case "footer":
         return <FooterSectionRenderer data={sectionValue as FooterSection} />;
       default:
         // Fallback for unknown sections - render as formatted JSON
@@ -314,22 +367,34 @@ export const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({
           <div className="space-y-3">
             {Object.entries(sectionValue).map(([key, value]) => (
               <div key={key}>
-                <span className="font-medium capitalize" style={{ color: 'var(--text-tertiary)' }}>
-                  {key.replace(/([A-Z])/g, ' $1').trim()}:
+                <span
+                  className="font-medium capitalize"
+                  style={{ color: "var(--text-tertiary)" }}
+                >
+                  {key.replace(/([A-Z])/g, " $1").trim()}:
                 </span>
                 <div className="mt-1">
-                  {typeof value === 'string' ? (
-                    <p style={{ color: 'var(--text-secondary)' }}>{value}</p>
+                  {typeof value === "string" ? (
+                    <p style={{ color: "var(--text-secondary)" }}>{value}</p>
                   ) : Array.isArray(value) ? (
                     <ul className="space-y-1">
                       {value.map((item, index) => (
-                        <li key={index} style={{ color: 'var(--text-secondary)' }}>
-                          • {typeof item === 'object' ? JSON.stringify(item, null, 2) : String(item)}
+                        <li
+                          key={index}
+                          style={{ color: "var(--text-secondary)" }}
+                        >
+                          •{" "}
+                          {typeof item === "object"
+                            ? JSON.stringify(item, null, 2)
+                            : String(item)}
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <pre className="text-sm overflow-x-auto" style={{ color: 'var(--text-muted)' }}>
+                    <pre
+                      className="text-sm overflow-x-auto"
+                      style={{ color: "var(--text-muted)" }}
+                    >
                       {JSON.stringify(value, null, 2)}
                     </pre>
                   )}
@@ -344,7 +409,7 @@ export const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({
   return (
     <div className="card-metallic p-4">
       <h5 className="text-sm font-medium mb-4 silver-text uppercase tracking-wider">
-        {sectionKey.replace(/([A-Z])/g, ' $1').trim()} Section
+        {sectionKey.replace(/([A-Z])/g, " $1").trim()} Section
       </h5>
       {renderContent()}
     </div>

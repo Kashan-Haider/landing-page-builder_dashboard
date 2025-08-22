@@ -93,15 +93,7 @@
     },
     "gallery": {
       "title": "Our Impact in Action",
-      "description": "Explore our portfolio of successful projects, meet our expert team, and see highlights from industry events and client celebrations. Each image tells a story of transformation and success.",
-      "categories": [
-        "client-success-stories", 
-        "team-expertise", 
-        "industry-events", 
-        "office-culture", 
-        "technology-solutions", 
-        "award-ceremonies"
-      ]
+      "description": "Explore our portfolio of successful projects, meet our expert team, and see highlights from industry events and client celebrations. Each image tells a story of transformation and success."
     },
     "testimonials": {
       "title": "Success Stories from Our Valued Clients",
@@ -208,8 +200,16 @@
       "ROI optimization", 
       "enterprise solutions"
     ],
-    "favicon": "https://cdn.acmeprofessional.com/assets/favicon.ico",
-    "ogImage": "https://cdn.acmeprofessional.com/assets/og-image-business-transformation.jpg"
+    "focusedKeywords":[
+      "business solutions",
+      "technology consulting",
+      "digital transformation",
+      "enterprise software",
+      "business automation",
+      "acme corp"
+    ],
+    "canonicalUrl": "https://canonicalUrl.com",
+    "isIndex": true
   },
   
   "themeData": {
@@ -286,42 +286,48 @@
       "title": "Modern Business Headquarters",
       "altText": "Acme Professional Solutions modern office building with glass facade in Manhattan",
       "imageUrl": "https://cdn.acmeprofessional.com/images/hero-headquarters-2025.jpg",
-      "category": "hero"
+      "slotName": "hero-image-001"
     },
     {
       "id": "about-img-1", 
       "title": "Executive Team Strategic Planning",
       "altText": "Acme leadership team collaborating on strategic business planning in modern conference room",
       "imageUrl": "https://cdn.acmeprofessional.com/images/team-strategic-planning.jpg",
-      "category": "about"
+      "slotName": "hero-image-001"
+
+      
     },
     {
       "id": "services-img-1",
       "title": "Digital Transformation Workshop",
       "altText": "Acme consultants leading client workshop on digital transformation strategies",
       "imageUrl": "https://cdn.acmeprofessional.com/images/digital-transformation-workshop.jpg",
-      "category": "services"
+      "slotName": "hero-image-001"
+
     },
     {
       "id": "testimonials-img-1",
       "title": "Client Success Celebration",
       "altText": "Happy clients celebrating business growth milestones with Acme consulting team",
       "imageUrl": "https://cdn.acmeprofessional.com/images/client-success-celebration.jpg",
-      "category": "testimonials"
+      "slotName": "hero-image-001"
+
     },
     {
       "id": "gallery-img-1",
       "title": "Technology Innovation Lab",
       "altText": "State-of-the-art technology lab where Acme develops custom business solutions",
       "imageUrl": "https://cdn.acmeprofessional.com/images/innovation-lab-technology.jpg",
-      "category": "gallery"
+      "slotName": "hero-image-001"
+
     },
     {
       "id": "contact-img-1",
       "title": "Professional Consultation Room",
       "altText": "Modern consultation room where Acme meets with prospective clients for initial assessments",
       "imageUrl": "https://cdn.acmeprofessional.com/images/consultation-room-modern.jpg",
-      "category": "contact"
+      "slotName": "hero-image-001"
+
     }
   ],
   

@@ -1,51 +1,46 @@
 @import "tailwindcss";
 
-/* Dark metallic theme variables */
+/* Base theme CSS variables */
 :root {
-  /* Dark backgrounds with subtle gradients */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #2d2d2d;
-  --bg-tertiary: #3a3a3a;
-  --bg-quaternary: #454545;
-  
-  /* Metallic and silver tones */
-  --metallic-dark: #2c2c2c;
-  --metallic-light: #4a4a4a;
-  --silver-primary: #c0c0c0;
-  --silver-secondary: #a8a8a8;
-  --silver-tertiary: #909090;
-  --silver-muted: #787878;
-  
-  /* Text colors optimized for dark theme */
+  /* Backgrounds */
+  --bg-primary: #0f1115;
+  --bg-secondary: #1a1d23;
+  --bg-tertiary: #23272f;
+  --bg-quaternary: #2d323c;
+
+  /* Text */
   --text-primary: #ffffff;
-  --text-secondary: #e5e5e5;
-  --text-tertiary: #c0c0c0;
-  --text-muted: #a8a8a8;
-  --text-disabled: #6b6b6b;
-  
-  /* Borders with metallic feel */
-  --border-primary: #4a4a4a;
-  --border-secondary: #5a5a5a;
-  --border-tertiary: #6a6a6a;
-  --border-metallic: #787878;
-  
-  /* Accent colors with metallic undertones */
-  --accent-primary: #7c9cc4;
-  --accent-secondary: #5d7fa3;
-  --accent-hover: #8fb3d4;
-  --accent-metallic: #9bb5d1;
-  
-  /* Status colors */
-  --success: #4ade80;
-  --warning: #fbbf24;
-  --error: #f87171;
-  --info: --accent-primary;
-  
-  /* Gradients */
-  --gradient-metallic: linear-gradient(135deg, #2d2d2d 0%, #4a4a4a 50%, #3a3a3a 100%);
-  --gradient-silver: linear-gradient(135deg, #a8a8a8 0%, #c0c0c0 50%, #909090 100%);
-  --gradient-dark: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
+  --text-secondary: #e2e6ea;
+  --text-tertiary: #c3c7cc;
+  --text-muted: #9aa0a6;
+  --text-disabled: #6c7279;
+
+  /* Accents */
+  --accent-primary: #0066cc;
+  --accent-secondary: #005bb5;
+  --accent-hover: #1a75e8;
+  --accent-metallic: #3385d9;
 }
+
+/* Theme variables for Tailwind utilities */
+@theme {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-quaternary: var(--bg-quaternary);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-muted: var(--text-muted);
+
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-metallic: var(--accent-metallic);
+}
+
+
 
 body {
   background: var(--gradient-dark);

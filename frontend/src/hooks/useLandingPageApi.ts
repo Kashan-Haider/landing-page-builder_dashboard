@@ -25,6 +25,10 @@ interface UseLandingPageApiReturn {
   // Legacy compatibility
   savePage: (pageId: string, data: Partial<LandingPage>) => Promise<LandingPage>;
   deletePage: (pageId: string) => Promise<void>;
+
+  // Legacy loading states (for backward compatibility)
+  saveLoading: boolean,
+  deleteLoading: boolean,
 }
 
 const API_BASE_URL = 'http://localhost:3000/api';

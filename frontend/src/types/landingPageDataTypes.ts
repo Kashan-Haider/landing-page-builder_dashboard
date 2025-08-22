@@ -3,7 +3,7 @@ export interface LandingPage {
   templateId: string;
   businessName: string;
   githubUrl?: string;
-  status: 'draft' | 'published' | 'archived';
+  status: "draft" | "published" | "archived";
   content: LandingPageContent;
   seoData: SEOData;
   themeData: ThemeData;
@@ -22,7 +22,7 @@ export interface LandingPageContent {
     ctaButtons?: Array<{
       label: string;
       href: string;
-      style: 'primary' | 'secondary';
+      style: "primary" | "secondary";
     }>;
   };
   about: {
@@ -87,6 +87,9 @@ export interface SEOData {
   title: string;
   description: string;
   keywords: string[];
+  canonicalUrl: string;
+  isIndex: boolean;
+  focusedKeywords: string[];
 }
 
 export interface ThemeData {

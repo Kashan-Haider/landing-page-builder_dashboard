@@ -8,45 +8,40 @@ datasource db {
 }
 
 model LandingPage {
-  id           String   @id @default(uuid())
+  id           String  @id @default(uuid())
   templateId   String
   businessName String
   githubUrl    String?
-  status       String   @default("draft")
-  
+  status       String  @default("draft")
+
   content      Json
   seoData      Json
   themeData    Json
   businessData Json
-  
-  images       Image[]
-  
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  publishedAt  DateTime?
+
+  images Image[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
 }
 
 model Image {
-  id             String      @id @default(uuid())
-  landingPageId  String
-  title          String
-  altText        String
-  imageUrl       String
-  category       String      @default("general")
-  createdAt      DateTime    @default(now())
-  
-  landingPage    LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
+  id            String   @id @default(uuid())
+  slotName      String
+  landingPageId String
+  title         String
+  altText       String
+  imageUrl      String
+  createdAt     DateTime @default(now())
+
+  landingPage LandingPage @relation(fields: [landingPageId], references: [id], onDelete: Cascade)
 }
 
 model Template {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String?
-  structure   Json
-  defaultData Json
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model Webhook {
@@ -54,7 +49,6 @@ model Webhook {
   name      String
   url       String
   events    String[]
-  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

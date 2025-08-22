@@ -1,20 +1,22 @@
-import { PrismaClient } from '@prisma/client';
-import { WebhookPayload, WebhookConfig } from '../types';
-import { v4 as uuidv4 } from 'uuid';
+import { PrismaClient } from "@prisma/client";
+import { WebhookPayload, WebhookConfig } from "../types";
+import { v4 as uuidv4 } from "uuid";
 
 const prisma = new PrismaClient();
 
 class WebhookService {
-  async triggerWebhooks(event: 'created' | 'updated', landingPage: {
-    templateId: string;
-    githubUrl?: string;
-  }) {
+  async triggerWebhooks(
+    event: "created" | "updated",
+    landingPage: {
+      templateId: string;
+      githubUrl?: string;
+    }
+  ) {
     try {
       const webhooks = await prisma.webhook.findMany({
-        where: { 
-          isActive: true, 
-          events: { has: event } 
-        }
+        where: {
+          events: { has: event },
+        },
       });
 
       if (webhooks.length === 0) return;
@@ -23,23 +25,23 @@ class WebhookService {
         templateId: landingPage.templateId,
         githubUrl: landingPage.githubUrl,
         event,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
 
       await Promise.allSettled(
-        webhooks.map(webhook => this.sendWebhook(webhook, payload))
+        webhooks.map((webhook) => this.sendWebhook(webhook, payload))
       );
     } catch (error) {
-      console.error('Error triggering webhooks:', error);
+      console.error("Error triggering webhooks:", error);
     }
   }
 
   private async sendWebhook(webhook: any, payload: WebhookPayload) {
     try {
       const response = await fetch(webhook.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       await prisma.webhookLog.create({
@@ -48,10 +50,10 @@ class WebhookService {
           webhookId: webhook.id,
           event: payload.event,
           payload: payload as any,
-          status: response.ok ? 'success' : 'failed',
+          status: response.ok ? "success" : "failed",
           statusCode: response.status,
-          error: response.ok ? undefined : await response.text()
-        }
+          error: response.ok ? undefined : await response.text(),
+        },
       });
     } catch (error) {
       await prisma.webhookLog.create({
@@ -60,64 +62,71 @@ class WebhookService {
           webhookId: webhook.id,
           event: payload.event,
           payload: payload as any,
-          status: 'failed',
+          status: "failed",
           statusCode: 0,
-          error: error instanceof Error ? error.message : 'Unknown error'
-        }
+          error: error instanceof Error ? error.message : "Unknown error",
+        },
       });
     }
   }
 
-  async createWebhook(data: Omit<WebhookConfig, 'id' | 'isActive'>) {
+  async createWebhook(data: Omit<WebhookConfig, "id" | "isActive">) {
     try {
       return await prisma.webhook.create({
-        data: { 
+        data: {
           id: uuidv4(),
-          ...data, 
-          isActive: true,
-          updatedAt: new Date()
-        }
+          ...data,
+          updatedAt: new Date(),
+        },
       });
     } catch (error) {
-      throw new Error(`Failed to create webhook: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to create webhook: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
   async getWebhooks() {
     try {
-      return await prisma.webhook.findMany({ 
-        orderBy: { createdAt: 'desc' } 
+      return await prisma.webhook.findMany({
+        orderBy: { createdAt: "desc" },
       });
     } catch (error) {
-      throw new Error('Failed to fetch webhooks');
+      throw new Error("Failed to fetch webhooks");
     }
   }
 
-  async toggleWebhook(id: string) {
-    try {
-      const webhook = await prisma.webhook.findUnique({ where: { id } });
-      if (!webhook) {
-        throw new Error('Webhook not found');
-      }
-      
-      return await prisma.webhook.update({
-        where: { id },
-        data: { isActive: !webhook.isActive }
-      });
-    } catch (error) {
-      throw new Error(`Failed to toggle webhook: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+  // async toggleWebhook(id: string) {
+  //   try {
+  //     const webhook = await prisma.webhook.findUnique({ where: { id } });
+  //     if (!webhook) {
+  //       throw new Error("Webhook not found");
+  //     }
+
+  //     return await prisma.webhook.update({
+  //       where: { id },
+  //       data: { name: },
+  //     });
+  //   } catch (error) {
+  //     throw new Error(
+  //       `Failed to toggle webhook: ${
+  //         error instanceof Error ? error.message : "Unknown error"
+  //       }`
+  //     );
+  //   }
+  // }
 
   async getWebhookLogs(webhookId?: string) {
     try {
       return await prisma.webhookLog.findMany({
         where: webhookId ? { webhookId } : {},
-        orderBy: { sentAt: 'desc' },
-        take: 100
+        orderBy: { sentAt: "desc" },
+        take: 100,
       });
     } catch (error) {
-      throw new Error('Failed to fetch webhook logs');
+      throw new Error("Failed to fetch webhook logs");
     }
   }
 }

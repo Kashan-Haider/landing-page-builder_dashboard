@@ -1,8 +1,48 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  /* Dark backgrounds with depth */
+  --bg-primary: #0f1115;
+  --bg-secondary: #1a1d23;
+  --bg-tertiary: #23272f;
+  --bg-quaternary: #2d323c;
+  
+  /* Polished metallic and silver tones */
+  --metallic-dark: #2c2f36;
+  --metallic-light: #50545d;
+  --silver-primary: #d4d8dd;
+  --silver-secondary: #b8bcc2;
+  --silver-tertiary: #9ca0a6;
+  --silver-muted: #7f8389;
+  
+  /* Text colors with stronger contrast */
+  --text-primary: #ffffff;
+  --text-secondary: #e2e6ea;
+  --text-tertiary: #c3c7cc;
+  --text-muted: #9aa0a6;
+  --text-disabled: #6c7279;
+  
+  /* Borders with subtle glow */
+  --border-primary: #444a55;
+  --border-secondary: #555c68;
+  --border-tertiary: #666e7b;
+  --border-metallic: #7b838f;
+  
+/* Jewel-tone accents (darkened for white text contrast) */
+--accent-primary: #0066cc;   /* deeper sapphire blue */
+--accent-secondary: #005bb5; /* even darker hover base */
+--accent-hover: #1a75e8;     /* slightly brighter hover */
+--accent-metallic: #3385d9;  /* metallic mid-tone */
+
+  
+  /* Status colors with vibrancy */
+  --success: #4ade80;   /* emerald green */
+  --warning: #facc15;   /* golden yellow */
+  --error: #f87171;     /* bright coral */
+  --info: #38bdf8;      /* sky blue */
+  
+  /* Gradients with more life */
+  --gradient-metallic: linear-gradient(135deg, #23272f 0%, #3d4450 50%, #2a2f38 100%);
+  --gradient-silver: linear-gradient(135deg, #b8bcc2 0%, #d4d8dd 50%, #9ca0a6 100%);
+  --gradient-dark: linear-gradient(180deg, #0f1115 0%, #1a1d23 100%);
 }
 
 .logo {

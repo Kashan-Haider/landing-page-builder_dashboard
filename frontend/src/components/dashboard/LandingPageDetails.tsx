@@ -1,41 +1,51 @@
-import React from 'react';
-import type { LandingPage } from '../../types/landingPageDataTypes';
-import { FieldDisplay } from '../shared/FieldDisplay';
-import { ContentSectionRenderer } from '../content/ContentSectionRenderer';
+import React from "react";
+import type { LandingPage } from "../../types/landingPageDataTypes";
+import { FieldDisplay } from "../shared/FieldDisplay";
+import { ContentSectionRenderer } from "../content/ContentSectionRenderer";
 
 interface LandingPageDetailsProps {
   page: LandingPage;
 }
 
 const formatDate = (date: string | undefined) => {
-  if (!date) return 'Not set';
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+  if (!date) return "Not set";
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'text-green-300 border-green-500';
-      case 'draft': return 'text-yellow-300 border-yellow-500';
-      case 'archived': return 'text-gray-300 border-gray-500';
-      default: return 'text-gray-300 border-gray-500';
+      case "published":
+        return "text-green-300 border-green-500";
+      case "draft":
+        return "text-yellow-300 border-yellow-500";
+      case "archived":
+        return "text-gray-300 border-gray-500";
+      default:
+        return "text-gray-300 border-gray-500";
     }
   };
 
   return (
-    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border metallic-bg ${getStatusColor(status)}`}>
+    <span
+      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border metallic-bg ${getStatusColor(
+        status
+      )}`}
+    >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
   );
 };
 
-export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) => {
+export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({
+  page,
+}) => {
   return (
     <div className="card-metallic max-h-full overflow-y-auto">
       <div className="px-6 py-6">
@@ -45,7 +55,7 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
             <h4 className="text-lg font-semibold silver-text mb-6 flex items-center gap-2">
               <svg
                 className="w-5 h-5"
-                style={{ color: 'var(--accent-primary)' }}
+                style={{ color: "var(--accent-primary)" }}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -66,27 +76,72 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <div>
-                <span style={{ color: 'var(--text-tertiary)' }} className="text-sm font-medium">Status:</span>
+                <span
+                  style={{ color: "var(--text-tertiary)" }}
+                  className="text-sm font-medium"
+                >
+                  Status:
+                </span>
                 <div className="mt-2">
                   <StatusBadge status={page.status} />
                 </div>
               </div>
               <div>
-                <span style={{ color: 'var(--text-tertiary)' }} className="text-sm font-medium">Images:</span>
-                <div style={{ color: 'var(--text-secondary)' }} className="text-sm mt-1">{page.images?.length || 0} uploaded</div>
+                <span
+                  style={{ color: "var(--text-tertiary)" }}
+                  className="text-sm font-medium"
+                >
+                  Images:
+                </span>
+                <div
+                  style={{ color: "var(--text-secondary)" }}
+                  className="text-sm mt-1"
+                >
+                  {page.images?.length || 0} uploaded
+                </div>
               </div>
               <div>
-                <span style={{ color: 'var(--text-tertiary)' }} className="text-sm font-medium">Created:</span>
-                <div style={{ color: 'var(--text-secondary)' }} className="text-sm mt-1">{formatDate(page.createdAt)}</div>
+                <span
+                  style={{ color: "var(--text-tertiary)" }}
+                  className="text-sm font-medium"
+                >
+                  Created:
+                </span>
+                <div
+                  style={{ color: "var(--text-secondary)" }}
+                  className="text-sm mt-1"
+                >
+                  {formatDate(page.createdAt)}
+                </div>
               </div>
               <div>
-                <span style={{ color: 'var(--text-tertiary)' }} className="text-sm font-medium">Updated:</span>
-                <div style={{ color: 'var(--text-secondary)' }} className="text-sm mt-1">{formatDate(page.updatedAt)}</div>
+                <span
+                  style={{ color: "var(--text-tertiary)" }}
+                  className="text-sm font-medium"
+                >
+                  Updated:
+                </span>
+                <div
+                  style={{ color: "var(--text-secondary)" }}
+                  className="text-sm mt-1"
+                >
+                  {formatDate(page.updatedAt)}
+                </div>
               </div>
               {page.publishedAt && (
                 <div className="md:col-span-2">
-                  <span style={{ color: 'var(--text-tertiary)' }} className="text-sm font-medium">Published:</span>
-                  <div style={{ color: 'var(--text-secondary)' }} className="text-sm mt-1">{formatDate(page.publishedAt)}</div>
+                  <span
+                    style={{ color: "var(--text-tertiary)" }}
+                    className="text-sm font-medium"
+                  >
+                    Published:
+                  </span>
+                  <div
+                    style={{ color: "var(--text-secondary)" }}
+                    className="text-sm mt-1"
+                  >
+                    {formatDate(page.publishedAt)}
+                  </div>
                 </div>
               )}
             </div>
@@ -113,9 +168,30 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
               </h4>
               <div className="space-y-4">
                 <FieldDisplay label="Title" value={page.seoData.title} />
-                <FieldDisplay label="Description" value={page.seoData.description} />
-                <FieldDisplay label="Keywords" value={page.seoData.keywords} type="array" />
+                <FieldDisplay
+                  label="Description"
+                  value={page.seoData.description}
+                />
+                <FieldDisplay
+                  label="Keywords"
+                  value={page.seoData.keywords}
+                  type="array"
+                />
               </div>
+              <FieldDisplay
+                label="Canonical Url"
+                value={page.seoData.canonicalUrl}
+              />
+              <FieldDisplay
+                label="Focused Keywords"
+                value={page.seoData.focusedKeywords}
+                type="array"
+              />
+              <FieldDisplay
+                label="Index"
+                value={page.seoData.isIndex}
+                type="boolean"
+              />
             </div>
           )}
 
@@ -140,40 +216,62 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <FieldDisplay label="Primary Color" value={page.themeData.primaryColor} />
+                  <FieldDisplay
+                    label="Primary Color"
+                    value={page.themeData.primaryColor}
+                  />
                   {page.themeData.primaryColor && (
                     <div className="mt-2 flex items-center gap-2">
-                      <div 
+                      <div
                         className="w-8 h-8 rounded border"
-                        style={{ 
+                        style={{
                           backgroundColor: page.themeData.primaryColor,
-                          borderColor: 'var(--border-secondary)'
+                          borderColor: "var(--border-secondary)",
                         }}
                       ></div>
-                      <span style={{ color: 'var(--text-muted)' }} className="text-sm">Color Preview</span>
+                      <span
+                        style={{ color: "var(--text-muted)" }}
+                        className="text-sm"
+                      >
+                        Color Preview
+                      </span>
                     </div>
                   )}
                 </div>
                 <div>
-                  <FieldDisplay label="Secondary Color" value={page.themeData.secondaryColor} />
+                  <FieldDisplay
+                    label="Secondary Color"
+                    value={page.themeData.secondaryColor}
+                  />
                   {page.themeData.secondaryColor && (
                     <div className="mt-2 flex items-center gap-2">
-                      <div 
+                      <div
                         className="w-8 h-8 rounded border"
-                        style={{ 
+                        style={{
                           backgroundColor: page.themeData.secondaryColor,
-                          borderColor: 'var(--border-secondary)'
+                          borderColor: "var(--border-secondary)",
                         }}
                       ></div>
-                      <span style={{ color: 'var(--text-muted)' }} className="text-sm">Color Preview</span>
+                      <span
+                        style={{ color: "var(--text-muted)" }}
+                        className="text-sm"
+                      >
+                        Color Preview
+                      </span>
                     </div>
                   )}
                 </div>
                 <div className="md:col-span-2">
-                  <FieldDisplay label="Font Family" value={page.themeData.fontFamily} />
+                  <FieldDisplay
+                    label="Font Family"
+                    value={page.themeData.fontFamily}
+                  />
                 </div>
                 <div className="md:col-span-2">
-                  <FieldDisplay label="Logo URL" value={page.themeData.logoUrl} />
+                  <FieldDisplay
+                    label="Logo URL"
+                    value={page.themeData.logoUrl}
+                  />
                 </div>
               </div>
             </div>
@@ -201,93 +299,208 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
               <div className="space-y-6">
                 {/* Contact Information */}
                 <div>
-                  <h5 className="text-sm font-medium mb-3" style={{ color: 'var(--text-tertiary)' }}>Contact Information</h5>
+                  <h5
+                    className="text-sm font-medium mb-3"
+                    style={{ color: "var(--text-tertiary)" }}
+                  >
+                    Contact Information
+                  </h5>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FieldDisplay label="Phone" value={page.businessData.phone} />
-                    <FieldDisplay label="Email" value={page.businessData.email} />
-                    <FieldDisplay label="Emergency Phone" value={page.businessData.emergencyPhone} />
-                    <FieldDisplay label="Emergency Email" value={page.businessData.emergencyEmail} />
+                    <FieldDisplay
+                      label="Phone"
+                      value={page.businessData.phone}
+                    />
+                    <FieldDisplay
+                      label="Email"
+                      value={page.businessData.email}
+                    />
+                    <FieldDisplay
+                      label="Emergency Phone"
+                      value={page.businessData.emergencyPhone}
+                    />
+                    <FieldDisplay
+                      label="Emergency Email"
+                      value={page.businessData.emergencyEmail}
+                    />
                   </div>
                 </div>
-                
+
                 {/* Address */}
                 {page.businessData.address && (
                   <div>
-                    <h5 className="text-sm font-medium mb-3" style={{ color: 'var(--text-tertiary)' }}>Address</h5>
+                    <h5
+                      className="text-sm font-medium mb-3"
+                      style={{ color: "var(--text-tertiary)" }}
+                    >
+                      Address
+                    </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FieldDisplay label="Street" value={page.businessData.address.street} />
-                      <FieldDisplay label="City" value={page.businessData.address.city} />
-                      <FieldDisplay label="State" value={page.businessData.address.state} />
-                      <FieldDisplay label="Zip Code" value={page.businessData.address.zipCode} />
-                      <FieldDisplay label="Country" value={page.businessData.address.country} />
+                      <FieldDisplay
+                        label="Street"
+                        value={page.businessData.address.street}
+                      />
+                      <FieldDisplay
+                        label="City"
+                        value={page.businessData.address.city}
+                      />
+                      <FieldDisplay
+                        label="State"
+                        value={page.businessData.address.state}
+                      />
+                      <FieldDisplay
+                        label="Zip Code"
+                        value={page.businessData.address.zipCode}
+                      />
+                      <FieldDisplay
+                        label="Country"
+                        value={page.businessData.address.country}
+                      />
                     </div>
                   </div>
                 )}
-                
+
                 {/* Coordinates */}
                 {page.businessData.coordinates && (
                   <div>
-                    <h5 className="text-sm font-medium mb-3" style={{ color: 'var(--text-tertiary)' }}>Coordinates</h5>
+                    <h5
+                      className="text-sm font-medium mb-3"
+                      style={{ color: "var(--text-tertiary)" }}
+                    >
+                      Coordinates
+                    </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FieldDisplay label="Latitude" value={page.businessData.coordinates.latitude} type="number" />
-                      <FieldDisplay label="Longitude" value={page.businessData.coordinates.longitude} type="number" />
+                      <FieldDisplay
+                        label="Latitude"
+                        value={page.businessData.coordinates.latitude}
+                        type="number"
+                      />
+                      <FieldDisplay
+                        label="Longitude"
+                        value={page.businessData.coordinates.longitude}
+                        type="number"
+                      />
                     </div>
                   </div>
                 )}
-                
+
                 {/* Business Hours */}
-                {page.businessData.hours && page.businessData.hours.length > 0 && (
-                  <div>
-                    <h5 className="text-sm font-medium mb-3" style={{ color: 'var(--text-tertiary)' }}>Business Hours</h5>
-                    <div className="space-y-2">
-                      {page.businessData.hours.map((hour, index) => (
-                        <div key={index} className="flex justify-between items-center p-3 metallic-bg rounded-lg">
-                          <span style={{ color: 'var(--text-primary)' }} className="font-medium">{hour.day}</span>
-                          <span className={`text-sm ${hour.isClosed ? 'text-red-400' : ''}`} style={{ color: hour.isClosed ? '#f87171' : 'var(--text-secondary)' }}>
-                            {hour.isClosed ? 'Closed' : hour.hours}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Social Links */}
-                {page.businessData.socialLinks && page.businessData.socialLinks.length > 0 && (
-                  <div>
-                    <h5 className="text-sm font-medium mb-3" style={{ color: 'var(--text-tertiary)' }}>Social Links</h5>
-                    <div className="space-y-2">
-                      {page.businessData.socialLinks.map((link, index) => (
-                        <div key={index} className="flex justify-between items-center p-3 metallic-bg rounded-lg">
-                          <span style={{ color: 'var(--text-primary)' }} className="font-medium capitalize">{link.platform}</span>
-                          <a href={link.url} target="_blank" rel="noopener noreferrer" 
-                             className="hover:underline text-sm truncate ml-2"
-                             style={{ color: 'var(--accent-primary)' }}>
-                            {link.url}
-                          </a>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Service Areas */}
-                {page.businessData.serviceAreas && page.businessData.serviceAreas.length > 0 && (
-                  <div>
-                    <h5 className="text-sm font-medium mb-3" style={{ color: 'var(--text-tertiary)' }}>Service Areas</h5>
-                    <div className="space-y-3">
-                      {page.businessData.serviceAreas.map((area, index) => (
-                        <div key={index} className="p-4 metallic-bg rounded-lg">
-                          <div className="flex justify-between items-start mb-2">
-                            <span style={{ color: 'var(--text-primary)' }} className="font-medium">{area.city}</span>
-                            <span style={{ color: 'var(--text-muted)' }} className="text-sm">{area.region}</span>
+                {page.businessData.hours &&
+                  page.businessData.hours.length > 0 && (
+                    <div>
+                      <h5
+                        className="text-sm font-medium mb-3"
+                        style={{ color: "var(--text-tertiary)" }}
+                      >
+                        Business Hours
+                      </h5>
+                      <div className="space-y-2">
+                        {page.businessData.hours.map((hour, index) => (
+                          <div
+                            key={index}
+                            className="flex justify-between items-center p-3 metallic-bg rounded-lg"
+                          >
+                            <span
+                              style={{ color: "var(--text-primary)" }}
+                              className="font-medium"
+                            >
+                              {hour.day}
+                            </span>
+                            <span
+                              className={`text-sm ${
+                                hour.isClosed ? "text-red-400" : ""
+                              }`}
+                              style={{
+                                color: hour.isClosed
+                                  ? "#f87171"
+                                  : "var(--text-secondary)",
+                              }}
+                            >
+                              {hour.isClosed ? "Closed" : hour.hours}
+                            </span>
                           </div>
-                          <p style={{ color: 'var(--text-secondary)' }} className="text-sm">{area.description}</p>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                {/* Social Links */}
+                {page.businessData.socialLinks &&
+                  page.businessData.socialLinks.length > 0 && (
+                    <div>
+                      <h5
+                        className="text-sm font-medium mb-3"
+                        style={{ color: "var(--text-tertiary)" }}
+                      >
+                        Social Links
+                      </h5>
+                      <div className="space-y-2">
+                        {page.businessData.socialLinks.map((link, index) => (
+                          <div
+                            key={index}
+                            className="flex justify-between items-center p-3 metallic-bg rounded-lg"
+                          >
+                            <span
+                              style={{ color: "var(--text-primary)" }}
+                              className="font-medium capitalize"
+                            >
+                              {link.platform}
+                            </span>
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:underline text-sm truncate ml-2"
+                              style={{ color: "var(--accent-primary)" }}
+                            >
+                              {link.url}
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                {/* Service Areas */}
+                {page.businessData.serviceAreas &&
+                  page.businessData.serviceAreas.length > 0 && (
+                    <div>
+                      <h5
+                        className="text-sm font-medium mb-3"
+                        style={{ color: "var(--text-tertiary)" }}
+                      >
+                        Service Areas
+                      </h5>
+                      <div className="space-y-3">
+                        {page.businessData.serviceAreas.map((area, index) => (
+                          <div
+                            key={index}
+                            className="p-4 metallic-bg rounded-lg"
+                          >
+                            <div className="flex justify-between items-start mb-2">
+                              <span
+                                style={{ color: "var(--text-primary)" }}
+                                className="font-medium"
+                              >
+                                {area.city}
+                              </span>
+                              <span
+                                style={{ color: "var(--text-muted)" }}
+                                className="text-sm"
+                              >
+                                {area.region}
+                              </span>
+                            </div>
+                            <p
+                              style={{ color: "var(--text-secondary)" }}
+                              className="text-sm"
+                            >
+                              {area.description}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
               </div>
             </div>
           )}
@@ -315,52 +528,103 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
                 {/* Hero Section */}
                 {page.content.hero && (
                   <div>
-                    <h5 className="text-sm font-medium mb-3 silver-text uppercase tracking-wider">Hero Section</h5>
+                    <h5 className="text-sm font-medium mb-3 silver-text uppercase tracking-wider">
+                      Hero Section
+                    </h5>
                     <div className="card-metallic p-4">
                       <div className="space-y-4">
-                        <FieldDisplay label="Title" value={page.content.hero.title} />
-                        <FieldDisplay label="Subtitle" value={page.content.hero.subtitle} />
-                        <FieldDisplay label="Description" value={page.content.hero.description} />
-                        {page.content.hero.ctaButtons && page.content.hero.ctaButtons.length > 0 && (
-                          <div className="mt-4">
-                            <span style={{ color: 'var(--text-tertiary)' }} className="text-sm font-medium">CTA Buttons:</span>
-                            <div className="mt-2 space-y-2">
-                              {page.content.hero.ctaButtons.map((cta, index) => (
-                                <div key={index} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-quaternary)' }}>
-                                  <span style={{ color: 'var(--text-primary)' }} className="font-medium">{cta.label}</span>
-                                  <span style={{ color: 'var(--text-muted)' }}>→</span>
-                                  <span style={{ color: 'var(--accent-primary)' }}>{cta.href}</span>
-                                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                    cta.style === 'primary' ? 'btn-metallic' : ''
-                                  }`} style={{ 
-                                    backgroundColor: cta.style === 'primary' ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
-                                    color: 'var(--text-primary)'
-                                  }}>
-                                    {cta.style}
-                                  </span>
-                                </div>
-                              ))}
+                        <FieldDisplay
+                          label="Title"
+                          value={page.content.hero.title}
+                        />
+                        <FieldDisplay
+                          label="Subtitle"
+                          value={page.content.hero.subtitle}
+                        />
+                        <FieldDisplay
+                          label="Description"
+                          value={page.content.hero.description}
+                        />
+                        {page.content.hero.ctaButtons &&
+                          page.content.hero.ctaButtons.length > 0 && (
+                            <div className="mt-4">
+                              <span
+                                style={{ color: "var(--text-tertiary)" }}
+                                className="text-sm font-medium"
+                              >
+                                CTA Buttons:
+                              </span>
+                              <div className="mt-2 space-y-2">
+                                {page.content.hero.ctaButtons.map(
+                                  (cta, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center gap-3 p-3 rounded-lg"
+                                      style={{
+                                        backgroundColor: "var(--bg-quaternary)",
+                                      }}
+                                    >
+                                      <span
+                                        style={{ color: "var(--text-primary)" }}
+                                        className="font-medium"
+                                      >
+                                        {cta.label}
+                                      </span>
+                                      <span
+                                        style={{ color: "var(--text-muted)" }}
+                                      >
+                                        →
+                                      </span>
+                                      <span
+                                        style={{
+                                          color: "var(--accent-primary)",
+                                        }}
+                                      >
+                                        {cta.href}
+                                      </span>
+                                      <span
+                                        className={`px-2 py-1 rounded text-xs font-medium ${
+                                          cta.style === "primary"
+                                            ? "btn-metallic"
+                                            : ""
+                                        }`}
+                                        style={{
+                                          backgroundColor:
+                                            cta.style === "primary"
+                                              ? "var(--accent-primary)"
+                                              : "var(--bg-tertiary)",
+                                          color: "var(--text-primary)",
+                                        }}
+                                      >
+                                        {cta.style}
+                                      </span>
+                                    </div>
+                                  )
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     </div>
                   </div>
                 )}
-                
+
                 {/* Other Content Sections - Now properly rendered */}
-                {Object.entries(page.content).filter(([key]) => key !== 'hero').map(([sectionKey, sectionValue]) => {
-                  if (!sectionValue || typeof sectionValue !== 'object') return null;
-                  
-                  return (
-                    <div key={sectionKey}>
-                      <ContentSectionRenderer 
-                        sectionKey={sectionKey} 
-                        sectionValue={sectionValue} 
-                      />
-                    </div>
-                  );
-                })}
+                {Object.entries(page.content)
+                  .filter(([key]) => key !== "hero")
+                  .map(([sectionKey, sectionValue]) => {
+                    if (!sectionValue || typeof sectionValue !== "object")
+                      return null;
+
+                    return (
+                      <div key={sectionKey}>
+                        <ContentSectionRenderer
+                          sectionKey={sectionKey}
+                          sectionValue={sectionValue}
+                        />
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           )}
@@ -387,13 +651,16 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {page.images.map((image) => (
                   <div key={image.id} className="card-metallic p-4">
-                    <div className="aspect-video rounded mb-3 overflow-hidden" style={{ backgroundColor: 'var(--bg-quaternary)' }}>
-                      <img 
-                        src={image.imageUrl} 
+                    <div
+                      className="aspect-video rounded mb-3 overflow-hidden"
+                      style={{ backgroundColor: "var(--bg-quaternary)" }}
+                    >
+                      <img
+                        src={image.imageUrl}
                         alt={image.altText}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.style.display = "none";
                         }}
                       />
                     </div>
