@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from "react";
-import { Save, ArrowLeft } from "lucide-react";
+import { Save, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
 import type { LandingPage } from "../../types/landingPageDataTypes";
 import { setNestedValue } from "./formHelpers";
+import { validateSection, validateFullForm } from "../../utils/validation";
 
 // Import section components
 import { BasicInfoSection } from "./sections/BasicInfoSection";
@@ -119,18 +120,48 @@ export const CmsForm: React.FC<CmsFormProps> = ({
   // Current section state for sidebar navigation
   const [currentSection, setCurrentSection] = useState("basic");
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
+  
+  // Validation state
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [sectionValidation, setSectionValidation] = useState<Record<string, boolean>>({});
 
-  // Helper to update nested form data
+  // Helper to update nested form data with validation
   const updateFormData = useCallback((path: string, value: any) => {
-    setFormData((prev: any) => setNestedValue(prev, path, value));
-  }, []);
+    setFormData((prev: any) => {
+      const newData = setNestedValue(prev, path, value);
+      
+      // Validate current section after data update
+      const validation = validateSection(currentSection, newData);
+      setValidationErrors(prev => ({
+        ...prev,
+        ...validation.errors
+      }));
+      setSectionValidation(prev => ({
+        ...prev,
+        [currentSection]: validation.isValid
+      }));
+      
+      return newData;
+    });
+  }, [currentSection]);
 
-  // Save handler
+  // Save handler with full form validation
   const handleSave = useCallback(async () => {
+    // Validate entire form before saving
+    const fullValidation = validateFullForm(formData);
+    
+    if (!fullValidation.isValid) {
+      setValidationErrors(fullValidation.errors);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+      return;
+    }
+    
     setSaveStatus("saving");
     try {
       await onSave(formData);
       setSaveStatus("success");
+      setValidationErrors({}); // Clear errors on successful save
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {
       setSaveStatus("error");
@@ -138,13 +169,13 @@ export const CmsForm: React.FC<CmsFormProps> = ({
     }
   }, [formData, onSave]);
 
-  // Form sections for sidebar navigation
+  // Form sections for sidebar navigation with validation status
   const sections = [
     { id: "basic", label: "Basic Info", icon: "📝" },
-    { id: "seo", label: "SEO Settings", icon: "🔍" },
-    { id: "theme", label: "Theme & Design", icon: "🎨" },
-    { id: "business", label: "Business Data", icon: "🏢" },
-    { id: "hero", label: "Hero Section", icon: "🎯" },
+    { id: "seo", label: "SEO", icon: "🔍" },
+    { id: "theme", label: "Theme", icon: "🎨" },
+    { id: "business", label: "Business", icon: "🏢" },
+    { id: "hero", label: "Hero Section", icon: "🦸" },
     { id: "about", label: "About Section", icon: "ℹ️" },
     { id: "services", label: "Services", icon: "⚙️" },
     { id: "gallery", label: "Gallery", icon: "🖼️" },
@@ -154,6 +185,14 @@ export const CmsForm: React.FC<CmsFormProps> = ({
     { id: "footer", label: "Footer", icon: "📄" },
     { id: "images", label: "Images", icon: "🖼️" },
   ];
+
+  // Helper to get validation icon for section
+  const getValidationIcon = (sectionId: string) => {
+    const isValid = sectionValidation[sectionId];
+    if (isValid === true) return "✅";
+    if (isValid === false) return "❌";
+    return "";
+  };
 
   // Render current section content
   const renderCurrentSection = () => {
@@ -252,6 +291,7 @@ export const CmsForm: React.FC<CmsFormProps> = ({
           >
             <span>{section.icon}</span>
             <span className="text-sm font-medium">{section.label}</span>
+            <span className="ml-auto">{getValidationIcon(section.id)}</span>
           </button>
         ))}
       </div>
@@ -317,6 +357,23 @@ export const CmsForm: React.FC<CmsFormProps> = ({
         {/* Form Content */}
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-4xl mx-auto">
+            {/* Validation Errors Display */}
+            {Object.keys(validationErrors).length > 0 && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-center space-x-2 mb-2">
+                  <AlertCircle className="w-5 h-5 text-red-600" />
+                  <h4 className="text-red-800 font-medium">Validation Errors</h4>
+                </div>
+                <ul className="space-y-1">
+                  {Object.entries(validationErrors).map(([field, error]) => (
+                    <li key={field} className="text-sm text-red-700">
+                      <strong>{field}:</strong> {error}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
             {renderCurrentSection()}
           </div>
         </div>
