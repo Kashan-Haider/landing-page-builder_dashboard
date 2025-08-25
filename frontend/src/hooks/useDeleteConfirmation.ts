@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { LandingPage } from '../types/landingPageDataTypes';
-import { useLandingPageApi } from './useLandingPageApi';
+import { usePageApi } from './usePageApi';
 
 interface UseDeleteConfirmationReturn {
   showDeleteConfirm: boolean;
@@ -17,7 +17,7 @@ export const useDeleteConfirmation = (
 ): UseDeleteConfirmationReturn => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [pageToDelete, setPageToDelete] = useState<LandingPage | null>(null);
-  const { deleteLoading, deletePage } = useLandingPageApi();
+  const { loading: deleteLoading, deletePage } = usePageApi();
 
   const handleDeletePage = (page: LandingPage) => {
     setPageToDelete(page);

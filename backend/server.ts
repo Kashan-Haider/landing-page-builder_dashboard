@@ -1,11 +1,14 @@
+// Main server file for Landing Page Builder CMS
+// This file sets up the Express server with all necessary middleware and routes
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import landingPageRoutes from './routes/landingPageRoutes';
+import pageRoutes from './routes/pageRoutes';
 import webhookRoutes from './routes/webhookRoutes';
 import { ApiResponse } from './types';
 import { handleServiceError } from './middleware/errorHandler';
 
+// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
@@ -20,7 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/landing-pages', landingPageRoutes);
+app.use('/api/pages', pageRoutes);
 app.use('/api/webhooks', webhookRoutes);
 
 app.get('/', (req, res) => {

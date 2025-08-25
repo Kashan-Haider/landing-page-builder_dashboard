@@ -7,7 +7,7 @@ import {
   handleServiceError,
 } from "../middleware/errorHandler";
 import { validateBody, validateQuery } from "../middleware/validation";
-import { createWebhookSchema } from "../validation/schemas";
+import { createWebhookSchema } from "../validation/pageSchemas";
 import { z } from "zod";
 
 const router = express.Router();

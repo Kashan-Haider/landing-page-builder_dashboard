@@ -54,8 +54,7 @@ export const testimonialsSectionSchema = z.object({
 
 export const faqItemSchema = z.object({
   question: z.string().min(1, "FAQ question is required"),
-  answer: z.string().min(1, "FAQ answer is required"),
-  category: z.string().default("general"),
+  answer: z.string().min(1, "FAQ answer is required")
 });
 
 export const faqSectionSchema = z.object({
@@ -218,6 +217,7 @@ export const updateLandingPageSchema = z.object({
   seoData: seoDataSchema.partial().optional(),
   themeData: themeDataSchema.partial().optional(),
   businessData: businessDataSchema.partial().optional(),
+  images: z.array(imageSchema).optional(), // Add images field for updates
 });
 
 export const createImageSchema = z.object({

@@ -66,7 +66,6 @@ export interface LandingPageContent {
     questions: Array<{
       question: string;
       answer: string;
-      category: string;
     }>;
   };
   contact: {

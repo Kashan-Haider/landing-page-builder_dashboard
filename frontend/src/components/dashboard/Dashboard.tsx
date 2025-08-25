@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DynamicLandingPageForm } from "../forms/DynamicLandingPageForm";
+import { CmsForm } from "../forms/CmsForm";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
 import { ErrorDisplay } from "../shared/ErrorDisplay";
 import { SearchBar } from "./SearchBar";
@@ -8,8 +8,8 @@ import { LandingPageList } from "./LandingPageList";
 import { LandingPageDetails } from "./LandingPageDetails";
 import { EmptyPageState } from "./EmptyPageState";
 import { DeleteConfirmModal } from "./DeleteConfirmModal";
-import { useLandingPages } from "../../hooks/useLandingPages";
-import { useLandingPageApi } from "../../hooks/useLandingPageApi";
+import { usePages } from "../../hooks/usePages";
+import { usePageApi } from "../../hooks/usePageApi";
 import { useDeleteConfirmation } from "../../hooks/useDeleteConfirmation";
 import type { LandingPage } from "../../types/landingPageDataTypes";
 
@@ -24,12 +24,12 @@ const Dashboard: React.FC = () => {
     error,
     setSelectedPage,
     setSearchTerm,
-    updatePage,
-    deletePage,
+    updatePageInList,
+    removePageFromList,
     refreshPages,
-  } = useLandingPages();
+  } = usePages();
 
-  const { savePage } = useLandingPageApi();
+  const { updatePage } = usePageApi();
 
   const {
     showDeleteConfirm,
@@ -38,14 +38,14 @@ const Dashboard: React.FC = () => {
     handleDeletePage,
     confirmDelete,
     cancelDelete,
-  } = useDeleteConfirmation(deletePage, () => {});
+  } = useDeleteConfirmation(removePageFromList, () => {});
 
-  const handleSaveFromDynamicForm = async (data: Partial<LandingPage>) => {
+  const handleSaveFromForm = async (data: Partial<LandingPage>) => {
     if (!selectedPage) return;
 
     try {
-      const updatedPageFromServer = await savePage(selectedPage.id, data);
-      updatePage(updatedPageFromServer);
+      const updatedPageFromServer = await updatePage(selectedPage.id, data);
+      updatePageInList(updatedPageFromServer);
     } catch (err) {
       throw err;
     }
@@ -61,10 +61,10 @@ const Dashboard: React.FC = () => {
 
   if (viewMode === "edit" && selectedPage) {
     return (
-      <DynamicLandingPageForm
-        landingPage={selectedPage}
-        onSave={handleSaveFromDynamicForm}
-        onBack={() => setViewMode("list")}
+      <CmsForm
+        page={selectedPage}
+        onSave={handleSaveFromForm}
+        onCancel={() => setViewMode("list")}
       />
     );
   }

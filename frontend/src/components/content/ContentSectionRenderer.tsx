@@ -285,13 +285,6 @@ const ContactSectionRenderer: React.FC<{ data: ContactSection }> = ({
       </h3>
       <p style={{ color: "var(--text-secondary)" }}>{data.description}</p>
     </div>
-    {data.showMap && (
-      <div className="card-metallic p-4">
-        <p style={{ color: "var(--text-tertiary)" }}>
-          📍 Map integration enabled
-        </p>
-      </div>
-    )}
   </div>
 );
 
