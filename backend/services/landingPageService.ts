@@ -74,6 +74,7 @@ class LandingPageService {
               title: img.title,
               altText: img.altText,
               imageUrl: img.imageUrl,
+              category:img.category
             })),
           },
         },

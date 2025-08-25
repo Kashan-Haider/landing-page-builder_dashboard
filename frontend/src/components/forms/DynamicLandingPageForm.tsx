@@ -713,11 +713,15 @@ const FAQArrayInput: React.FC<{
 };
 
 // Component for Business Hours Array
+
+type Period = { open: string; close: string };
+type DaySchedule = { day: string; isClosed: boolean; periods: Period[] };
+
 const BusinessHoursInput: React.FC<{
   label: string;
-  value: any[] | undefined;
-  onChange: (value: any[]) => void;
-}> = ({ label, value = [], onChange }) => {
+  value: { timezone?: string; schedule: DaySchedule[] } | undefined;
+  onChange: (value: { timezone?: string; schedule: DaySchedule[] }) => void;
+}> = ({ label, value, onChange }) => {
   const days = [
     "Monday",
     "Tuesday",
@@ -728,78 +732,187 @@ const BusinessHoursInput: React.FC<{
     "Sunday",
   ];
 
-  // Initialize with all days if empty
+  // Initialize default schedule if empty
   React.useEffect(() => {
-    if (value.length === 0) {
-      const defaultHours = days.map((day) => ({
-        day,
-        hours: day === "Sunday" ? "Closed" : "9:00 AM - 5:00 PM",
-        isClosed: day === "Sunday",
+    if (!value || !value.schedule || value.schedule.length === 0) {
+      const defaultSchedule: DaySchedule[] = days.map((d) => ({
+        day: d,
+        isClosed: d === "Sunday",
+        periods: d === "Sunday" ? [] : [{ open: "09:00", close: "17:00" }],
       }));
-      onChange(defaultHours);
+      onChange({
+        timezone: value?.timezone || "Asia/Singapore",
+        schedule: defaultSchedule,
+      });
     }
-  }, [value.length, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const updateHour = (index: number, field: string, newValue: any) => {
-    const newArray = [...value];
-    newArray[index] = { ...newArray[index], [field]: newValue };
-    onChange(newArray);
+  const updateDay = (index: number, patch: Partial<DaySchedule>) => {
+    const currentSchedule = value?.schedule || [];
+    const copy = [...currentSchedule];
+    copy[index] = {
+      ...(copy[index] || {
+        day: days[index],
+        isClosed: false,
+        periods: [{ open: "09:00", close: "17:00" }],
+      }),
+      ...patch,
+    };
+    onChange({
+      timezone: value?.timezone || "Asia/Singapore",
+      schedule: copy,
+    });
   };
 
+  const updatePeriod = (
+    dayIndex: number,
+    periodIndex: number,
+    field: keyof Period,
+    val: string
+  ) => {
+    const currentSchedule = value?.schedule || [];
+    const copy = [...currentSchedule];
+    const day = copy[dayIndex] || {
+      day: days[dayIndex],
+      isClosed: false,
+      periods: [{ open: "09:00", close: "17:00" }],
+    };
+    const periods = [...(day.periods || [])];
+    periods[periodIndex] = { ...periods[periodIndex], [field]: val };
+    copy[dayIndex] = { ...day, periods };
+    onChange({
+      timezone: value?.timezone || "Asia/Singapore",
+      schedule: copy,
+    });
+  };
+
+  const addPeriod = (dayIndex: number) => {
+    const currentSchedule = value?.schedule || [];
+    const copy = [...currentSchedule];
+    const day = copy[dayIndex] || {
+      day: days[dayIndex],
+      isClosed: false,
+      periods: [],
+    };
+    const periods = [...(day.periods || []), { open: "09:00", close: "17:00" }];
+    copy[dayIndex] = { ...day, periods };
+    onChange({
+      timezone: value?.timezone || "Asia/Singapore",
+      schedule: copy,
+    });
+  };
+
+  const removePeriod = (dayIndex: number, periodIndex: number) => {
+    const currentSchedule = value?.schedule || [];
+    const copy = [...currentSchedule];
+    const day = copy[dayIndex];
+    if (!day) return;
+    const periods = (day.periods || []).filter((_, i) => i !== periodIndex);
+    copy[dayIndex] = { ...day, periods };
+    onChange({
+      timezone: value?.timezone || "Asia/Singapore",
+      schedule: copy,
+    });
+  };
+
+  const schedule = value?.schedule || [];
+
   return (
-    <div className="space-y-4">
-      <label
-        className="block text-sm font-medium"
-        style={{ color: "var(--text-tertiary)" }}
-      >
-        {label}
-      </label>
-      <div className="space-y-3">
-        {value.map((hour, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-3 gap-4 items-center p-3 metallic-bg rounded-lg"
-          >
-            <span
-              className="font-medium"
-              style={{ color: "var(--text-primary)" }}
+    <div className="space-y-3 ">
+      <label className="block text-sm font-medium text-gray-700">{label}</label>
+
+      <div className="space-y-2">
+        {days.map((dayName, index) => {
+          const day = schedule[index] || {
+            day: dayName,
+            isClosed: false,
+            periods: [],
+          };
+
+          return (
+            <div
+              key={dayName}
+              className="border mb-5 border-gray-600 hover:border-gray-500 shadow-lg hover:shadow-2xl shadow-[#00000091] rounded-2xl p-3 px-6 bg-primar"
             >
-              {hour.day}
-            </span>
-            <input
-              type="text"
-              value={hour.hours}
-              onChange={(e) => updateHour(index, "hours", e.target.value)}
-              placeholder="e.g., 9:00 AM - 5:00 PM"
-              className="px-3 py-2 rounded border transition-all duration-300 outline-none"
-              style={{
-                color: "var(--text-primary)",
-                borderColor: "var(--border-secondary)",
-                backgroundColor: "var(--bg-secondary)",
-              }}
-              disabled={hour.isClosed}
-            />
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={hour.isClosed}
-                onChange={(e) => {
-                  updateHour(index, "isClosed", e.target.checked);
-                  if (e.target.checked) {
-                    updateHour(index, "hours", "Closed");
-                  }
-                }}
-                className="rounded"
-              />
-              <span
-                className="text-sm"
-                style={{ color: "var(--text-tertiary)" }}
-              >
-                Closed
-              </span>
-            </label>
-          </div>
-        ))}
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-medium text-gray-100">{dayName}</span>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={!!day.isClosed}
+                    onChange={(e) => {
+                      const closed = e.target.checked;
+                      updateDay(index, {
+                        isClosed: closed,
+                        periods: closed
+                          ? []
+                          : day.periods.length
+                          ? day.periods
+                          : [{ open: "09:00", close: "17:00" }],
+                      });
+                    }}
+                    className="rounded"
+                  />
+                  <span className="text-sm text-gray-600">Closed</span>
+                </label>
+              </div>
+
+              {!day.isClosed && (
+                <div className="space-y-2">
+                  {(day.periods || []).map((period, periodIndex) => (
+                    <div key={periodIndex} className="flex items-center gap-2">
+                      <input
+                        type="time"
+                        value={period.open}
+                        onChange={(e) =>
+                          updatePeriod(
+                            index,
+                            periodIndex,
+                            "open",
+                            e.target.value
+                          )
+                        }
+                        className="px-2 py-1 border border-gray-300 rounded bg-gray-900 text-sm"
+                      />
+                      <span className="text-gray-500">to</span>
+                      <input
+                        type="time"
+                        value={period.close}
+                        onChange={(e) =>
+                          updatePeriod(
+                            index,
+                            periodIndex,
+                            "close",
+                            e.target.value
+                          )
+                        }
+                        className="px-2 py-1 border border-gray-300 rounded bg-gray-900 text-sm"
+                      />
+                      {(day.periods || []).length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removePeriod(index, periodIndex)}
+                          className="text-red-600 hover:text-red-800 text-sm px-2"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={() => addPeriod(index)}
+                    className="text-white hover:cursor-pointer text-sm"
+                  >
+                    + Add another time
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1012,13 +1125,11 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
 
   // Initialize form data with the actual landing page data
   const [localData, setLocalData] = useState<LandingPage>(() => {
-    console.log("Form: Initializing with landing page data:", landingPage);
     return { ...landingPage };
   });
 
   // Update local data when landing page prop changes
   React.useEffect(() => {
-    console.log("Form: Landing page updated, syncing local data:", landingPage);
     setLocalData({ ...landingPage });
   }, [landingPage]);
   const [isSaving, setIsSaving] = useState(false);
@@ -1062,10 +1173,8 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
   // Handle field changes
   const handleFieldChange = useCallback(
     (path: string, value: any) => {
-      console.log("Form: Field change - path:", path, "value:", value);
       setLocalData((prevData) => {
         const newData = setNestedValue(prevData, path, value);
-        console.log("Form: Updated local data:", newData);
         return newData;
       });
       // Clear any previous save status when user makes changes
@@ -1082,19 +1191,16 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
   // Handle manual save
   const handleSave = async () => {
     try {
-      console.log("Form: Starting save process with data:", localData);
       setIsSaving(true);
       setSaveError(null);
       setSaveSuccess(false);
 
       await onSave(localData);
 
-      console.log("Form: Save operation completed successfully");
       setSaveSuccess(true);
       // Auto-hide success message after 3 seconds
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (error) {
-      console.error("Form: Save operation failed:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Failed to save";
       setSaveError(errorMessage);
@@ -1618,6 +1724,7 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
               </div>
 
               {/* Business Hours */}
+
               <div className="space-y-4">
                 <h4
                   className="font-semibold"
@@ -1631,6 +1738,16 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
                   onChange={(value) =>
                     handleFieldChange("businessData.hours", value)
                   }
+                />
+                <TextInput
+                  label="Timezone"
+                  onChange={(value) =>
+                    handleFieldChange("businessData.hours.timezone", value)
+                  }
+                  value={getNestedValue(
+                    localData,
+                    "businessData.hours.timezone"
+                  )}
                 />
               </div>
 
@@ -1758,7 +1875,7 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
         className="glass-effect border-b"
         style={{ borderColor: "var(--border-primary)" }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-10 md:px-20 lg:px-40">
           <div className="flex items-center justify-between py-6">
             <div className="flex items-center space-x-4">
               {onBack && (
@@ -1836,7 +1953,7 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
 
       {/* Status Messages */}
       {(saveError || saveSuccess) && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <div className="px-10 md:px-20 lg:px-40 pt-4">
           {saveError && (
             <div
               className="mb-4 p-4 rounded-lg border"
@@ -1898,7 +2015,7 @@ export const DynamicLandingPageForm: React.FC<DynamicLandingPageFormProps> = ({
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="px-10 md:px-20 lg:px-40 py-8">
         <div className="flex gap-8">
           {/* Sidebar Navigation */}
           <div className="w-72 flex-shrink-0">

@@ -235,15 +235,58 @@
       "latitude": 40.7589,
       "longitude": -73.9851
     },
-    "hours": [
-      {"day": "Monday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
-      {"day": "Tuesday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
-      {"day": "Wednesday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
-      {"day": "Thursday", "hours": "8:00 AM - 7:00 PM EST", "isClosed": false},
-      {"day": "Friday", "hours": "8:00 AM - 6:00 PM EST", "isClosed": false},
-      {"day": "Saturday", "hours": "10:00 AM - 4:00 PM EST (By Appointment)", "isClosed": false},
-      {"day": "Sunday", "hours": "Emergency Consultations Only", "isClosed": true}
-    ],
+    "hours": {
+  "timezone": "America/New_York",
+  "schedule": [
+    {
+      "day": "Monday",
+      "isClosed": false,
+      "periods": [
+        {"open": "08:00", "close": "19:00"}
+      ]
+    },
+    {
+      "day": "Tuesday", 
+      "isClosed": false,
+      "periods": [
+        {"open": "08:00", "close": "19:00"}
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "isClosed": false,
+      "periods": [
+        {"open": "08:00", "close": "19:00"}
+      ]
+    },
+    {
+      "day": "Thursday",
+      "isClosed": false,
+      "periods": [
+        {"open": "08:00", "close": "19:00"}
+      ]
+    },
+    {
+      "day": "Friday",
+      "isClosed": false,
+      "periods": [
+        {"open": "08:00", "close": "18:00"}
+      ]
+    },
+    {
+      "day": "Saturday",
+      "isClosed": false,
+      "periods": [
+        {"open": "10:00", "close": "16:00"}
+      ]
+    },
+    {
+      "day": "Sunday",
+      "isClosed": true,
+      "periods": []
+    }
+  ]
+},
     "socialLinks": [
       {"platform": "linkedin", "url": "https://linkedin.com/company/acme-professional-solutions"},
       {"platform": "twitter", "url": "https://twitter.com/acmeprofessional"},
@@ -286,14 +329,16 @@
       "title": "Modern Business Headquarters",
       "altText": "Acme Professional Solutions modern office building with glass facade in Manhattan",
       "imageUrl": "https://cdn.acmeprofessional.com/images/hero-headquarters-2025.jpg",
-      "slotName": "hero-image-001"
+      "slotName": "hero-image-001",
+      "category": "header"
     },
     {
       "id": "about-img-1", 
       "title": "Executive Team Strategic Planning",
       "altText": "Acme leadership team collaborating on strategic business planning in modern conference room",
       "imageUrl": "https://cdn.acmeprofessional.com/images/team-strategic-planning.jpg",
-      "slotName": "hero-image-001"
+      "slotName": "hero-image-001",
+      "category": "about"
 
       
     },
@@ -302,7 +347,8 @@
       "title": "Digital Transformation Workshop",
       "altText": "Acme consultants leading client workshop on digital transformation strategies",
       "imageUrl": "https://cdn.acmeprofessional.com/images/digital-transformation-workshop.jpg",
-      "slotName": "hero-image-001"
+      "slotName": "hero-image-001",
+      "category": "gallery"
 
     },
     {
@@ -310,7 +356,9 @@
       "title": "Client Success Celebration",
       "altText": "Happy clients celebrating business growth milestones with Acme consulting team",
       "imageUrl": "https://cdn.acmeprofessional.com/images/client-success-celebration.jpg",
-      "slotName": "hero-image-001"
+      "slotName": "hero-image-001",
+      "category": "gallery"
+
 
     },
     {
@@ -318,7 +366,9 @@
       "title": "Technology Innovation Lab",
       "altText": "State-of-the-art technology lab where Acme develops custom business solutions",
       "imageUrl": "https://cdn.acmeprofessional.com/images/innovation-lab-technology.jpg",
-      "slotName": "hero-image-001"
+      "slotName": "hero-image-001",
+      "category": "testimonials"
+
 
     },
     {
@@ -326,7 +376,9 @@
       "title": "Professional Consultation Room",
       "altText": "Modern consultation room where Acme meets with prospective clients for initial assessments",
       "imageUrl": "https://cdn.acmeprofessional.com/images/consultation-room-modern.jpg",
-      "slotName": "hero-image-001"
+      "slotName": "hero-image-001",
+      "category": "testimonials"
+
 
     }
   ],

@@ -1,5 +1,5 @@
 import React from "react";
-import type { LandingPage } from "../../types/landingPageDataTypes";
+import type { LandingPage, Period } from "../../types/landingPageDataTypes";
 import { FieldDisplay } from "../shared/FieldDisplay";
 import { ContentSectionRenderer } from "../content/ContentSectionRenderer";
 
@@ -385,7 +385,8 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({
 
                 {/* Business Hours */}
                 {page.businessData.hours &&
-                  page.businessData.hours.length > 0 && (
+                  page.businessData.hours.schedule &&
+                  page.businessData.hours.schedule.length > 0 && (
                     <div>
                       <h5
                         className="text-sm font-medium mb-3"
@@ -394,31 +395,52 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({
                         Business Hours
                       </h5>
                       <div className="space-y-2">
-                        {page.businessData.hours.map((hour, index) => (
-                          <div
-                            key={index}
-                            className="flex justify-between items-center p-3 metallic-bg rounded-lg"
-                          >
-                            <span
-                              style={{ color: "var(--text-primary)" }}
-                              className="font-medium"
-                            >
-                              {hour.day}
-                            </span>
-                            <span
-                              className={`text-sm ${
-                                hour.isClosed ? "text-red-400" : ""
-                              }`}
-                              style={{
-                                color: hour.isClosed
-                                  ? "#f87171"
-                                  : "var(--text-secondary)",
-                              }}
-                            >
-                              {hour.isClosed ? "Closed" : hour.hours}
-                            </span>
-                          </div>
-                        ))}
+                        <div className="flex justify-between py-3 px-6 bg-bg-tertiary">
+                          <h2>Timezone</h2>
+                          <h2>{page.businessData.hours.timezone}</h2>
+                        </div>
+                        {page.businessData.hours.schedule.map(
+                          (daySchedule, index) => {
+                            // Format periods for display
+                            const formatPeriods = (periods: Period[]) => {
+                              if (!periods || periods.length === 0)
+                                return "Closed";
+                              return periods
+                                .map(
+                                  (period) => `${period.open} - ${period.close}`
+                                )
+                                .join(", ");
+                            };
+
+                            return (
+                              <div
+                                key={index}
+                                className="flex justify-between items-center p-3 metallic-bg rounded-lg"
+                              >
+                                <span
+                                  style={{ color: "var(--text-primary)" }}
+                                  className="font-medium"
+                                >
+                                  {daySchedule.day}
+                                </span>
+                                <span
+                                  className={`text-sm ${
+                                    daySchedule.isClosed ? "text-red-400" : ""
+                                  }`}
+                                  style={{
+                                    color: daySchedule.isClosed
+                                      ? "#f87171"
+                                      : "var(--text-secondary)",
+                                  }}
+                                >
+                                  {daySchedule.isClosed
+                                    ? "Closed"
+                                    : formatPeriods(daySchedule.periods)}
+                                </span>
+                              </div>
+                            );
+                          }
+                        )}
                       </div>
                     </div>
                   )}
@@ -651,19 +673,6 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {page.images.map((image) => (
                   <div key={image.id} className="card-metallic p-4">
-                    <div
-                      className="aspect-video rounded mb-3 overflow-hidden"
-                      style={{ backgroundColor: "var(--bg-quaternary)" }}
-                    >
-                      <img
-                        src={image.imageUrl}
-                        alt={image.altText}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                        }}
-                      />
-                    </div>
                     <div className="space-y-2">
                       <FieldDisplay label="Title" value={image.title} />
                       <FieldDisplay label="Alt Text" value={image.altText} />

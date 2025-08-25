@@ -122,11 +122,44 @@ export const coordinatesSchema = z.object({
   longitude: z.number(),
 });
 
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+const timeSchema = z
+  .string()
+  .regex(timeRegex, "Time must be in HH:MM (24-hour) format");
+
+/**
+ * A single open/close period (allows split shifts)
+ */
+export const periodSchema = z.object({
+  open: timeSchema,
+  close: timeSchema,
+});
+
+/**
+ * One day's schedule: name of day, closed flag, and an array of periods.
+ */
 export const businessHourSchema = z.object({
   day: z.string().min(1, "Day is required"),
-  hours: z.string().min(1, "Hours are required"),
   isClosed: z.boolean().default(false),
+  // periods array is empty when isClosed === true
+  periods: z.array(periodSchema).default([{ open: "09:00", close: "17:00" }]),
 });
+
+const DEFAULT_DAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+const DEFAULT_SCHEDULE = DEFAULT_DAYS.map((day) => ({
+  day,
+  isClosed: day === "Sunday",
+  periods: day === "Sunday" ? [] : [{ open: "09:00", close: "17:00" }],
+}));
 
 export const socialLinkSchema = z.object({
   platform: z.string().min(1, "Platform is required"),
@@ -144,9 +177,15 @@ export const businessDataSchema = z.object({
   email: z.string().email("Valid email is required"),
   emergencyPhone: z.string().optional(),
   emergencyEmail: z.string().email().optional(),
-  address: addressSchema,
+  address: addressSchema, // keep as-is from your code
   coordinates: coordinatesSchema.optional(),
-  hours: z.array(businessHourSchema).default([]),
+  // hours is stored as JSON in PostgreSQL (fits your LandingPage.businessData Json field)
+  hours: z
+    .object({
+      timezone: z.string().optional(), // e.g. "Asia/Singapore" (IANA tz) — helpful when interpreting times
+      schedule: z.array(businessHourSchema).default(DEFAULT_SCHEDULE),
+    })
+    .default({ schedule: DEFAULT_SCHEDULE }),
   socialLinks: z.array(socialLinkSchema).default([]),
   serviceAreas: z.array(serviceAreaSchema).default([]),
 });
@@ -155,6 +194,7 @@ export const imageSchema = z.object({
   slotName: z.string().min(1, "Slot name is required"),
   title: z.string().min(1, "Title is required"),
   altText: z.string().min(1, "Alt text is required"),
+  category: z.string().min(1, "Category name is required"),
   imageUrl: z.string().url("Image URL must be a valid URL"),
 });
 
@@ -185,6 +225,7 @@ export const createImageSchema = z.object({
   altText: z.string().min(1, "Alt text is required"),
   imageUrl: z.string().url("Valid image URL is required"),
   slotName: z.string().min(1, "ImageSlot is required"),
+  category: z.string().min(1, "Category name is required"),
 });
 
 export const createWebhookSchema = z.object({

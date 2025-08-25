@@ -70,14 +70,17 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--gradient-dark)' }}>
+    <div
+      className="min-h-screen"
+      style={{ background: "var(--gradient-dark)" }}
+    >
       <DashboardHeader
         selectedPage={selectedPage}
         onEdit={() => setViewMode("edit")}
         onDelete={handleDeletePage}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="px-4 md:px-20 lg:px-40 py-8">
         <SearchBar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}

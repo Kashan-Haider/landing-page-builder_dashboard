@@ -99,6 +99,17 @@ export interface ThemeData {
   logoUrl?: string;
 }
 
+export interface Period {
+  open: string;
+  close: string;
+}
+
+export interface DaySchedule {
+  day: string;
+  isClosed: boolean;
+  periods: Period[];
+}
+
 export interface BusinessData {
   phone: string;
   email: string;
@@ -115,11 +126,10 @@ export interface BusinessData {
     latitude: number;
     longitude: number;
   };
-  hours: Array<{
-    day: string;
-    hours: string;
-    isClosed: boolean;
-  }>;
+  hours: {
+    timezone?: string;
+    schedule: DaySchedule[];
+  };
   socialLinks: Array<{
     platform: string;
     url: string;
