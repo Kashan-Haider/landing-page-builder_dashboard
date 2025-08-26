@@ -5,7 +5,7 @@ import {
   CreateLandingPageInput,
   UpdateLandingPageInput,
   CreateImageInput,
-} from "../validation/pageSchemas";
+} from "../validation";
 import { webhookService } from "./webhookService";
 import { imageService } from "./imageService";
 import { merge } from "lodash";

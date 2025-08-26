@@ -7,7 +7,7 @@ import { getNestedValue } from "../formHelpers";
 interface ContentSectionProps {
   formData: any;
   updateFormData: (path: string, value: any) => void;
-  section: "hero" | "about" | "gallery" | "contact" | "footer";
+  section: "hero" | "about" | "gallery" | "contact" | "footer" | "businessOverviewSection";
 }
 
 export const ContentSection: React.FC<ContentSectionProps> = ({
@@ -133,6 +133,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       case "gallery": return "Gallery";
       case "contact": return "Contact";
       case "footer": return "Footer";
+      case "businessOverviewSection": return "Business Overview";
       default: return "Content Section";
     }
   };
@@ -144,9 +145,18 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       case "gallery": return "Display images of your work or products";
       case "contact": return "Help visitors get in touch with you";
       case "footer": return "Footer information and links";
+      case "businessOverviewSection": return "Highlight key business information and offerings";
       default: return "Configure this section of your page";
     }
   };
+
+  const renderBusinessOverviewSection = () => (
+    <div className="space-y-6">
+      <div className="text-sm text-gray-600 mb-4">
+        Business overview content items will be managed here. Each item includes a heading, description, and call-to-action button.
+      </div>
+    </div>
+  );
 
   const renderSectionContent = () => {
     switch (section) {
@@ -155,6 +165,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       case "gallery": return renderGallerySection();
       case "contact": return renderContactSection();
       case "footer": return renderFooterSection();
+      case "businessOverviewSection": return renderBusinessOverviewSection();
       default: return null;
     }
   };

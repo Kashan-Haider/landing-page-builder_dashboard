@@ -14,22 +14,30 @@ export interface LandingPage {
   publishedAt?: string;
 }
 
+export interface BusinessOverviewContent {
+  heading: string;
+  description: string;
+  ctaButton: {
+    label: string;
+    href: string;
+  };
+}
+
 export interface LandingPageContent {
   hero: {
     title: string;
     subtitle: string;
     description: string;
-    ctaButtons?: Array<{
+    ctaButton: {
       label: string;
       href: string;
-      style: "primary" | "secondary";
-    }>;
+    };
   };
   about: {
     title: string;
     description: string;
     features: string[];
-    ctaButton?: {
+    ctaButton: {
       label: string;
       href: string;
     };
@@ -47,7 +55,9 @@ export interface LandingPageContent {
   gallery: {
     title: string;
     description: string;
-    categories: string[];
+  };
+  businessOverview: {
+    content: BusinessOverviewContent[];
   };
   testimonials: {
     title: string;
@@ -57,7 +67,6 @@ export interface LandingPageContent {
       role: string;
       company: string;
       text: string;
-      rating?: number;
     }>;
   };
   faq: {
@@ -66,7 +75,6 @@ export interface LandingPageContent {
     questions: Array<{
       question: string;
       answer: string;
-      category: string;
     }>;
   };
   contact: {
@@ -95,8 +103,6 @@ export interface SEOData {
 export interface ThemeData {
   primaryColor: string;
   secondaryColor: string;
-  fontFamily?: string;
-  logoUrl?: string;
 }
 
 export interface Period {
@@ -142,13 +148,11 @@ export interface BusinessData {
 }
 
 export interface Image {
-  id: string;
-  landingPageId: string;
+  slotName: string;
   title: string;
   altText: string;
-  imageUrl: string;
   category: string;
-  createdAt: string;
+  imageUrl: string;
 }
 
 export interface ApiResponse<T = any> {

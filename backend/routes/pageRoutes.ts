@@ -12,7 +12,7 @@ import {
   createLandingPageSchema, 
   updateLandingPageSchema,
   createImageSchema
-} from '../validation/pageSchemas';
+} from '../validation';
 
 const router = express.Router();
 

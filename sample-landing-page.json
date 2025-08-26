@@ -10,10 +10,8 @@
       "title": "Transform Your Business with Professional Excellence",
       "subtitle": "Leading Business Solutions Provider Since 2014",
       "description": "We partner with ambitious companies to accelerate growth, optimize operations, and achieve sustainable success through innovative strategies and cutting-edge digital solutions. Join over 500+ satisfied clients who have transformed their businesses with our expert guidance.",
-      "ctaButtons": [
-        {"label": "Start Your Transformation", "href": "/contact", "style": "primary"},
-        {"label": "Explore Our Services", "href": "/services", "style": "secondary"}
-      ]
+      "ctaButtons": 
+        {"label": "Explore Our Services", "href": "/services"}
     },
     "about": {
       "title": "About Acme Professional Solutions",
@@ -94,6 +92,12 @@
     "gallery": {
       "title": "Our Impact in Action",
       "description": "Explore our portfolio of successful projects, meet our expert team, and see highlights from industry events and client celebrations. Each image tells a story of transformation and success."
+    },
+    "businessOverview": {
+      "content": [
+        {"heading" : "heading", "description": "End-to-end digital solutions including website development, SEO, social media marketing, and e-commerce optimization.",  "ctaButton": {"label": "click me",
+        "href": "#"}}
+      ]
     },
     "testimonials": {
       "title": "Success Stories from Our Valued Clients",

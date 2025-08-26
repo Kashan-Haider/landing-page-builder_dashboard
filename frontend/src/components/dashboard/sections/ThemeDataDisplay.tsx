@@ -6,7 +6,10 @@ interface ThemeDataDisplayProps {
   themeData: LandingPage["themeData"];
 }
 
-const ColorPreview: React.FC<{ color: string; label: string }> = ({ color, label }) => (
+const ColorPreview: React.FC<{ color: string; label: string }> = ({
+  color,
+  label,
+}) => (
   <div>
     <FieldDisplay label={label} value={color} />
     {color && (
@@ -26,7 +29,9 @@ const ColorPreview: React.FC<{ color: string; label: string }> = ({ color, label
   </div>
 );
 
-export const ThemeDataDisplay: React.FC<ThemeDataDisplayProps> = ({ themeData }) => {
+export const ThemeDataDisplay: React.FC<ThemeDataDisplayProps> = ({
+  themeData,
+}) => {
   if (!themeData) return null;
 
   return (
@@ -49,13 +54,10 @@ export const ThemeDataDisplay: React.FC<ThemeDataDisplayProps> = ({ themeData })
       </h4>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ColorPreview color={themeData.primaryColor} label="Primary Color" />
-        <ColorPreview color={themeData.secondaryColor} label="Secondary Color" />
-        <div className="md:col-span-2">
-          <FieldDisplay label="Font Family" value={themeData.fontFamily} />
-        </div>
-        <div className="md:col-span-2">
-          <FieldDisplay label="Logo URL" value={themeData.logoUrl} />
-        </div>
+        <ColorPreview
+          color={themeData.secondaryColor}
+          label="Secondary Color"
+        />
       </div>
     </div>
   );

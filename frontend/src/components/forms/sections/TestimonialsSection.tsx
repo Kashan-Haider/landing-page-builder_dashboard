@@ -12,16 +12,19 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   formData,
   updateFormData,
 }) => {
-  const testimonials = getNestedValue(formData, "content.testimonials.testimonials") || [];
+  const testimonials =
+    getNestedValue(formData, "content.testimonials.testimonials") || [];
 
   const addTestimonial = () => {
-    const newTestimonials = [...testimonials, {
-      name: "",
-      role: "",
-      company: "",
-      text: "",
-      rating: 5,
-    }];
+    const newTestimonials = [
+      ...testimonials,
+      {
+        name: "",
+        role: "",
+        company: "",
+        text: "",
+      },
+    ];
     updateFormData("content.testimonials.testimonials", newTestimonials);
   };
 
@@ -32,14 +35,19 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   };
 
   const removeTestimonial = (index: number) => {
-    const newTestimonials = testimonials.filter((_: any, i: number) => i !== index);
+    const newTestimonials = testimonials.filter(
+      (_: any, i: number) => i !== index
+    );
     updateFormData("content.testimonials.testimonials", newTestimonials);
   };
 
   return (
     <div className="space-y-8">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+        <h3
+          className="text-lg font-semibold mb-2"
+          style={{ color: "var(--text-primary)" }}
+        >
           Testimonials Section
         </h3>
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
@@ -50,7 +58,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       <TextInput
         label="Testimonials Title"
         value={getNestedValue(formData, "content.testimonials.title")}
-        onChange={(value) => updateFormData("content.testimonials.title", value)}
+        onChange={(value) =>
+          updateFormData("content.testimonials.title", value)
+        }
         placeholder="What Our Clients Say"
         required
       />
@@ -58,7 +68,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       <TextInput
         label="Testimonials Description"
         value={getNestedValue(formData, "content.testimonials.description")}
-        onChange={(value) => updateFormData("content.testimonials.description", value)}
+        onChange={(value) =>
+          updateFormData("content.testimonials.description", value)
+        }
         placeholder="Hear from our satisfied customers"
         multiline
         required
@@ -66,7 +78,10 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
 
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-md font-medium" style={{ color: "var(--text-secondary)" }}>
+          <h4
+            className="text-md font-medium"
+            style={{ color: "var(--text-secondary)" }}
+          >
             Testimonials
           </h4>
           <button
@@ -127,7 +142,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                 <TextInput
                   label="Company"
                   value={testimonial.company || ""}
-                  onChange={(value) => updateTestimonial(index, "company", value)}
+                  onChange={(value) =>
+                    updateTestimonial(index, "company", value)
+                  }
                   placeholder="Acme Corp"
                   required
                 />
@@ -141,31 +158,6 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                 multiline
                 required
               />
-
-              <div>
-                <label
-                  className="block text-sm font-medium mb-2"
-                  style={{ color: "var(--text-tertiary)" }}
-                >
-                  Rating
-                </label>
-                <select
-                  value={testimonial.rating || 5}
-                  onChange={(e) => updateTestimonial(index, "rating", parseInt(e.target.value))}
-                  className="px-4 py-2 metallic-bg rounded-lg border transition-all duration-300 outline-none"
-                  style={{
-                    color: "var(--text-primary)",
-                    borderColor: "var(--border-secondary)",
-                    backgroundColor: "var(--bg-secondary)",
-                  }}
-                >
-                  <option value={5}>⭐⭐⭐⭐⭐ (5 stars)</option>
-                  <option value={4}>⭐⭐⭐⭐ (4 stars)</option>
-                  <option value={3}>⭐⭐⭐ (3 stars)</option>
-                  <option value={2}>⭐⭐ (2 stars)</option>
-                  <option value={1}>⭐ (1 star)</option>
-                </select>
-              </div>
             </div>
           ))}
 

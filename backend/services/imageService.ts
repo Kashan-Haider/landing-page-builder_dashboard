@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { CreateImageInput } from "../validation/pageSchemas";
+import { CreateImageInput } from "../validation";
 
 const prisma = new PrismaClient();
 

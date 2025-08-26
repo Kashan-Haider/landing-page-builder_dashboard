@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Save, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
+import { Save, ArrowLeft, AlertCircle } from "lucide-react";
 import type { LandingPage } from "../../types/landingPageDataTypes";
 import { setNestedValue } from "./formHelpers";
 import { validateSection, validateFullForm } from "../../utils/validation";
@@ -42,13 +42,19 @@ export const CmsForm: React.FC<CmsFormProps> = ({
           title: "",
           subtitle: "",
           description: "",
-          ctaButtons: [],
+          ctaButtons: {
+          label: "",
+          href: "",
+        },
         },
         about: {
           title: "",
           description: "",
           features: [],
-          ctaButton: undefined,
+          ctaButton: {
+            label: "",
+            href: "",
+          },
         },
         services: {
           title: "",
@@ -58,6 +64,9 @@ export const CmsForm: React.FC<CmsFormProps> = ({
         gallery: {
           title: "",
           description: "",
+        },
+        businessOverviewSection: {
+          content: [],
         },
         testimonials: {
           title: "",
@@ -90,8 +99,6 @@ export const CmsForm: React.FC<CmsFormProps> = ({
       themeData: {
         primaryColor: "#3B82F6",
         secondaryColor: "#1E40AF",
-        fontFamily: "Inter",
-        logoUrl: "",
       },
       businessData: {
         phone: "",
@@ -171,19 +178,20 @@ export const CmsForm: React.FC<CmsFormProps> = ({
 
   // Form sections for sidebar navigation with validation status
   const sections = [
-    { id: "basic", label: "Basic Info", icon: "📝" },
-    { id: "seo", label: "SEO", icon: "🔍" },
-    { id: "theme", label: "Theme", icon: "🎨" },
-    { id: "business", label: "Business", icon: "🏢" },
-    { id: "hero", label: "Hero Section", icon: "🦸" },
-    { id: "about", label: "About Section", icon: "ℹ️" },
-    { id: "services", label: "Services", icon: "⚙️" },
-    { id: "gallery", label: "Gallery", icon: "🖼️" },
-    { id: "testimonials", label: "Testimonials", icon: "💬" },
-    { id: "faq", label: "FAQ", icon: "❓" },
-    { id: "contact", label: "Contact", icon: "📞" },
-    { id: "footer", label: "Footer", icon: "📄" },
-    { id: "images", label: "Images", icon: "🖼️" },
+    { id: "basic", label: "Basic Info" },
+    { id: "seo", label: "SEO" },
+    { id: "theme", label: "Theme" },
+    { id: "business", label: "Business" },
+    { id: "hero", label: "Hero Section" },
+    { id: "about", label: "About Section" },
+    { id: "services", label: "Services" },
+    { id: "gallery", label: "Gallery" },
+    { id: "businessOverview", label: "Business Overview" },
+    { id: "testimonials", label: "Testimonials" },
+    { id: "faq", label: "FAQ" },
+    { id: "contact", label: "Contact" },
+    { id: "footer", label: "Footer" },
+    { id: "images", label: "Images" },
   ];
 
   // Helper to get validation icon for section
@@ -213,6 +221,8 @@ export const CmsForm: React.FC<CmsFormProps> = ({
         return <ServicesSection formData={formData} updateFormData={updateFormData} />;
       case "gallery":
         return <ContentSection formData={formData} updateFormData={updateFormData} section="gallery" />;
+      case "businessOverview":
+        return <ContentSection formData={formData} updateFormData={updateFormData} section="businessOverviewSection" />;
       case "testimonials":
         return <TestimonialsSection formData={formData} updateFormData={updateFormData} />;
       case "faq":
@@ -289,7 +299,6 @@ export const CmsForm: React.FC<CmsFormProps> = ({
                   : "var(--text-secondary)",
             }}
           >
-            <span>{section.icon}</span>
             <span className="text-sm font-medium">{section.label}</span>
             <span className="ml-auto">{getValidationIcon(section.id)}</span>
           </button>
