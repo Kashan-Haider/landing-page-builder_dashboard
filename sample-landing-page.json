@@ -333,8 +333,7 @@
       "title": "Modern Business Headquarters",
       "altText": "Acme Professional Solutions modern office building with glass facade in Manhattan",
       "imageUrl": "https://cdn.acmeprofessional.com/images/hero-headquarters-2025.jpg",
-      "slotName": "hero-image-001",
-      "category": "header"
+      "slotName": "hero-image-001"
     },
     {
       "id": "about-img-1", 

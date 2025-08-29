@@ -15,6 +15,7 @@ export const BasicInfoDisplay: React.FC<BasicInfoDisplayProps> = ({ page }) => {
         Basic Information
       </h4>
       <div className="space-y-4">
+        <FieldDisplay label="ID" value={page.id} />
         <FieldDisplay label="Business Name" value={page.businessName} />
         <FieldDisplay label="Template ID" value={page.templateId} />
         <FieldDisplay label="GitHub URL" value={page.githubUrl} />

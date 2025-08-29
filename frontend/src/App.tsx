@@ -1,13 +1,13 @@
-import './App.css'
-import LandingPageDashboard from './landingPageDashboard/LandingPageDashboard'
-
+import "./App.css";
+import Dashboard from "./landingPageDashboard/LandingPageDashboard";
+import ContentForm from "./pages/ContentForm";
 
 const App = () => {
   return (
     <div>
-      <LandingPageDashboard/>
+      <Dashboard />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -10,6 +10,7 @@ import { SeoSection } from "./sections/SeoSection";
 import { ThemeSection } from "./sections/ThemeSection";
 import { BusinessDataSection } from "./sections/BusinessDataSection";
 import { ContentSection } from "./sections/ContentSection";
+import { BusinessOverviewSection } from "./sections/BusinessOverviewSection";
 import { ServicesSection } from "./sections/ServicesSection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { FaqSection } from "./sections/FaqSection";
@@ -222,7 +223,7 @@ export const CmsForm: React.FC<CmsFormProps> = ({
       case "gallery":
         return <ContentSection formData={formData} updateFormData={updateFormData} section="gallery" />;
       case "businessOverview":
-        return <ContentSection formData={formData} updateFormData={updateFormData} section="businessOverviewSection" />;
+        return <BusinessOverviewSection formData={formData} updateFormData={updateFormData} />;
       case "testimonials":
         return <TestimonialsSection formData={formData} updateFormData={updateFormData} />;
       case "faq":

@@ -7,7 +7,13 @@ import { getNestedValue } from "../formHelpers";
 interface ContentSectionProps {
   formData: any;
   updateFormData: (path: string, value: any) => void;
-  section: "hero" | "about" | "gallery" | "contact" | "footer" | "businessOverviewSection";
+  section:
+    | "hero"
+    | "about"
+    | "gallery"
+    | "contact"
+    | "footer"
+    | "businessOverview";
 }
 
 export const ContentSection: React.FC<ContentSectionProps> = ({
@@ -80,7 +86,9 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       <TextInput
         label="Gallery Description"
         value={getNestedValue(formData, "content.gallery.description")}
-        onChange={(value) => updateFormData("content.gallery.description", value)}
+        onChange={(value) =>
+          updateFormData("content.gallery.description", value)
+        }
         placeholder="Showcase of our best work"
         multiline
         required
@@ -100,7 +108,9 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       <TextInput
         label="Contact Description"
         value={getNestedValue(formData, "content.contact.description")}
-        onChange={(value) => updateFormData("content.contact.description", value)}
+        onChange={(value) =>
+          updateFormData("content.contact.description", value)
+        }
         placeholder="We'd love to hear from you..."
         multiline
         required
@@ -128,52 +138,77 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
 
   const getSectionTitle = () => {
     switch (section) {
-      case "hero": return "Hero Section";
-      case "about": return "About Section";
-      case "gallery": return "Gallery";
-      case "contact": return "Contact";
-      case "footer": return "Footer";
-      case "businessOverviewSection": return "Business Overview";
-      default: return "Content Section";
+      case "hero":
+        return "Hero Section";
+      case "about":
+        return "About Section";
+      case "gallery":
+        return "Gallery";
+      case "contact":
+        return "Contact";
+      case "footer":
+        return "Footer";
+      case "businessOverview":
+        return "Business Overview";
+      default:
+        return "Content Section";
     }
   };
 
   const getSectionDescription = () => {
     switch (section) {
-      case "hero": return "The main banner area of your page";
-      case "about": return "Tell your story and showcase what makes you unique";
-      case "gallery": return "Display images of your work or products";
-      case "contact": return "Help visitors get in touch with you";
-      case "footer": return "Footer information and links";
-      case "businessOverviewSection": return "Highlight key business information and offerings";
-      default: return "Configure this section of your page";
+      case "hero":
+        return "The main banner area of your page";
+      case "about":
+        return "Tell your story and showcase what makes you unique";
+      case "gallery":
+        return "Display images of your work or products";
+      case "contact":
+        return "Help visitors get in touch with you";
+      case "footer":
+        return "Footer information and links";
+      case "businessOverview":
+        return "Highlight key business information and offerings";
+      default:
+        return "Configure this section of your page";
     }
   };
 
   const renderBusinessOverviewSection = () => (
     <div className="space-y-6">
       <div className="text-sm text-gray-600 mb-4">
-        Business overview content items will be managed here. Each item includes a heading, description, and call-to-action button.
+        Business overview content items will be managed here. Each item includes
+        a heading, description, and call-to-action button.
       </div>
     </div>
   );
 
   const renderSectionContent = () => {
     switch (section) {
-      case "hero": return renderHeroSection();
-      case "about": return renderAboutSection();
-      case "gallery": return renderGallerySection();
-      case "contact": return renderContactSection();
-      case "footer": return renderFooterSection();
-      case "businessOverviewSection": return renderBusinessOverviewSection();
-      default: return null;
+      case "hero":
+        return renderHeroSection();
+      case "about":
+        return renderAboutSection();
+      case "gallery":
+        return renderGallerySection();
+      case "contact":
+        return renderContactSection();
+      case "footer":
+        return renderFooterSection();
+      case "businessOverview":
+        return renderBusinessOverviewSection();
+      default:
+        return null;
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+        <h3
+          className="text-lg font-semibold mb-2"
+          style={{ color: "var(--text-primary)" }}
+        >
           {getSectionTitle()}
         </h3>
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
