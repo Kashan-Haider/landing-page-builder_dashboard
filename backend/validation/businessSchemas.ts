@@ -45,8 +45,21 @@ const DEFAULT_SCHEDULE = DEFAULT_DAYS.map((day) => ({
 }));
 
 export const socialLinkSchema = z.object({
-  platform: z.string().min(1, "Platform is required"),
-  url: z.url("Valid URL is required"),
+  platform: z.enum(["Facebook", "Instagram", "Twitter", "LinkedIn", "YouTube"], {
+    message: "Platform must be one of: Facebook, Instagram, Twitter, LinkedIn, YouTube"
+  }),
+  url: z.string().url("Valid URL is required").refine((url) => {
+    // Additional URL validation for social media platforms
+    try {
+      const urlObj = new URL(url);
+      const hostname = urlObj.hostname.toLowerCase().replace('www.', '');
+      
+      // Allow any valid URL for now, but could be made stricter
+      return true;
+    } catch {
+      return false;
+    }
+  }, "Must be a valid social media URL"),
 });
 
 export const serviceAreaSchema = z.object({

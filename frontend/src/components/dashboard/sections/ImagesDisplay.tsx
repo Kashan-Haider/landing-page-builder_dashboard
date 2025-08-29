@@ -29,7 +29,7 @@ export const ImagesDisplay: React.FC<ImagesDisplayProps> = ({ images }) => {
       </h4>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {images.map((image) => (
-          <div key={image.id} className="card-metallic p-4">
+          <div key={image.slotName} className="card-metallic p-4">
             <div className="space-y-2">
               <FieldDisplay label="Title" value={image.title} />
               <FieldDisplay label="Alt Text" value={image.altText} />

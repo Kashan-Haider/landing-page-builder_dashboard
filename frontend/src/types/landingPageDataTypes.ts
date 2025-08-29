@@ -137,7 +137,7 @@ export interface BusinessData {
     schedule: DaySchedule[];
   };
   socialLinks: Array<{
-    platform: string;
+    platform: "Facebook" | "Instagram" | "Twitter" | "LinkedIn" | "YouTube";
     url: string;
   }>;
   serviceAreas: Array<{

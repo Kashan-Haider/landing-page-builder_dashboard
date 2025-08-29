@@ -14,6 +14,8 @@ import { BusinessOverviewSection } from "./sections/BusinessOverviewSection";
 import { ServicesSection } from "./sections/ServicesSection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { FaqSection } from "./sections/FaqSection";
+import { SocialLinksSection } from "./sections/SocialLinksSection";
+import { ServiceAreasSection } from "./sections/ServiceAreasSection";
 import { ImageArrayInput } from "./ImageArrayInput";
 
 interface CmsFormProps {
@@ -183,6 +185,8 @@ export const CmsForm: React.FC<CmsFormProps> = ({
     { id: "seo", label: "SEO" },
     { id: "theme", label: "Theme" },
     { id: "business", label: "Business" },
+    { id: "socialLinks", label: "Social Links" },
+    { id: "serviceAreas", label: "Service Areas" },
     { id: "hero", label: "Hero Section" },
     { id: "about", label: "About Section" },
     { id: "services", label: "Services" },
@@ -214,6 +218,10 @@ export const CmsForm: React.FC<CmsFormProps> = ({
         return <ThemeSection formData={formData} updateFormData={updateFormData} />;
       case "business":
         return <BusinessDataSection formData={formData} updateFormData={updateFormData} />;
+      case "socialLinks":
+        return <SocialLinksSection formData={formData} updateFormData={updateFormData} />;
+      case "serviceAreas":
+        return <ServiceAreasSection formData={formData} updateFormData={updateFormData} />;
       case "hero":
         return <ContentSection formData={formData} updateFormData={updateFormData} section="hero" />;
       case "about":
