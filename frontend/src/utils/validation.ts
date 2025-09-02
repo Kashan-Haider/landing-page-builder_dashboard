@@ -15,7 +15,7 @@ export const heroSectionSchema = z.object({
   title: z.string().min(3, "Hero title must be at least 3 characters"),
   subtitle: z.string().min(1, "Hero subtitle is required"),
   description: z.string().min(1, "Hero description is required"),
-  ctaButtons: z.array(ctaButtonSchema).optional(),
+  ctaButton: ctaButtonSchema
 });
 
 // About Section Schema

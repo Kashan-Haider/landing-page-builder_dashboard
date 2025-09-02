@@ -2,6 +2,7 @@
 // This file defines all HTTP routes for page CRUD operations
 import express from 'express';
 import { pageService } from '../services/pageService';
+import { landingPageGeneratorService } from '../services/landingPageGeneratorService';
 import { 
   asyncHandler, 
   sendSuccess, 
@@ -94,6 +95,45 @@ router.post('/:id/images',
 router.delete('/images/:imageId', asyncHandler(async (req, res) => {
   const result = await pageService.deleteImage(req.params.imageId);
   sendSuccess(res, result, 'Image deleted successfully');
+}));
+
+// Create page from template (simplified workflow)
+router.post('/generate', asyncHandler(async (req, res) => {
+  const { businessName, templateId, githubUrl } = req.body;
+  
+  // Validate required fields
+  if (!businessName || !templateId || !githubUrl) {
+    return handleServiceError(
+      new Error('businessName, templateId, and githubUrl are required'), 
+      res, 
+      'Missing required fields'
+    );
+  }
+
+  try {
+    // Generate landing page data from template
+    const pageData = await landingPageGeneratorService.generateLandingPageData({
+      businessName,
+      templateId,
+      githubUrl
+    });
+
+    // Create the page in database
+    const createdPage = await pageService.createPage(pageData);
+
+    // Fetch and setup GitHub repository (async process)
+    landingPageGeneratorService.fetchAndSetupRepo(
+      { businessName, templateId, githubUrl },
+      createdPage.id
+    ).catch(error => {
+      console.error('Error setting up repository:', error);
+    });
+
+    sendSuccess(res, createdPage, 'Landing page generated successfully', 201);
+  } catch (error) {
+    console.error('Error generating landing page:', error);
+    return handleServiceError(error as Error, res, 'Failed to generate landing page');
+  }
 }));
 
 export default router;

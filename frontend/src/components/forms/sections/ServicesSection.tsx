@@ -16,12 +16,15 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   const services = getNestedValue(formData, "content.services.services") || [];
 
   const addService = () => {
-    const newServices = [...services, {
-      name: "",
-      description: "",
-      features: [],
-      price: "",
-    }];
+    const newServices = [
+      ...services,
+      {
+        name: "",
+        description: "",
+        features: [],
+        price: "",
+      },
+    ];
     updateFormData("content.services.services", newServices);
   };
 
@@ -39,7 +42,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   return (
     <div className="space-y-8">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+        <h3
+          className="text-lg font-semibold mb-2"
+          style={{ color: "var(--text-primary)" }}
+        >
           Services Section
         </h3>
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
@@ -58,7 +64,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       <TextInput
         label="Services Description"
         value={getNestedValue(formData, "content.services.description")}
-        onChange={(value) => updateFormData("content.services.description", value)}
+        onChange={(value) =>
+          updateFormData("content.services.description", value)
+        }
         placeholder="What we offer to help you succeed"
         multiline
         required
@@ -66,7 +74,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
 
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-md font-medium" style={{ color: "var(--text-secondary)" }}>
+          <h4
+            className="text-md font-medium"
+            style={{ color: "var(--text-secondary)" }}
+          >
             Services
           </h4>
           <button

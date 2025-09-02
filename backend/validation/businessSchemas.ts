@@ -45,8 +45,17 @@ const DEFAULT_SCHEDULE = DEFAULT_DAYS.map((day) => ({
 }));
 
 export const socialLinkSchema = z.object({
-  platform: z.enum(["Facebook", "Instagram", "Twitter", "LinkedIn", "YouTube"], {
-    message: "Platform must be one of: Facebook, Instagram, Twitter, LinkedIn, YouTube"
+  platform: z.enum([
+    "facebook", "Facebook", 
+    "instagram", "Instagram", 
+    "twitter", "Twitter", 
+    "linkedin", "LinkedIn", 
+    "youtube", "YouTube",
+    "yelp", "Yelp",
+    "google", "Google",
+    "tiktok", "TikTok"
+  ], {
+    message: "Platform must be a supported social media platform"
   }),
   url: z.string().url("Valid URL is required").refine((url) => {
     // Additional URL validation for social media platforms

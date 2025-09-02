@@ -136,9 +136,20 @@ class PageService {
         }
       }
 
-      // Merge complex data objects
+      // Handle content updates with proper array replacement
       if (data.content) {
-        updateData.content = merge({}, existingPage.content, data.content);
+        updateData.content = { ...existingPage.content as any };
+        
+        // Deep merge each section, but replace arrays completely
+        Object.keys(data.content).forEach(sectionKey => {
+          const sectionData = (data.content as any)[sectionKey];
+          if (sectionData && typeof sectionData === 'object') {
+            (updateData.content as any)[sectionKey] = {
+              ...(updateData.content as any)[sectionKey],
+              ...sectionData
+            };
+          }
+        });
       }
       if (data.seoData) {
         updateData.seoData = merge({}, existingPage.seoData, data.seoData);
