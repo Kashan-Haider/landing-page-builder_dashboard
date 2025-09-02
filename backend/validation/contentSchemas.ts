@@ -89,6 +89,15 @@ export const footerSectionSchema = z.object({
     .optional(),
 });
 
+export const companyDetailsSectionSchema = z.object({
+  heading: z.string().min(1, "Company details heading is required"),
+  description: z.string().min(1, "Company details description is required"),
+});
+
+export const companyDetailsSchema = z.object({
+  sections: z.array(companyDetailsSectionSchema).default([]),
+});
+
 export const contentSchema = z.object({
   hero: heroSectionSchema,
   about: aboutSectionSchema,

@@ -71,6 +71,7 @@ class PageService {
           seoData: data.seoData,
           themeData: data.themeData,
           businessData: data.businessData,
+          companyDetails: data.companyDetails,
           images: {
             create: data.images.map((img) => ({
               slotName: img.slotName,
@@ -159,6 +160,9 @@ class PageService {
       }
       if (data.businessData) {
         updateData.businessData = merge({}, existingPage.businessData, data.businessData);
+      }
+      if (data.companyDetails) {
+        updateData.companyDetails = merge({}, existingPage.companyDetails, data.companyDetails);
       }
 
       // Handle images update - replace all images

@@ -8,6 +8,7 @@ export interface LandingPage {
   seoData: SEOData;
   themeData: ThemeData;
   businessData: BusinessData;
+  companyDetails: CompanyDetails;
   images: Image[];
   createdAt: string;
   updatedAt: string;
@@ -21,6 +22,15 @@ export interface BusinessOverviewContent {
     label: string;
     href: string;
   };
+}
+
+export interface CompanyDetailsSection {
+  heading: string;
+  description: string;
+}
+
+export interface CompanyDetails {
+  sections: CompanyDetailsSection[];
 }
 
 export interface LandingPageContent {

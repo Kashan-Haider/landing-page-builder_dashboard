@@ -5,6 +5,7 @@ import { SeoDataDisplay } from "./sections/SeoDataDisplay";
 import { ThemeDataDisplay } from "./sections/ThemeDataDisplay";
 import { BusinessDataDisplay } from "./sections/BusinessDataDisplay";
 import { ContentDisplay } from "./sections/ContentDisplay";
+import { CompanyDetailsDisplay } from "./sections/CompanyDetailsDisplay";
 import { ImagesDisplay } from "./sections/ImagesDisplay";
 
 interface LandingPageDetailsProps {
@@ -21,6 +22,7 @@ export const LandingPageDetails: React.FC<LandingPageDetailsProps> = ({ page }) 
           <ThemeDataDisplay themeData={page.themeData} />
           <BusinessDataDisplay businessData={page.businessData} />
           <ContentDisplay content={page.content} />
+          <CompanyDetailsDisplay companyDetails={page.companyDetails} />
           <ImagesDisplay images={page.images} />
         </div>
       </div>

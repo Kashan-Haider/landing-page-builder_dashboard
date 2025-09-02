@@ -327,6 +327,23 @@
     ]
   },
   
+  "companyDetails": {
+    "sections": [
+      {
+        "heading": "Our Mission",
+        "description": "At Acme Professional Solutions, our mission is to empower businesses with innovative strategies and cutting-edge technology solutions that drive sustainable growth and operational excellence. We believe every company has the potential to achieve extraordinary results with the right guidance and tools."
+      },
+      {
+        "heading": "Our Values",
+        "description": "Integrity, innovation, and client success form the foundation of everything we do. We are committed to transparency, ethical business practices, and delivering measurable results that exceed expectations. Our collaborative approach ensures that every client partnership is built on trust and mutual respect."
+      },
+      {
+        "heading": "Why Choose Us",
+        "description": "With over a decade of experience and 500+ successful client partnerships, we bring proven expertise and industry insights to every project. Our team of certified professionals combines strategic thinking with hands-on implementation to deliver solutions that create lasting impact and competitive advantage."
+      }
+    ]
+  },
+  
   "images": [
     {
       "id": "hero-img-1",

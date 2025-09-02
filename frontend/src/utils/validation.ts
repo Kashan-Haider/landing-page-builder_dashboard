@@ -95,6 +95,16 @@ export const footerSectionSchema = z.object({
     .optional(),
 });
 
+// Company Details Schema
+export const companyDetailsSectionSchema = z.object({
+  heading: z.string().min(1, "Company details heading is required"),
+  description: z.string().min(1, "Company details description is required"),
+});
+
+export const companyDetailsSchema = z.object({
+  sections: z.array(companyDetailsSectionSchema).default([]),
+});
+
 // Content Schema
 export const contentSchema = z.object({
   hero: heroSectionSchema,
@@ -209,6 +219,7 @@ export const landingPageSchema = z.object({
   seoData: seoDataSchema.partial().optional(),
   themeData: themeDataSchema.partial().optional(),
   businessData: businessDataSchema.partial().optional(),
+  companyDetails: companyDetailsSchema.partial().optional(),
   images: z.array(imageSchema).optional().default([]),
 });
 
@@ -268,6 +279,17 @@ export const validateSection = (sectionName: string, data: any): { isValid: bool
           if (!businessResult.success) {
             businessResult.error.issues.forEach((err: any) => {
               errors[`businessData.${err.path.join(".")}`] = err.message;
+              isValid = false;
+            });
+          }
+        }
+        break;
+      case "companyDetails":
+        if (data.companyDetails) {
+          const companyDetailsResult = companyDetailsSchema.safeParse(data.companyDetails);
+          if (!companyDetailsResult.success) {
+            companyDetailsResult.error.issues.forEach((err: any) => {
+              errors[`companyDetails.${err.path.join(".")}`] = err.message;
               isValid = false;
             });
           }

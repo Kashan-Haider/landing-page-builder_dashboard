@@ -12,6 +12,7 @@ interface LandingPageTemplate {
   seoData: any;
   themeData: any;
   businessData: any;
+  companyDetails: any;
   images: any[];
 }
 
