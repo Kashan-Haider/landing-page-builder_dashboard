@@ -1,5 +1,6 @@
 import React from "react";
 import { TextInput } from "../TextInput";
+import { BusinessHoursInput } from "../BusinessHoursInput";
 import { getNestedValue } from "../formHelpers";
 
 interface BusinessDataSectionProps {
@@ -110,12 +111,19 @@ export const BusinessDataSection: React.FC<BusinessDataSectionProps> = ({
         <h4 className="text-md font-medium mb-4" style={{ color: "var(--text-secondary)" }}>
           Business Hours
         </h4>
-        <TextInput
-          label="Timezone"
-          value={getNestedValue(formData, "businessData.hours.timezone")}
-          onChange={(value) => updateFormData("businessData.hours.timezone", value)}
-          placeholder="America/New_York"
-        />
+        <div className="space-y-4">
+          <TextInput
+            label="Timezone"
+            value={getNestedValue(formData, "businessData.hours.timezone")}
+            onChange={(value) => updateFormData("businessData.hours.timezone", value)}
+            placeholder="America/New_York"
+          />
+          <BusinessHoursInput
+            label="Weekly Schedule"
+            value={getNestedValue(formData, "businessData.hours.schedule") || []}
+            onChange={(value) => updateFormData("businessData.hours.schedule", value)}
+          />
+        </div>
       </div>
     </div>
   );

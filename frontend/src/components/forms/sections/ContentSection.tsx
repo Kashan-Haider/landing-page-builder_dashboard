@@ -2,6 +2,7 @@ import React from "react";
 import { TextInput } from "../TextInput";
 import { ArrayInput } from "../ArrayInput";
 import { BooleanInput } from "../BooleanInput";
+import { CtaButtonInput } from "../CtaButtonInput";
 import { getNestedValue } from "../formHelpers";
 
 interface ContentSectionProps {
@@ -45,6 +46,12 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
         multiline
         required
       />
+      <CtaButtonInput
+        label="Call-to-Action Button"
+        value={getNestedValue(formData, "content.hero.ctaButton") || { label: "", href: "" }}
+        onChange={(value) => updateFormData("content.hero.ctaButton", value)}
+        required
+      />
     </div>
   );
 
@@ -70,6 +77,12 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
         value={getNestedValue(formData, "content.about.features")}
         onChange={(value) => updateFormData("content.about.features", value)}
         placeholder="Key feature or benefit"
+      />
+      <CtaButtonInput
+        label="Call-to-Action Button"
+        value={getNestedValue(formData, "content.about.ctaButton") || { label: "", href: "" }}
+        onChange={(value) => updateFormData("content.about.ctaButton", value)}
+        required
       />
     </div>
   );
