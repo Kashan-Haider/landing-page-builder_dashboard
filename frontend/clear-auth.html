@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Authentication</title>
+</head>
+<body>
+    <h1>Clearing Authentication Data...</h1>
+    <script>
+        // Clear all authentication data
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        localStorage.clear(); // Clear everything to be safe
+        
+        console.log('Authentication data cleared');
+        document.body.innerHTML = '<h1>Authentication data cleared!</h1><p>You can now close this tab and try logging in again.</p>';
+    </script>
+</body>
+</html>

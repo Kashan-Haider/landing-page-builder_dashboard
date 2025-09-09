@@ -1,5 +1,6 @@
 import React from "react";
 import { Trash2 } from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
 import type { LandingPage } from "../../types/landingPageDataTypes";
 
 interface DashboardHeaderProps {
@@ -13,6 +14,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const { user } = useAuth();
   return (
     <header
       className="glass-effect border-b"
@@ -33,29 +35,32 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </div>
           {selectedPage && (
             <div className="flex gap-3">
-              <button
-                onClick={() => onDelete(selectedPage)}
-                className="px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 border"
-                style={{
-                  backgroundColor: "var(--error)",
-                  borderColor: "#dc2626",
-                  color: "var(--text-primary)",
-                  boxShadow: "0 2px 4px rgba(239, 68, 68, 0.2)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 8px rgba(239, 68, 68, 0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow =
-                    "0 2px 4px rgba(239, 68, 68, 0.2)";
-                }}
-              >
-                <Trash2 className="w-4 h-4" />
-                Delete
-              </button>
+              {/* Delete button - only visible for ADMIN users */}
+              {user?.role === 'ADMIN' && (
+                <button
+                  onClick={() => onDelete(selectedPage)}
+                  className="px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 border"
+                  style={{
+                    backgroundColor: "var(--error)",
+                    borderColor: "#dc2626",
+                    color: "var(--text-primary)",
+                    boxShadow: "0 2px 4px rgba(239, 68, 68, 0.2)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 8px rgba(239, 68, 68, 0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 2px 4px rgba(239, 68, 68, 0.2)";
+                  }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              )}
               <button
                 onClick={onEdit}
                 className="px-4 py-2 rounded-lg bg-accent-primary text-white font-medium shadow-md 

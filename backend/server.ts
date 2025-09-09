@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import pageRoutes from './routes/pageRoutes';
 import webhookRoutes from './routes/webhookRoutes';
+import authRoutes from './routes/authRoutes';
 import { ApiResponse } from './types';
 import { handleServiceError } from './middleware/errorHandler';
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 app.use('/api/pages', pageRoutes);
 app.use('/api/webhooks', webhookRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   const response: ApiResponse = {
