@@ -25,6 +25,14 @@ export interface LandingPageContent {
       style: 'primary' | 'secondary';
     }>;
   };
+  serviceHighlights: {
+    title: string;
+    description: string;
+    services: Array<{
+      name: string;
+      description: string;
+    }>;
+  };
   about: {
     title: string;
     description: string;

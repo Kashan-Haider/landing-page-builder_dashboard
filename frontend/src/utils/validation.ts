@@ -111,6 +111,7 @@ export const contentSchema = z.object({
   about: aboutSectionSchema,
   services: servicesSectionSchema,
   gallery: gallerySectionSchema,
+  companyDetails: companyDetailsSchema.optional().default({ sections: [] }),
   testimonials: testimonialsSectionSchema,
   faq: faqSectionSchema,
   contact: contactSectionSchema,
@@ -219,7 +220,6 @@ export const landingPageSchema = z.object({
   seoData: seoDataSchema.partial().optional(),
   themeData: themeDataSchema.partial().optional(),
   businessData: businessDataSchema.partial().optional(),
-  companyDetails: companyDetailsSchema.partial().optional(),
   images: z.array(imageSchema).optional().default([]),
 });
 
@@ -285,11 +285,11 @@ export const validateSection = (sectionName: string, data: any): { isValid: bool
         }
         break;
       case "companyDetails":
-        if (data.companyDetails) {
-          const companyDetailsResult = companyDetailsSchema.safeParse(data.companyDetails);
+        if (data.content && data.content.companyDetails) {
+          const companyDetailsResult = companyDetailsSchema.safeParse(data.content.companyDetails);
           if (!companyDetailsResult.success) {
             companyDetailsResult.error.issues.forEach((err: any) => {
-              errors[`companyDetails.${err.path.join(".")}`] = err.message;
+              errors[`content.companyDetails.${err.path.join(".")}`] = err.message;
               isValid = false;
             });
           }
@@ -334,6 +334,9 @@ export const validateSection = (sectionName: string, data: any): { isValid: bool
               break;
             case "footer":
               sectionSchema = footerSectionSchema;
+              break;
+            case "companyDetails":
+              sectionSchema = companyDetailsSchema;
               break;
           }
           

@@ -8,7 +8,6 @@ export interface LandingPage {
   seoData: SEOData;
   themeData: ThemeData;
   businessData: BusinessData;
-  companyDetails: CompanyDetails;
   images: Image[];
   createdAt: string;
   updatedAt: string;
@@ -30,6 +29,8 @@ export interface CompanyDetailsSection {
 }
 
 export interface CompanyDetails {
+  heading: string;
+  description: string;
   sections: CompanyDetailsSection[];
 }
 
@@ -69,6 +70,7 @@ export interface LandingPageContent {
   businessOverview: {
     content: BusinessOverviewContent[];
   };
+  companyDetails: CompanyDetails;
   testimonials: {
     title: string;
     description: string;

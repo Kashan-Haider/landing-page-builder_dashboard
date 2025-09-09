@@ -44,6 +44,55 @@ const HeroSection: React.FC<{ hero: LandingPage["content"]["hero"] }> = ({
   );
 };
 
+// Service Highlights Section Renderer
+const ServiceHighlightsSection: React.FC<{
+  serviceHighlights: any;
+}> = ({ serviceHighlights }) => {
+  if (!serviceHighlights) return null;
+
+  return (
+    <ContentSection title="Service Highlights Section">
+      <div className="space-y-4">
+        <FieldDisplay label="Title" value={serviceHighlights.title} />
+        <FieldDisplay label="Description" value={serviceHighlights.description} />
+
+        {serviceHighlights.services && serviceHighlights.services.length > 0 && (
+          <div>
+            <h6
+              className="font-medium mb-3"
+              style={{ color: "var(--text-tertiary)" }}
+            >
+              Service Highlights ({serviceHighlights.services.length}):
+            </h6>
+            <div className="space-y-3">
+              {serviceHighlights.services.map((service: any, index: number) => (
+                <div
+                  key={index}
+                  className="border rounded-lg p-3"
+                  style={{ borderColor: "var(--border-primary)" }}
+                >
+                  <h6
+                    className="font-medium mb-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
+                    {service.name}
+                  </h6>
+                  <p
+                    className="text-sm"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    {service.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </ContentSection>
+  );
+};
+
 // About Section Renderer
 const AboutSection: React.FC<{ about: LandingPage["content"]["about"] }> = ({
   about,
@@ -191,6 +240,22 @@ const ServicesSection: React.FC<{
   );
 };
 
+// CTA Section Renderer
+const CtaSection: React.FC<{ ctaSection: any }> = ({ ctaSection }) => {
+  if (!ctaSection) return null;
+
+  return (
+    <ContentSection title="CTA Section">
+      <div className="space-y-4">
+        <FieldDisplay label="Sub Heading" value={ctaSection.subHeading} />
+        <FieldDisplay label="Heading" value={ctaSection.heading} />
+        <FieldDisplay label="Description" value={ctaSection.description} />
+        {ctaSection.ctaButton && <CTAButton {...ctaSection.ctaButton} />}
+      </div>
+    </ContentSection>
+  );
+};
+
 // Generic Section Renderer for simpler sections
 const GenericSection: React.FC<{ title: string; data: any }> = ({
   title,
@@ -326,9 +391,11 @@ export const ContentDisplay: React.FC<ContentDisplayProps> = ({ content }) => {
 
       <div className="space-y-6">
         <HeroSection hero={content.hero} />
+        <ServiceHighlightsSection serviceHighlights={(content as any).serviceHighlights} />
         <AboutSection about={content.about} />
         <BusinessOverviewSection businessOverview={content.businessOverview} />
         <ServicesSection services={content.services} />
+        <CtaSection ctaSection={(content as any).ctaSection} />
         <GenericSection title="Gallery Section" data={content.gallery} />
         <GenericSection
           title="Testimonials Section"

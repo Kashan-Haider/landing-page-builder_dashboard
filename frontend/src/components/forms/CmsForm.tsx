@@ -17,6 +17,8 @@ import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { FaqSection } from "./sections/FaqSection";
 import { SocialLinksSection } from "./sections/SocialLinksSection";
 import { ServiceAreasSection } from "./sections/ServiceAreasSection";
+import { ServiceHighlightsSection } from "./sections/ServiceHighlightsSection";
+import { CtaSectionComponent } from "./sections/CtaSectionComponent";
 import { ImageArrayInput } from "./ImageArrayInput";
 
 interface CmsFormProps {
@@ -51,6 +53,11 @@ export const CmsForm: React.FC<CmsFormProps> = ({
           href: "",
         },
         },
+        serviceHighlights: {
+          title: "",
+          description: "",
+          services: [],
+        },
         about: {
           title: "",
           description: "",
@@ -65,12 +72,26 @@ export const CmsForm: React.FC<CmsFormProps> = ({
           description: "",
           services: [],
         },
+        ctaSection: {
+          subHeading: "",
+          heading: "",
+          description: "",
+          ctaButton: {
+            label: "",
+            href: "",
+          },
+        },
         gallery: {
           title: "",
           description: "",
         },
         businessOverviewSection: {
           content: [],
+        },
+        companyDetails: {
+          heading: "",
+          description: "",
+          sections: [],
         },
         testimonials: {
           title: "",
@@ -123,9 +144,6 @@ export const CmsForm: React.FC<CmsFormProps> = ({
         },
         socialLinks: [],
         serviceAreas: [],
-      },
-      companyDetails: {
-        sections: [],
       },
       images: [],
     };
@@ -192,8 +210,10 @@ export const CmsForm: React.FC<CmsFormProps> = ({
     { id: "socialLinks", label: "Social Links" },
     { id: "serviceAreas", label: "Service Areas" },
     { id: "hero", label: "Hero Section" },
+    { id: "serviceHighlights", label: "Service Highlights" },
     { id: "about", label: "About Section" },
     { id: "services", label: "Services" },
+    { id: "ctaSection", label: "CTA Section" },
     { id: "gallery", label: "Gallery" },
     { id: "businessOverview", label: "Business Overview" },
     { id: "companyDetails", label: "Company Details" },
@@ -229,10 +249,14 @@ export const CmsForm: React.FC<CmsFormProps> = ({
         return <ServiceAreasSection formData={formData} updateFormData={updateFormData} />;
       case "hero":
         return <ContentSection formData={formData} updateFormData={updateFormData} section="hero" />;
+      case "serviceHighlights":
+        return <ServiceHighlightsSection formData={formData} updateFormData={updateFormData} />;
       case "about":
         return <ContentSection formData={formData} updateFormData={updateFormData} section="about" />;
       case "services":
         return <ServicesSection formData={formData} updateFormData={updateFormData} />;
+      case "ctaSection":
+        return <CtaSectionComponent formData={formData} updateFormData={updateFormData} />;
       case "gallery":
         return <ContentSection formData={formData} updateFormData={updateFormData} section="gallery" />;
       case "businessOverview":

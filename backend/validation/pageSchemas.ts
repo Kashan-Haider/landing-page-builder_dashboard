@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { contentSchema, companyDetailsSchema } from "./contentSchemas";
+import { contentSchema } from "./contentSchemas";
 import { businessDataSchema } from "./businessSchemas";
 import { seoDataSchema, themeDataSchema } from "./seoThemeSchemas";
 import { imageSchema, createImageSchema, createWebhookSchema } from "./imageWebhookSchemas";
@@ -16,7 +16,6 @@ export const createLandingPageSchema = z.object({
   seoData: seoDataSchema,
   themeData: themeDataSchema,
   businessData: businessDataSchema,
-  companyDetails: companyDetailsSchema,
   images: z.array(imageSchema).optional().default([]), // optional array of images
 });
 
@@ -29,7 +28,6 @@ export const updateLandingPageSchema = z.object({
   seoData: seoDataSchema.partial().optional(),
   themeData: themeDataSchema.partial().optional(),
   businessData: businessDataSchema.partial().optional(),
-  companyDetails: companyDetailsSchema.partial().optional(),
   images: z.array(imageSchema).optional(), // Add images field for updates
 });
 

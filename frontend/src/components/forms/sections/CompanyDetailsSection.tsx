@@ -14,7 +14,10 @@ export const CompanyDetailsSection: React.FC<CompanyDetailsSectionProps> = ({
   updateFormData,
 }) => {
   const companyDetailsSections: CompanyDetailsSectionType[] =
-    getNestedValue(formData, "companyDetails.sections") || [];
+    getNestedValue(formData, "content.companyDetails.sections") || [];
+  
+  const companyDetailsHeading = getNestedValue(formData, "content.companyDetails.heading") || "";
+  const companyDetailsDescription = getNestedValue(formData, "content.companyDetails.description") || "";
 
   const addCompanyDetailsItem = () => {
     const newItem: CompanyDetailsSectionType = {
@@ -23,12 +26,12 @@ export const CompanyDetailsSection: React.FC<CompanyDetailsSectionProps> = ({
     };
 
     const updatedSections = [...companyDetailsSections, newItem];
-    updateFormData("companyDetails.sections", updatedSections);
+    updateFormData("content.companyDetails.sections", updatedSections);
   };
 
   const removeCompanyDetailsItem = (index: number) => {
     const updatedSections = companyDetailsSections.filter((_, i) => i !== index);
-    updateFormData("companyDetails.sections", updatedSections);
+    updateFormData("content.companyDetails.sections", updatedSections);
   };
 
   const updateCompanyDetailsItem = (
@@ -41,7 +44,7 @@ export const CompanyDetailsSection: React.FC<CompanyDetailsSectionProps> = ({
       ...updatedSections[index],
       [field]: value,
     };
-    updateFormData("companyDetails.sections", updatedSections);
+    updateFormData("content.companyDetails.sections", updatedSections);
   };
 
   return (
@@ -54,9 +57,33 @@ export const CompanyDetailsSection: React.FC<CompanyDetailsSectionProps> = ({
           Company Details Section
         </h3>
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-          Add detailed information about your company. Each section includes a
-          heading and description to showcase different aspects of your business.
+          Configure the main heading and description for your company details section,
+          then add individual detail items to showcase different aspects of your business.
         </p>
+      </div>
+
+      {/* Main Company Details Section Fields */}
+      <div className="space-y-4 mb-8 p-6 border rounded-lg" style={{ borderColor: "var(--border-primary)", backgroundColor: "var(--bg-secondary)" }}>
+        <h4 className="text-md font-medium mb-4" style={{ color: "var(--text-primary)" }}>
+          Section Header
+        </h4>
+        
+        <TextInput
+          label="Section Heading"
+          value={companyDetailsHeading}
+          onChange={(value) => updateFormData("content.companyDetails.heading", value)}
+          placeholder="Company Details (e.g., About Our Company, Why Choose Us)"
+          required
+        />
+        
+        <TextInput
+          label="Section Description"
+          value={companyDetailsDescription}
+          onChange={(value) => updateFormData("content.companyDetails.description", value)}
+          placeholder="Brief introduction to your company details section..."
+          multiline
+          required
+        />
       </div>
 
       {/* Company Details Items */}

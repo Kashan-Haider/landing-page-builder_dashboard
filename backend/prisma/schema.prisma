@@ -14,11 +14,10 @@ model LandingPage {
   githubUrl    String?
   status       String  @default("draft")
 
-  content        Json
-  seoData        Json
-  themeData      Json
-  businessData   Json
-  companyDetails Json @default("{\"sections\":[]}")
+  content      Json
+  seoData      Json
+  themeData    Json
+  businessData Json
 
   images Image[]
 

@@ -22,6 +22,17 @@ export const heroSectionSchema = z.object({
   ctaButton: ctaButtonSchema,
 });
 
+export const serviceHighlightsItemSchema = z.object({
+  name: z.string().min(1, "Service name is required"),
+  description: z.string().min(1, "Service description is required")
+});
+
+export const serviceHighlightsSchema = z.object({
+  title: z.string().min(1, "Service highlights title is required"),
+  description: z.string().min(1, "Service highlights description is required"),
+  services: z.array(serviceHighlightsItemSchema).default([]),
+});
+
 export const aboutSectionSchema = z.object({
   title: z.string().min(1, "About title is required"),
   description: z.string().min(1, "About description is required"),
@@ -95,15 +106,27 @@ export const companyDetailsSectionSchema = z.object({
 });
 
 export const companyDetailsSchema = z.object({
+  heading: z.string().min(1, "Company details heading is required"),
+  description: z.string().min(1, "Company details description is required"),
   sections: z.array(companyDetailsSectionSchema).default([]),
+});
+
+export const ctaSectionSchema = z.object({
+  subHeading: z.string().min(1, "CTA section subheading is required"),
+  heading: z.string().min(1, "CTA section heading is required"),
+  description: z.string().min(1, "CTA section description is required"),
+  ctaButton: ctaButtonSchema,
 });
 
 export const contentSchema = z.object({
   hero: heroSectionSchema,
+  serviceHighlights: serviceHighlightsSchema,
   about: aboutSectionSchema,
   services: servicesSectionSchema,
+  ctaSection: ctaSectionSchema,
   gallery: gallerySectionSchema,
   businessOverview: businessOverviewSection,
+  companyDetails: companyDetailsSchema.optional().default({ heading: "", description: "", sections: [] }),
   testimonials: testimonialsSectionSchema,
   faq: faqSectionSchema,
   contact: contactSectionSchema,
