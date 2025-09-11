@@ -17,7 +17,7 @@ interface LandingPageTemplate {
 }
 
 class TemplateDataService {
-  private sampleDataPath = path.join(process.cwd(), '..', 'sample-landing-page.json');
+  private sampleDataPath = path.join(process.cwd(), '..', 'sample-page.json');
 
   // Load sample template from JSON file
   async loadSampleTemplate(): Promise<any> {

@@ -1,39 +1,106 @@
 {
-    "id": "nexus-digital-solutions-2025",
+    "id": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
     "templateId": "premium-corporate-template",
-    "businessName": "Nexus Digital Solutions & Consulting",
+    "businessName": "Nexus Digital Solutions & Consultings",
     "githubUrl": "https://github.com/nexus-digital/corporate-website",
-    "status": "published",
+    "status": "draft",
     "content": {
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "questions": [
+                {
+                    "answer": "Our project timelines vary based on complexity and scope. Simple integrations take 6-12 weeks, while comprehensive digital transformations range from 6-18 months. We follow an agile delivery approach with regular sprints, weekly progress updates, and milestone-based deliverables to ensure transparency and continuous value delivery.",
+                    "question": "What is your typical project timeline and delivery process?"
+                },
+                {
+                    "answer": "We serve clients across 22+ industries including healthcare, finance, manufacturing, retail, education, and energy. Our solutions scale from startups to Fortune 500 enterprises. We've successfully delivered projects ranging from $50K to $5M+, with flexible engagement models to match your needs and budget.",
+                    "question": "Which industries and company sizes do you work with?"
+                },
+                {
+                    "answer": "Security is built into every solution we deliver. We maintain ISO 27001, SOC 2 Type II certifications and follow industry-specific compliance standards (HIPAA, PCI-DSS, GDPR, SOX). Our security framework includes end-to-end encryption, regular penetration testing, and comprehensive audit trails.",
+                    "question": "How do you ensure data security and compliance?"
+                },
+                {
+                    "answer": "We work with cutting-edge technologies including cloud platforms (AWS, Azure, GCP), modern frameworks (React, Angular, Node.js, Python, .NET), AI/ML tools (TensorFlow, PyTorch), and enterprise systems (Salesforce, SAP, Oracle). Our technology-agnostic approach ensures we select the best tools for your specific needs.",
+                    "question": "What technologies and platforms do you specialize in?"
+                },
+                {
+                    "answer": "We establish clear KPIs and success metrics during project planning, including technical performance, business outcomes, and ROI targets. Our clients typically see 35-50% efficiency improvements and 25-40% cost reductions. We provide detailed analytics dashboards and quarterly business reviews to track progress and optimize results.",
+                    "question": "How do you measure project success and ROI?"
+                },
+                {
+                    "answer": "We offer comprehensive post-launch support including 24/7 monitoring, regular maintenance, performance optimization, user training, and strategic consulting. Our support plans range from basic maintenance to full managed services, ensuring your solutions continue to deliver value as your business grows.",
+                    "question": "What post-implementation support do you provide?"
+                },
+                {
+                    "answer": "Absolutely! We specialize in complex system integrations and have extensive experience working with legacy systems. Our integration approach includes thorough system analysis, API development, data migration strategies, and minimal-disruption deployment to ensure seamless connectivity with your existing infrastructure.",
+                    "question": "Can you integrate with our existing systems and infrastructure?"
+                },
+                {
+                    "answer": "We offer flexible pricing models including fixed-price projects, time-and-materials, and retainer-based engagements. Most projects include milestone-based payments with 30% upfront, progress payments, and final delivery payment. We also offer performance-based pricing options aligned with your business outcomes.",
+                    "question": "What is your pricing model and payment structure?"
+                }
+            ],
+            "description": "Find answers to common questions about our services, processes, and partnership approach. Our comprehensive FAQ covers everything from project timelines to technical specifications. Need more specific information? Our experts are here to help."
+        },
         "hero": {
             "title": "Empowering Businesses Through Digital Innovation",
             "subtitle": "Your Strategic Partner for Digital Excellence Since 2016",
-            "description": "We transform ambitious organizations into digital leaders through cutting-edge technology solutions, strategic consulting, and innovative digital experiences. Join 750+ companies worldwide who have revolutionized their operations and achieved unprecedented growth with our expertise.",
             "ctaButton": {
-                "label": "Schedule Strategy Session",
-                "href": "/contact"
-            }
+                "href": "/contact",
+                "label": "Schedule Strategy Session"
+            },
+            "description": "We transform ambitious organizations into digital leaders through cutting-edge technology solutions, strategic consulting, and innovative digital experiences. Join 750+ companies worldwide who have revolutionized their operations and achieved unprecedented growth with our expertise."
         },
         "about": {
             "title": "About Nexus Digital Solutions",
-            "description": "Since 2016, Nexus Digital Solutions has been at the forefront of digital transformation, helping businesses navigate the complex landscape of modern technology. Our team of 85+ certified professionals combines strategic thinking with technical excellence to deliver solutions that drive real business impact. We've successfully executed over 2,800 projects across 22 industries, helping organizations increase operational efficiency by an average of 52% and boost revenue by 41% within 18 months of partnership.",
             "features": [
                 "85+ Certified Technology Experts",
                 "Award-Winning Digital Solutions",
                 "24/7 Global Support Network"
             ],
             "ctaButton": {
-                "label": "Schedule Strategy Session",
-                "href": "/contact"
-            }
+                "href": "/contact",
+                "label": "Schedule Strategy Session"
+            },
+            "description": "Since 2016, Nexus Digital Solutions has been at the forefront of digital transformation, helping businesses navigate the complex landscape of modern technology. Our team of 85+ certified professionals combines strategic thinking with technical excellence to deliver solutions that drive real business impact. We've successfully executed over 2,800 projects across 22 industries, helping organizations increase operational efficiency by an average of 52% and boost revenue by 41% within 18 months of partnership."
+        },
+        "footer": {
+            "links": [
+                {
+                    "href": "/privacy",
+                    "text": "Privacy Policy"
+                },
+                {
+                    "href": "/terms",
+                    "text": "Terms of Service"
+                },
+                {
+                    "href": "/cookies",
+                    "text": "Cookie Policy"
+                },
+                {
+                    "href": "/careers",
+                    "text": "Careers"
+                }
+            ],
+            "copyright": "© 2025 Nexus Digital Solutions & Consulting. All rights reserved. Empowering digital transformation worldwide since 2016."
+        },
+        "contact": {
+            "title": "Ready to Transform Your Business?",
+            "showMap": true,
+            "description": "Take the first step toward digital excellence and unprecedented growth. Schedule your complimentary strategic consultation today and discover how our proven methodologies can accelerate your digital transformation journey. Our senior consultants are ready to discuss your unique challenges and craft a customized roadmap to success."
+        },
+        "gallery": {
+            "title": "Innovation in Action",
+            "description": "Take a behind-the-scenes look at our state-of-the-art facilities, collaborative workspaces, client engagements, and the cutting-edge projects that are shaping the future of business technology."
         },
         "services": {
             "title": "Comprehensive Digital Solutions Portfolio",
-            "description": "Our integrated approach combines strategic consulting, cutting-edge development, and ongoing optimization to deliver measurable business outcomes. Each solution is customized to address your unique challenges while positioning you for future growth and market leadership.",
             "services": [
                 {
                     "name": "Digital Strategy & Transformation",
-                    "description": "End-to-end digital transformation services including strategic planning, technology roadmapping, and change management to accelerate your digital evolution.",
+                    "price": "Starting at $4,500/month",
                     "features": [
                         "Digital Maturity Assessment",
                         "Technology Roadmap Development",
@@ -44,11 +111,11 @@
                         "Agile Methodology Implementation",
                         "Performance Measurement Framework"
                     ],
-                    "price": "Starting at $4,500/month"
+                    "description": "End-to-end digital transformation services including strategic planning, technology roadmapping, and change management to accelerate your digital evolution."
                 },
                 {
                     "name": "Custom Software Development",
-                    "description": "Tailored software solutions including web applications, mobile apps, enterprise systems, and API integrations built with modern frameworks.",
+                    "price": "Starting at $6,800/month",
                     "features": [
                         "Full-Stack Web Development",
                         "Native & Cross-Platform Mobile Apps",
@@ -59,11 +126,11 @@
                         "Microservices Implementation",
                         "DevOps & CI/CD Pipeline Setup"
                     ],
-                    "price": "Starting at $6,800/month"
+                    "description": "Tailored software solutions including web applications, mobile apps, enterprise systems, and API integrations built with modern frameworks."
                 },
                 {
                     "name": "Cloud Infrastructure & DevOps",
-                    "description": "Comprehensive cloud migration, infrastructure automation, and DevOps services to optimize performance, security, and scalability.",
+                    "price": "Starting at $5,200/month",
                     "features": [
                         "Multi-Cloud Strategy & Migration",
                         "Infrastructure as Code (IaC)",
@@ -74,11 +141,11 @@
                         "Cost Optimization Strategies",
                         "Disaster Recovery Planning"
                     ],
-                    "price": "Starting at $5,200/month"
+                    "description": "Comprehensive cloud migration, infrastructure automation, and DevOps services to optimize performance, security, and scalability."
                 },
                 {
                     "name": "AI & Machine Learning Solutions",
-                    "description": "Advanced AI and ML implementations including predictive analytics, automation, and intelligent decision-making systems.",
+                    "price": "Starting at $7,500/month",
                     "features": [
                         "Predictive Analytics Platforms",
                         "Natural Language Processing",
@@ -89,11 +156,11 @@
                         "AI Ethics & Governance",
                         "MLOps & Model Management"
                     ],
-                    "price": "Starting at $7,500/month"
+                    "description": "Advanced AI and ML implementations including predictive analytics, automation, and intelligent decision-making systems."
                 },
                 {
                     "name": "Data Analytics & Business Intelligence",
-                    "description": "Transform your data into actionable insights with advanced analytics, visualization, and business intelligence solutions.",
+                    "price": "Starting at $3,800/month",
                     "features": [
                         "Data Warehouse Architecture",
                         "Real-time Analytics Dashboards",
@@ -104,11 +171,11 @@
                         "Performance KPI Development",
                         "Automated Reporting Systems"
                     ],
-                    "price": "Starting at $3,800/month"
+                    "description": "Transform your data into actionable insights with advanced analytics, visualization, and business intelligence solutions."
                 },
                 {
                     "name": "Cybersecurity & Compliance",
-                    "description": "Comprehensive security solutions including risk assessment, compliance management, and ongoing security monitoring.",
+                    "price": "Starting at $4,200/month",
                     "features": [
                         "Security Risk Assessment",
                         "Compliance Framework Implementation",
@@ -119,45 +186,64 @@
                         "Regular Security Audits",
                         "GDPR & SOX Compliance"
                     ],
-                    "price": "Starting at $4,200/month"
+                    "description": "Comprehensive security solutions including risk assessment, compliance management, and ongoing security monitoring."
                 }
-            ]
+            ],
+            "description": "Our integrated approach combines strategic consulting, cutting-edge development, and ongoing optimization to deliver measurable business outcomes. Each solution is customized to address your unique challenges while positioning you for future growth and market leadership."
         },
-        "gallery": {
-            "title": "Innovation in Action",
-            "description": "Take a behind-the-scenes look at our state-of-the-art facilities, collaborative workspaces, client engagements, and the cutting-edge projects that are shaping the future of business technology."
+        "ctaSection": {
+            "heading": "Let's Work Together",
+            "ctaButton": {
+                "href": "/contact",
+                "label": "Get Started"
+            },
+            "subHeading": "Ready to Get Started?",
+            "description": "Contact us today to discuss your project and see how we can help you achieve your goals."
         },
-        "businessOverview": {
-            "content": [
+        "testimonials": {
+            "title": "Client Success Testimonials",
+            "description": "Hear directly from business leaders who have transformed their organizations through our partnership. These testimonials showcase real results from real digital transformation journeys across various industries.",
+            "testimonials": [
                 {
-                    "heading": "Digital-First Approach",
-                    "description": "We believe that successful digital transformation starts with a digital-first mindset, leveraging cloud-native technologies and agile methodologies to deliver scalable, future-ready solutions.",
-                    "ctaButton": {
-                        "label": "Learn Our Methodology",
-                        "href": "/methodology"
-                    }
+                    "name": "Jennifer Martinez",
+                    "role": "Chief Technology Officer",
+                    "text": "Nexus transformed our entire e-commerce infrastructure, resulting in a 340% increase in online sales and 99.9% uptime. Their AI-powered recommendation engine alone boosted our average order value by 65%. The ROI has been exceptional.",
+                    "company": "RetailTech Innovations Inc."
                 },
                 {
-                    "heading": "Industry Expertise",
-                    "description": "With deep knowledge across 22+ industries, we understand the unique challenges and opportunities in your sector, allowing us to deliver targeted solutions that drive real business value.",
-                    "ctaButton": {
-                        "label": "Explore Industries",
-                        "href": "/industries"
-                    }
+                    "name": "Robert Kim",
+                    "role": "CEO & President",
+                    "text": "The custom fintech platform developed by Nexus helped us reduce transaction processing time by 80% and achieve full regulatory compliance. We've processed over $500M in transactions with zero security incidents.",
+                    "company": "FinanceForward Solutions"
                 },
                 {
-                    "heading": "Innovation Partnership",
-                    "description": "More than a vendor, we're your strategic technology partner committed to your long-term success through continuous innovation, optimization, and growth enablement.",
-                    "ctaButton": {
-                        "label": "Partner With Us",
-                        "href": "/partnership"
-                    }
+                    "name": "Dr. Amanda Foster",
+                    "role": "Chief Medical Officer",
+                    "text": "Nexus's healthcare analytics platform provides real-time insights that have improved patient outcomes by 35% while reducing costs by $1.8M annually. Their HIPAA-compliant architecture gives us complete confidence in data security.",
+                    "company": "Metropolitan Health System"
+                },
+                {
+                    "name": "Marcus Thompson",
+                    "role": "Operations Director",
+                    "text": "The IoT and AI solutions implemented by Nexus have revolutionized our production line. We've achieved 99.2% quality scores and reduced waste by 45%. Their predictive maintenance system saved us from 12 major equipment failures.",
+                    "company": "Advanced Manufacturing Corp"
+                },
+                {
+                    "name": "Lisa Chen",
+                    "role": "VP of Digital Innovation",
+                    "text": "Our learning management platform built by Nexus now serves 2.5M students worldwide. The scalable architecture handles peak loads seamlessly, and their analytics dashboard provides insights that have improved student engagement by 60%.",
+                    "company": "EduTech Global"
+                },
+                {
+                    "name": "Carlos Rodriguez",
+                    "role": "Chief Information Officer",
+                    "text": "Nexus helped us build a smart grid management system that optimizes energy distribution in real-time. We've reduced energy waste by 30% and improved grid reliability to 99.8%. Their IoT expertise is unmatched.",
+                    "company": "GreenEnergy Solutions"
                 }
             ]
         },
         "companyDetails": {
             "heading": "Our Company Story",
-            "description": "Founded in 2016 with a vision to democratize cutting-edge technology, Nexus Digital Solutions has grown from a small startup to a leading digital transformation partner. Our journey is defined by innovation, client success, and continuous evolution in the rapidly changing technology landscape.",
             "sections": [
                 {
                     "heading": "Mission Statement",
@@ -171,128 +257,143 @@
                     "heading": "Core Values",
                     "description": "Innovation-First Mindset, Client Success Obsession, Transparent Communication, Continuous Learning Culture, Ethical Technology Practices, and Sustainable Business Growth guide everything we do."
                 }
-            ]
+            ],
+            "description": "Founded in 2016 with a vision to democratize cutting-edge technology, Nexus Digital Solutions has grown from a small startup to a leading digital transformation partner. Our journey is defined by innovation, client success, and continuous evolution in the rapidly changing technology landscape."
         },
-        "testimonials": {
-            "title": "Client Success Testimonials",
-            "description": "Hear directly from business leaders who have transformed their organizations through our partnership. These testimonials showcase real results from real digital transformation journeys across various industries.",
-            "testimonials": [
+        "businessOverview": {
+            "content": [
                 {
-                    "name": "Jennifer Martinez",
-                    "role": "Chief Technology Officer",
-                    "company": "RetailTech Innovations Inc.",
-                    "text": "Nexus transformed our entire e-commerce infrastructure, resulting in a 340% increase in online sales and 99.9% uptime. Their AI-powered recommendation engine alone boosted our average order value by 65%. The ROI has been exceptional."
+                    "heading": "Digital-First Approach",
+                    "ctaButton": {
+                        "href": "/methodology",
+                        "label": "Learn Our Methodology"
+                    },
+                    "description": "We believe that successful digital transformation starts with a digital-first mindset, leveraging cloud-native technologies and agile methodologies to deliver scalable, future-ready solutions."
                 },
                 {
-                    "name": "Robert Kim",
-                    "role": "CEO & President",
-                    "company": "FinanceForward Solutions",
-                    "text": "The custom fintech platform developed by Nexus helped us reduce transaction processing time by 80% and achieve full regulatory compliance. We've processed over $500M in transactions with zero security incidents."
+                    "heading": "Industry Expertise",
+                    "ctaButton": {
+                        "href": "/industries",
+                        "label": "Explore Industries"
+                    },
+                    "description": "With deep knowledge across 22+ industries, we understand the unique challenges and opportunities in your sector, allowing us to deliver targeted solutions that drive real business value."
                 },
                 {
-                    "name": "Dr. Amanda Foster",
-                    "role": "Chief Medical Officer",
-                    "company": "Metropolitan Health System",
-                    "text": "Nexus's healthcare analytics platform provides real-time insights that have improved patient outcomes by 35% while reducing costs by $1.8M annually. Their HIPAA-compliant architecture gives us complete confidence in data security."
+                    "heading": "Innovation Partnership",
+                    "ctaButton": {
+                        "href": "/partnership",
+                        "label": "Partner With Us"
+                    },
+                    "description": "More than a vendor, we're your strategic technology partner committed to your long-term success through continuous innovation, optimization, and growth enablement."
                 },
                 {
-                    "name": "Marcus Thompson",
-                    "role": "Operations Director",
-                    "company": "Advanced Manufacturing Corp",
-                    "text": "The IoT and AI solutions implemented by Nexus have revolutionized our production line. We've achieved 99.2% quality scores and reduced waste by 45%. Their predictive maintenance system saved us from 12 major equipment failures."
+                    "heading": "Scalable Solutions",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Discover Scalability"
+                    },
+                    "description": "Our solutions are designed to scale with your business, ensuring seamless performance as your needs evolve without compromising efficiency or security."
                 },
                 {
-                    "name": "Lisa Chen",
-                    "role": "VP of Digital Innovation",
-                    "company": "EduTech Global",
-                    "text": "Our learning management platform built by Nexus now serves 2.5M students worldwide. The scalable architecture handles peak loads seamlessly, and their analytics dashboard provides insights that have improved student engagement by 60%."
+                    "heading": "Data-Driven Insights",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Unlock Insights"
+                    },
+                    "description": "We harness the power of analytics and AI to transform raw data into actionable insights that guide smarter business decisions and measurable outcomes."
                 },
                 {
-                    "name": "Carlos Rodriguez",
-                    "role": "Chief Information Officer",
-                    "company": "GreenEnergy Solutions",
-                    "text": "Nexus helped us build a smart grid management system that optimizes energy distribution in real-time. We've reduced energy waste by 30% and improved grid reliability to 99.8%. Their IoT expertise is unmatched."
+                    "heading": "Customer-Centric Design",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "See Our Approach"
+                    },
+                    "description": "Our human-centered design philosophy ensures every solution we build prioritizes user experience, engagement, and long-term adoption."
+                },
+                {
+                    "heading": "Cloud-Native Architecture",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Learn About Cloud"
+                    },
+                    "description": "By leveraging cloud-native technologies, we deliver resilient, flexible, and cost-effective systems built for agility and speed."
+                },
+                {
+                    "heading": "Security & Compliance",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Explore Security"
+                    },
+                    "description": "We prioritize enterprise-grade security and compliance frameworks, safeguarding your digital assets and maintaining regulatory alignment."
+                },
+                {
+                    "heading": "Agile Delivery",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Understand Agile"
+                    },
+                    "description": "Through agile methodologies, we ensure rapid iterations, faster time-to-market, and continuous improvements for every project."
+                },
+                {
+                    "heading": "Sustainable Technology",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Go Green With Us"
+                    },
+                    "description": "Our solutions embrace sustainable practices, helping organizations reduce their environmental footprint while achieving efficiency gains."
+                },
+                {
+                    "heading": "Future-Ready Workforce",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Empower Teams"
+                    },
+                    "description": "We equip teams with the right tools, skills, and cultural mindset to embrace innovation and drive long-term digital success."
+                },
+                {
+                    "heading": "Global Reach",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "See Our Presence"
+                    },
+                    "description": "With operations and partnerships worldwide, we bring localized expertise and global perspective to every engagement."
+                },
+                {
+                    "heading": "Continuous Innovation",
+                    "ctaButton": {
+                        "href": "#",
+                        "label": "Stay Ahead"
+                    },
+                    "description": "We invest heavily in research, emerging technologies, and innovation labs to ensure our clients are always ahead of the curve."
                 }
             ]
         },
-        "faq": {
-            "title": "Frequently Asked Questions",
-            "description": "Find answers to common questions about our services, processes, and partnership approach. Our comprehensive FAQ covers everything from project timelines to technical specifications. Need more specific information? Our experts are here to help.",
-            "questions": [
+        "serviceHighlights": {
+            "title": "Our Key Services",
+            "services": [
                 {
-                    "question": "What is your typical project timeline and delivery process?",
-                    "answer": "Our project timelines vary based on complexity and scope. Simple integrations take 6-12 weeks, while comprehensive digital transformations range from 6-18 months. We follow an agile delivery approach with regular sprints, weekly progress updates, and milestone-based deliverables to ensure transparency and continuous value delivery."
+                    "name": "Clients",
+                    "description": "500+"
                 },
                 {
-                    "question": "Which industries and company sizes do you work with?",
-                    "answer": "We serve clients across 22+ industries including healthcare, finance, manufacturing, retail, education, and energy. Our solutions scale from startups to Fortune 500 enterprises. We've successfully delivered projects ranging from $50K to $5M+, with flexible engagement models to match your needs and budget."
+                    "name": "Projects Completed",
+                    "description": "2000+"
                 },
                 {
-                    "question": "How do you ensure data security and compliance?",
-                    "answer": "Security is built into every solution we deliver. We maintain ISO 27001, SOC 2 Type II certifications and follow industry-specific compliance standards (HIPAA, PCI-DSS, GDPR, SOX). Our security framework includes end-to-end encryption, regular penetration testing, and comprehensive audit trails."
+                    "name": "Expert Support",
+                    "description": "100%"
                 },
                 {
-                    "question": "What technologies and platforms do you specialize in?",
-                    "answer": "We work with cutting-edge technologies including cloud platforms (AWS, Azure, GCP), modern frameworks (React, Angular, Node.js, Python, .NET), AI/ML tools (TensorFlow, PyTorch), and enterprise systems (Salesforce, SAP, Oracle). Our technology-agnostic approach ensures we select the best tools for your specific needs."
-                },
-                {
-                    "question": "How do you measure project success and ROI?",
-                    "answer": "We establish clear KPIs and success metrics during project planning, including technical performance, business outcomes, and ROI targets. Our clients typically see 35-50% efficiency improvements and 25-40% cost reductions. We provide detailed analytics dashboards and quarterly business reviews to track progress and optimize results."
-                },
-                {
-                    "question": "What post-implementation support do you provide?",
-                    "answer": "We offer comprehensive post-launch support including 24/7 monitoring, regular maintenance, performance optimization, user training, and strategic consulting. Our support plans range from basic maintenance to full managed services, ensuring your solutions continue to deliver value as your business grows."
-                },
-                {
-                    "question": "Can you integrate with our existing systems and infrastructure?",
-                    "answer": "Absolutely! We specialize in complex system integrations and have extensive experience working with legacy systems. Our integration approach includes thorough system analysis, API development, data migration strategies, and minimal-disruption deployment to ensure seamless connectivity with your existing infrastructure."
-                },
-                {
-                    "question": "What is your pricing model and payment structure?",
-                    "answer": "We offer flexible pricing models including fixed-price projects, time-and-materials, and retainer-based engagements. Most projects include milestone-based payments with 30% upfront, progress payments, and final delivery payment. We also offer performance-based pricing options aligned with your business outcomes."
+                    "name": "Uptime",
+                    "description": "24/7"
                 }
-            ]
-        },
-        "contact": {
-            "title": "Ready to Transform Your Business?",
-            "description": "Take the first step toward digital excellence and unprecedented growth. Schedule your complimentary strategic consultation today and discover how our proven methodologies can accelerate your digital transformation journey. Our senior consultants are ready to discuss your unique challenges and craft a customized roadmap to success.",
-            "showMap": true,
-            "consultation": {
-                "duration": "60 minutes",
-                "deliverables": [
-                    "Digital Maturity Assessment",
-                    "Technology Roadmap Overview",
-                    "ROI Projection Analysis",
-                    "Custom Solution Recommendations"
-                ],
-                "value": "$500 value - completely free"
-            }
-        },
-        "footer": {
-            "copyright": "© 2025 Nexus Digital Solutions & Consulting. All rights reserved. Empowering digital transformation worldwide since 2016.",
-            "links": [
-                {
-                    "text": "Privacy Policy",
-                    "href": "/privacy"
-                },
-                {
-                    "text": "Terms of Service",
-                    "href": "/terms"
-                },
-                {
-                    "text": "Cookie Policy",
-                    "href": "/cookies"
-                },
-                {
-                    "text": "Careers",
-                    "href": "/careers"
-                }
-            ]
+            ],
+            "description": "Discover what makes us stand out in the industry"
         }
     },
     "seoData": {
         "title": "Nexus Digital Solutions - Leading Digital Transformation & Custom Software Development",
-        "description": "Transform your business with Nexus Digital's expert consulting, AI solutions, and custom development. 750+ successful clients, 41% average revenue increase. Start your free consultation today.",
+        "isIndex": true,
         "keywords": [
             "digital transformation",
             "custom software development",
@@ -310,6 +411,8 @@
             "mobile app development",
             "digital strategy"
         ],
+        "description": "Transform your business with Nexus Digital's expert consulting, AI solutions, and custom development. 750+ successful clients, 41% average revenue increase. Start your free consultation today.",
+        "canonicalUrl": "https://nexusdigitalsolutions.com",
         "focusedKeywords": [
             "digital transformation",
             "custom software development",
@@ -317,122 +420,116 @@
             "cloud migration services",
             "enterprise technology consulting",
             "nexus digital solutions"
-        ],
-        "canonicalUrl": "https://nexusdigitalsolutions.com",
-        "isIndex": true
+        ]
     },
     "themeData": {
         "primaryColor": "#0f172a",
-        "secondaryColor": "#3b82f6"
+        "secondaryColor": "#3D3D3D"
     },
     "businessData": {
-        "phone": "+1 (888) 639-8774",
         "email": "hello@nexusdigitalsolutions.com",
-        "emergencyPhone": "+1 (888) 911-TECH",
-        "emergencyEmail": "urgent@nexusdigitalsolutions.com",
-        "salesEmail": "sales@nexusdigitalsolutions.com",
-        "supportEmail": "support@nexusdigitalsolutions.com",
-        "address": {
-            "street": "2450 Innovation Drive, Suite 1800",
-            "city": "San Francisco",
-            "state": "CA",
-            "zipCode": "94105",
-            "country": "United States"
-        },
-        "coordinates": {
-            "latitude": 37.7749,
-            "longitude": -122.4194
-        },
         "hours": {
-            "timezone": "America/Los_Angeles",
             "schedule": [
                 {
                     "day": "Monday",
-                    "isClosed": false,
                     "periods": [
                         {
                             "open": "07:00",
                             "close": "19:00"
                         }
-                    ]
+                    ],
+                    "isClosed": false
                 },
                 {
                     "day": "Tuesday",
-                    "isClosed": false,
                     "periods": [
                         {
                             "open": "07:00",
                             "close": "19:00"
                         }
-                    ]
+                    ],
+                    "isClosed": false
                 },
                 {
                     "day": "Wednesday",
-                    "isClosed": false,
                     "periods": [
                         {
                             "open": "07:00",
                             "close": "19:00"
                         }
-                    ]
+                    ],
+                    "isClosed": false
                 },
                 {
                     "day": "Thursday",
-                    "isClosed": false,
                     "periods": [
                         {
                             "open": "07:00",
                             "close": "19:00"
                         }
-                    ]
+                    ],
+                    "isClosed": false
                 },
                 {
                     "day": "Friday",
-                    "isClosed": false,
                     "periods": [
                         {
                             "open": "07:00",
                             "close": "18:00"
                         }
-                    ]
+                    ],
+                    "isClosed": false
                 },
                 {
                     "day": "Saturday",
-                    "isClosed": false,
                     "periods": [
                         {
                             "open": "09:00",
                             "close": "17:00"
                         }
-                    ]
+                    ],
+                    "isClosed": false
                 },
                 {
                     "day": "Sunday",
-                    "isClosed": true,
-                    "periods": []
+                    "periods": [],
+                    "isClosed": true
                 }
-            ]
+            ],
+            "timezone": "America/Los_Angeles"
+        },
+        "phone": "+1 (888) 639-8774",
+        "address": {
+            "city": "San Francisco",
+            "state": "CA",
+            "street": "2450 Innovation Drive, Suite 1800",
+            "country": "United States",
+            "zipCode": "94105"
+        },
+        "coordinates": {
+            "latitude": 37.7749,
+            "longitude": -122.4194
         },
         "socialLinks": [
             {
-                "platform": "linkedin",
-                "url": "https://linkedin.com/company/nexus-digital-solutions"
+                "url": "https://linkedin.com/company/nexus-digital-solutions",
+                "platform": "linkedin"
             },
             {
-                "platform": "twitter",
-                "url": "https://twitter.com/nexusdigitalHQ"
+                "url": "https://twitter.com/nexusdigitalHQ",
+                "platform": "twitter"
             },
             {
-                "platform": "facebook",
-                "url": "https://facebook.com/nexusdigitalsolutions"
+                "url": "https://facebook.com/nexusdigitalsolutions",
+                "platform": "facebook"
             },
             {
-                "platform": "instagram",
-                "url": "https://instagram.com/nexusdigital"
+                "url": "https://instagram.com/nexusdigital",
+                "platform": "instagram"
             },
             {
-                "platform": "youtube",
-                "url": "https://youtube.com/c/nexusdigitalsolutions"
+                "url": "https://youtube.com/c/nexusdigitalsolutions",
+                "platform": "youtube"
             }
         ],
         "serviceAreas": [
@@ -477,77 +574,122 @@
                 "description": "Strategic partnerships and direct services for international clients seeking US-based technology expertise with global delivery capabilities."
             }
         ],
-        "certifications": [
-            "ISO 27001:2013 Information Security Management",
-            "SOC 2 Type II Compliance",
-            "AWS Advanced Consulting Partner",
-            "Microsoft Gold Partner",
-            "Google Cloud Premier Partner",
-            "Salesforce Consulting Partner",
-            "Oracle PartnerNetwork Gold Level"
-        ],
-        "awards": [
-            "2024 Digital Transformation Company of the Year - TechCrunch",
-            "2023 Best AI Implementation - CIO Magazine",
-            "2023 Top Cloud Services Provider - Gartner",
-            "2022 Innovation Excellence Award - Forbes",
-            "2022 Best Places to Work - Glassdoor"
-        ]
+        "emergencyEmail": "urgent@nexusdigitalsolutions.com",
+        "emergencyPhone": "+1 (888) 911-TECH"
     },
+    "createdAt": "2025-09-03T16:33:07.929Z",
+    "updatedAt": "2025-09-09T15:32:52.494Z",
+    "publishedAt": null,
     "images": [
         {
+            "id": "de942a14-5419-4568-8303-43daf91824ef",
+            "slotName": "hero-image-1",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
             "title": "Modern Tech Headquarters",
             "altText": "Nexus Digital Solutions modern glass office building in San Francisco with city skyline",
-            "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=800&fit=crop&auto=format",
-            "slotName": "hero-image-1",
-            "category": "hero"
+            "imageUrl": "https://images.pexels.com/photos/2330137/pexels-photo-2330137.jpeg",
+            "category": "hero",
+            "createdAt": "2025-09-09T15:32:52.517Z"
         },
         {
+            "id": "2a3d63e5-2672-4db1-a26f-090125d848b8",
+            "slotName": "about-image-1",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
             "title": "Collaborative Innovation Team",
             "altText": "Diverse team of Nexus engineers and consultants collaborating on digital solutions in modern workspace",
             "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop&auto=format",
-            "slotName": "about-image-1",
-            "category": "about"
+            "category": "about",
+            "createdAt": "2025-09-09T15:32:52.517Z"
         },
         {
+            "id": "c608726a-2f72-4fea-9127-5f338f2e2b00",
+            "slotName": "services-image-1",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
             "title": "AI Development Workshop",
             "altText": "Nexus data scientists and engineers working on AI and machine learning solutions",
             "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop&auto=format",
-            "slotName": "services-image-1",
-            "category": "services"
+            "category": "services",
+            "createdAt": "2025-09-09T15:32:52.517Z"
         },
         {
+            "id": "7f9ae090-c7e5-43a5-8bb4-6ff2e3970d0a",
+            "slotName": "services-image-2",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
             "title": "Cloud Infrastructure Monitoring",
             "altText": "Advanced monitoring dashboard showing cloud infrastructure metrics and performance",
             "imageUrl": "https://images.unsplash.com/photo-1518186233392-c232efbf2373?w=1200&h=800&fit=crop&auto=format",
-            "slotName": "services-image-2",
-            "category": "services"
+            "category": "services",
+            "createdAt": "2025-09-09T15:32:52.517Z"
         },
         {
+            "id": "0e81fec6-6598-4ebd-95f7-a837432ae8df",
+            "slotName": "gallery-image-1",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
             "title": "Innovation Lab Technology",
             "altText": "State-of-the-art innovation lab with cutting-edge development workstations and equipment",
             "imageUrl": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1200&h=800&fit=crop&auto=format",
-            "slotName": "gallery-image-1",
-            "category": "gallery"
+            "category": "gallery",
+            "createdAt": "2025-09-09T15:32:52.517Z"
         },
         {
+            "id": "41eba2b9-a660-46f1-83d8-d55429fdb73f",
+            "slotName": "gallery-image-2",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
             "title": "Code Development Session",
             "altText": "Software developers working on code review and pair programming session",
             "imageUrl": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200&h=800&fit=crop&auto=format",
-            "slotName": "gallery-image-2",
-            "category": "gallery"
+            "category": "gallery",
+            "createdAt": "2025-09-09T15:32:52.517Z"
         },
         {
+            "id": "a84ee011-e59d-4fcd-9f9b-1c91f0c8d561",
+            "slotName": "gallery-image-3",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
             "title": "Data Analytics Dashboard",
             "altText": "Business intelligence dashboard displaying real-time analytics and data visualizations",
             "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop&auto=format",
-            "slotName": "gallery-image-3",
-            "category": "gallery"
+            "category": "gallery",
+            "createdAt": "2025-09-09T15:32:52.517Z"
+        },
+        {
+            "id": "1ca6c47d-eb4f-4d03-a0a5-f6a5ffad2fdf",
+            "slotName": "companyDetails-image-1",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
+            "title": "company details",
+            "altText": "company details",
+            "imageUrl": "https://images.pexels.com/photos/7317341/pexels-photo-7317341.jpeg",
+            "category": "companyDetails",
+            "createdAt": "2025-09-09T15:32:52.517Z"
+        },
+        {
+            "id": "48c640fe-bc61-44ca-a3c0-cd83a601cd34",
+            "slotName": "companyDetails-image-2",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
+            "title": "companyDetails",
+            "altText": "company details",
+            "imageUrl": "https://images.pexels.com/photos/45072/pexels-photo-45072.jpeg",
+            "category": "companyDetails",
+            "createdAt": "2025-09-09T15:32:52.517Z"
+        },
+        {
+            "id": "9eb3ce0a-2276-40cd-97b6-57251c99ef58",
+            "slotName": "companyDetails-image-3",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
+            "title": "companyDetails",
+            "altText": "companyDetails",
+            "imageUrl": "https://images.pexels.com/photos/1595385/pexels-photo-1595385.jpeg",
+            "category": "companyDetails",
+            "createdAt": "2025-09-09T15:32:52.517Z"
+        },
+        {
+            "id": "2da87abd-ffe2-40ca-b346-f3690b1d7629",
+            "slotName": "cta-image-1",
+            "landingPageId": "c0f6f1c7-82d2-4410-92ab-26d6071d5c3c",
+            "title": "cta image",
+            "altText": "cta image",
+            "imageUrl": "https://images.pexels.com/photos/417192/pexels-photo-417192.jpeg",
+            "category": "cta-image",
+            "createdAt": "2025-09-09T15:32:52.517Z"
         }
-    ],
-    "createdAt": "2025-01-20T08:00:00Z",
-    "updatedAt": "2025-08-30T14:25:00Z",
-    "publishedAt": "2025-01-25T12:00:00Z",
-    "version": "2.1.0",
-    "lastReviewed": "2025-08-15T10:30:00Z"
+    ]
 }

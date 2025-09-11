@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 
+interface Template {
+  id: string;
+  name: string;
+  url: string;
+  description: string;
+  preview?: string;
+}
+
 interface Service {
   name: string;
   description: string;
   price: string;
   features: string[];
-  image: File | null;
 }
 
 interface ServiceArea {
@@ -14,455 +21,623 @@ interface ServiceArea {
   description: string;
 }
 
-interface Testimonial {
-  name: string;
-  role: string;
-  company: string;
-  text: string;
-  rating: number;
-  image: File | null;
-}
-
 interface FormData {
   businessName: string;
-  industry: string;
   email: string;
   phone: string;
+  emergencyPhone: string;
+  emergencyEmail: string;
+  street: string;
   city: string;
+  state: string;
+  zipCode: string;
   country: string;
-  websiteUrl: string;
-  logo: File | null;
-  heroImage: File | null;
-  aboutImage: File | null;
-  galleryImages: { altText: string; file: File | null }[];
+  templateId: string;
+  githubUrl: string;
   services: Service[];
   serviceAreas: ServiceArea[];
-  testimonials: Testimonial[];
 }
 
 const CreateLandingPage: React.FC = () => {
+  // Available templates
+  const templates: Template[] = [
+    {
+      id: "template001",
+      name: "Template 001",
+      url: "https://github.com/Kashan-Haider/template001",
+      description: "Modern corporate template with clean design and professional layout"
+    }
+  ];
+
   const [formData, setFormData] = useState<FormData>({
     businessName: "",
-    industry: "",
     email: "",
     phone: "",
+    emergencyPhone: "",
+    emergencyEmail: "",
+    street: "",
     city: "",
+    state: "",
+    zipCode: "",
     country: "",
-    websiteUrl: "",
-    logo: null,
-    heroImage: null,
-    aboutImage: null,
-    galleryImages: [
-      { altText: "", file: null },
-      { altText: "", file: null },
-      { altText: "", file: null },
-    ],
-    services: [],
-    serviceAreas: [],
-    testimonials: [],
+    templateId: "template001", // Default to first template
+    githubUrl: "https://github.com/Kashan-Haider/template001",
+    services: [{ name: "", description: "", price: "", features: [""] }],
+    serviceAreas: [{ city: "", region: "", description: "" }]
   });
 
-  // handle basic field change
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Handle form field changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // file change (logo, hero, about)
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    key: keyof FormData
-  ) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, [key]: file }));
+  // Handle service changes
+  const handleServiceChange = (index: number, field: keyof Service, value: string | string[]) => {
+    const updatedServices = [...formData.services];
+    if (field === 'features' && Array.isArray(value)) {
+      updatedServices[index][field] = value;
+    } else if (typeof value === 'string') {
+      (updatedServices[index] as any)[field] = value;
+    }
+    setFormData((prev) => ({ ...prev, services: updatedServices }));
   };
 
-  // gallery change
-  const handleGalleryChange = (
-    index: number,
-    field: "altText" | "file",
-    value: any
-  ) => {
-    setFormData((prev) => {
-      const updated = [...prev.galleryImages];
-      updated[index] = { ...updated[index], [field]: value };
-      return { ...prev, galleryImages: updated };
-    });
+  // Handle service area changes
+  const handleServiceAreaChange = (index: number, field: keyof ServiceArea, value: string) => {
+    const updatedServiceAreas = [...formData.serviceAreas];
+    updatedServiceAreas[index][field] = value;
+    setFormData((prev) => ({ ...prev, serviceAreas: updatedServiceAreas }));
   };
 
-  // services
+  // Add new service
   const addService = () => {
     setFormData((prev) => ({
       ...prev,
-      services: [
-        ...prev.services,
-        { name: "", description: "", price: "", features: [], image: null },
-      ],
+      services: [...prev.services, { name: "", description: "", price: "", features: [""] }]
     }));
   };
 
-  const updateService = (index: number, field: keyof Service, value: any) => {
-    setFormData((prev) => {
-      const updated = [...prev.services];
-      updated[index] = { ...updated[index], [field]: value };
-      return { ...prev, services: updated };
-    });
+  // Remove service
+  const removeService = (index: number) => {
+    if (formData.services.length > 1) {
+      const updatedServices = formData.services.filter((_, i) => i !== index);
+      setFormData((prev) => ({ ...prev, services: updatedServices }));
+    }
   };
 
-  // service areas
+  // Add new service area
   const addServiceArea = () => {
     setFormData((prev) => ({
       ...prev,
-      serviceAreas: [
-        ...prev.serviceAreas,
-        { city: "", region: "", description: "" },
-      ],
+      serviceAreas: [...prev.serviceAreas, { city: "", region: "", description: "" }]
     }));
   };
 
-  const updateServiceArea = (
-    index: number,
-    field: keyof ServiceArea,
-    value: any
-  ) => {
-    setFormData((prev) => {
-      const updated = [...prev.serviceAreas];
-      updated[index] = { ...updated[index], [field]: value };
-      return { ...prev, serviceAreas: updated };
-    });
+  // Remove service area
+  const removeServiceArea = (index: number) => {
+    if (formData.serviceAreas.length > 1) {
+      const updatedServiceAreas = formData.serviceAreas.filter((_, i) => i !== index);
+      setFormData((prev) => ({ ...prev, serviceAreas: updatedServiceAreas }));
+    }
   };
 
-  // testimonials
-  const addTestimonial = () => {
-    setFormData((prev) => ({
-      ...prev,
-      testimonials: [
-        ...prev.testimonials,
-        { name: "", role: "", company: "", text: "", rating: 5, image: null },
-      ],
-    }));
+  // Handle feature changes for services
+  const handleFeatureChange = (serviceIndex: number, featureIndex: number, value: string) => {
+    const updatedServices = [...formData.services];
+    updatedServices[serviceIndex].features[featureIndex] = value;
+    setFormData((prev) => ({ ...prev, services: updatedServices }));
   };
 
-  const updateTestimonial = (
-    index: number,
-    field: keyof Testimonial,
-    value: any
-  ) => {
-    setFormData((prev) => {
-      const updated = [...prev.testimonials];
-      updated[index] = { ...updated[index], [field]: value };
-      return { ...prev, testimonials: updated };
-    });
+  // Add feature to service
+  const addFeature = (serviceIndex: number) => {
+    const updatedServices = [...formData.services];
+    updatedServices[serviceIndex].features.push("");
+    setFormData((prev) => ({ ...prev, services: updatedServices }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Remove feature from service
+  const removeFeature = (serviceIndex: number, featureIndex: number) => {
+    const updatedServices = [...formData.services];
+    if (updatedServices[serviceIndex].features.length > 1) {
+      updatedServices[serviceIndex].features.splice(featureIndex, 1);
+      setFormData((prev) => ({ ...prev, services: updatedServices }));
+    }
+  };
+
+  // Handle template selection
+  const handleTemplateChange = (templateId: string) => {
+    const selectedTemplate = templates.find(t => t.id === templateId);
+    if (selectedTemplate) {
+      setFormData((prev) => ({
+        ...prev,
+        templateId: selectedTemplate.id,
+        githubUrl: selectedTemplate.url
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted ✅", formData);
-    // TODO: send to backend/file storage
+    setIsLoading(true);
+    
+    try {
+      console.log("Creating landing page with data:", formData);
+      
+      const response = await fetch('/api/pages/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          businessName: formData.businessName,
+          templateId: formData.templateId,
+          githubUrl: formData.githubUrl,
+          email: formData.email,
+          phone: formData.phone,
+          emergencyPhone: formData.emergencyPhone,
+          emergencyEmail: formData.emergencyEmail,
+          address: {
+            street: formData.street,
+            city: formData.city,
+            state: formData.state,
+            zipCode: formData.zipCode,
+            country: formData.country
+          },
+          services: formData.services.filter(service => service.name.trim() !== ""),
+          serviceAreas: formData.serviceAreas.filter(area => area.city.trim() !== "")
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create landing page');
+      }
+
+      const result = await response.json();
+      console.log("Landing page created successfully:", result);
+      
+      alert(`Landing page created successfully! Page ID: ${result.data.id}`);
+      
+      // Reset form after successful creation
+      setFormData({
+        businessName: "",
+        email: "",
+        phone: "",
+        emergencyPhone: "",
+        emergencyEmail: "",
+        street: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        country: "",
+        templateId: "template001",
+        githubUrl: "https://github.com/Kashan-Haider/template001",
+        services: [{ name: "", description: "", price: "", features: [""] }],
+        serviceAreas: [{ city: "", region: "", description: "" }]
+      });
+    } catch (error) {
+      console.error("Error creating landing page:", error);
+      alert(`Error creating landing page: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] py-6 px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-4xl bg-[var(--bg-secondary)] rounded-2xl shadow-lg p-8 space-y-6 border border-[var(--border-primary)]"
+        className="w-full max-w-4xl mx-auto bg-[var(--bg-secondary)] rounded-2xl shadow-lg p-8 space-y-6 border border-[var(--border-primary)]"
       >
-        <h2 className="text-2xl font-bold text-[var(--text-secondary)]">
-          Business Information
+        <h2 className="text-2xl font-bold text-[var(--text-secondary)] text-center">
+          Create Landing Page
         </h2>
+        <p className="text-[var(--text-tertiary)] text-center">
+          Choose a template and provide comprehensive business information including services and service areas to generate a professional landing page
+        </p>
 
-        {/* --- core info --- */}
-        <input
-          type="text"
-          name="businessName"
-          placeholder="Business Name"
-          value={formData.businessName}
-          onChange={handleChange}
-          className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] mb-3"
-          required
-        />
-        <input
-          type="text"
-          name="industry"
-          placeholder="Industry"
-          value={formData.industry}
-          onChange={handleChange}
-          className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] mb-3"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] mb-3"
-          required
-        />
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone"
-          value={formData.phone}
-          onChange={handleChange}
-          className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] mb-3"
-          required
-        />
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="city"
-            placeholder="City"
-            value={formData.city}
-            onChange={handleChange}
-            className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)]"
-            required
-          />
-          <input
-            type="text"
-            name="country"
-            placeholder="Country"
-            value={formData.country}
-            onChange={handleChange}
-            className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)]"
-            required
-          />
+        {/* Template Selection */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-[var(--text-secondary)]">
+            Select Template *
+          </label>
+          <div className="space-y-3">
+            {templates.map((template) => (
+              <div
+                key={template.id}
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                  formData.templateId === template.id
+                    ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)]/10'
+                    : 'border-[var(--border-secondary)] bg-[var(--bg-tertiary)] hover:border-[var(--accent-primary)]/50'
+                }`}
+                onClick={() => handleTemplateChange(template.id)}
+              >
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    name="templateId"
+                    value={template.id}
+                    checked={formData.templateId === template.id}
+                    onChange={() => handleTemplateChange(template.id)}
+                    className="w-4 h-4 text-[var(--accent-primary)] focus:ring-[var(--accent-primary)]"
+                  />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-[var(--text-secondary)]">{template.name}</h3>
+                    <p className="text-sm text-[var(--text-tertiary)] mt-1">{template.description}</p>
+                    <p className="text-xs text-[var(--text-quaternary)] mt-1">Source: {template.url}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        <input
-          type="url"
-          name="websiteUrl"
-          placeholder="Website URL"
-          value={formData.websiteUrl}
-          onChange={handleChange}
-          className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] mt-3"
-          required
-        />
 
-        {/* logo/hero/about */}
-        <div className="space-y-3">
-          <label>Logo *</label>
+        {/* Business Name */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-[var(--text-secondary)]">
+            Business Name *
+          </label>
           <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleFileChange(e, "logo")}
-            required
-          />
-
-          <label>Hero Image *</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleFileChange(e, "heroImage")}
-            required
-          />
-
-          <label>About Image *</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleFileChange(e, "aboutImage")}
+            type="text"
+            name="businessName"
+            placeholder="Enter your business name"
+            value={formData.businessName}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
             required
           />
         </div>
 
-        {/* gallery */}
-        <div>
-          <h3 className="font-semibold mt-6">Gallery Images (min 3)</h3>
-          {formData.galleryImages.map((img, i) => (
-            <div key={i} className="mb-3">
+        {/* Contact Information Section */}
+        <div className="space-y-4 p-4 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-secondary)]">
+          <h3 className="text-lg font-semibold text-[var(--text-secondary)] border-b border-[var(--border-secondary)] pb-2">
+            Contact Information
+          </h3>
+          
+          {/* Primary Email */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-[var(--text-secondary)]">
+              Primary Email *
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your primary email address"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+              required
+            />
+          </div>
+
+          {/* Emergency Email */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-[var(--text-secondary)]">
+              Emergency Email
+            </label>
+            <input
+              type="email"
+              name="emergencyEmail"
+              placeholder="Enter emergency contact email"
+              value={formData.emergencyEmail}
+              onChange={handleChange}
+              className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+            />
+          </div>
+
+          {/* Phone Numbers */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                Primary Phone *
+              </label>
               <input
-                type="text"
-                placeholder="Alt text"
-                value={img.altText}
-                onChange={(e) =>
-                  handleGalleryChange(i, "altText", e.target.value)
-                }
-                className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] mb-1"
-                required
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  handleGalleryChange(i, "file", e.target.files?.[0] || null)
-                }
+                type="tel"
+                name="phone"
+                placeholder="Enter your phone number"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
                 required
               />
             </div>
-          ))}
-        </div>
-
-        {/* services */}
-        <div>
-          <h3 className="font-semibold mt-6">Services</h3>
-          {formData.services.map((srv, i) => (
-            <div
-              key={i}
-              className="mb-4 p-3 bg-[var(--bg-tertiary)] rounded-lg"
-            >
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                Emergency Phone
+              </label>
               <input
-                type="text"
-                placeholder="Service Name"
-                value={srv.name}
-                onChange={(e) => updateService(i, "name", e.target.value)}
-                className="w-full p-2 rounded mb-2"
-                required
-              />
-              <textarea
-                placeholder="Description"
-                value={srv.description}
-                onChange={(e) =>
-                  updateService(i, "description", e.target.value)
-                }
-                className="w-full p-2 rounded mb-2"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Price"
-                value={srv.price}
-                onChange={(e) => updateService(i, "price", e.target.value)}
-                className="w-full p-2 rounded mb-2"
-              />
-              <label>Service Image *</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  updateService(i, "image", e.target.files?.[0] || null)
-                }
-                required
+                type="tel"
+                name="emergencyPhone"
+                placeholder="Emergency contact number"
+                value={formData.emergencyPhone}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
               />
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={addService}
-            className="mt-2 py-2 px-4 bg-[var(--accent-primary)] rounded"
-          >
-            + Add Service
-          </button>
+          </div>
         </div>
 
-        {/* service areas */}
-        <div>
-          <h3 className="font-semibold mt-6">Service Areas</h3>
-          {formData.serviceAreas.map((area, i) => (
-            <div
-              key={i}
-              className="mb-4 p-3 bg-[var(--bg-tertiary)] rounded-lg"
-            >
+        {/* Business Address Section */}
+        <div className="space-y-4 p-4 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-secondary)]">
+          <h3 className="text-lg font-semibold text-[var(--text-secondary)] border-b border-[var(--border-secondary)] pb-2">
+            Business Address
+          </h3>
+          
+          {/* Street Address */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-[var(--text-secondary)]">
+              Street Address *
+            </label>
+            <input
+              type="text"
+              name="street"
+              placeholder="Enter your street address"
+              value={formData.street}
+              onChange={handleChange}
+              className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+              required
+            />
+          </div>
+
+          {/* City, State, Zip */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                City *
+              </label>
               <input
                 type="text"
+                name="city"
                 placeholder="City"
-                value={area.city}
-                onChange={(e) => updateServiceArea(i, "city", e.target.value)}
-                className="w-full p-2 rounded mb-2"
-              />
-              <input
-                type="text"
-                placeholder="Region"
-                value={area.region}
-                onChange={(e) => updateServiceArea(i, "region", e.target.value)}
-                className="w-full p-2 rounded mb-2"
-              />
-              <textarea
-                placeholder="Description"
-                value={area.description}
-                onChange={(e) =>
-                  updateServiceArea(i, "description", e.target.value)
-                }
-                className="w-full p-2 rounded"
+                value={formData.city}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                required
               />
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={addServiceArea}
-            className="mt-2 py-2 px-4 bg-[var(--accent-primary)] rounded"
-          >
-            + Add Service Area
-          </button>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                State *
+              </label>
+              <input
+                type="text"
+                name="state"
+                placeholder="State"
+                value={formData.state}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                Zip Code *
+              </label>
+              <input
+                type="text"
+                name="zipCode"
+                placeholder="Zip Code"
+                value={formData.zipCode}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Country */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-[var(--text-secondary)]">
+              Country *
+            </label>
+            <input
+              type="text"
+              name="country"
+              placeholder="Country"
+              value={formData.country}
+              onChange={handleChange}
+              className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+              required
+            />
+          </div>
         </div>
 
-        {/* testimonials */}
-        <div>
-          <h3 className="font-semibold mt-6">Testimonials</h3>
-          {formData.testimonials.map((t, i) => (
-            <div
-              key={i}
-              className="mb-4 p-3 bg-[var(--bg-tertiary)] rounded-lg"
+        {/* Services Section */}
+        <div className="space-y-4 p-4 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-secondary)]">
+          <div className="flex justify-between items-center border-b border-[var(--border-secondary)] pb-2">
+            <h3 className="text-lg font-semibold text-[var(--text-secondary)]">
+              Services Offered
+            </h3>
+            <button
+              type="button"
+              onClick={addService}
+              className="px-3 py-1 text-sm bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white rounded-lg transition-colors"
             >
-              <input
-                type="text"
-                placeholder="Name"
-                value={t.name}
-                onChange={(e) => updateTestimonial(i, "name", e.target.value)}
-                className="w-full p-2 rounded mb-2"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Role"
-                value={t.role}
-                onChange={(e) => updateTestimonial(i, "role", e.target.value)}
-                className="w-full p-2 rounded mb-2"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Company"
-                value={t.company}
-                onChange={(e) =>
-                  updateTestimonial(i, "company", e.target.value)
-                }
-                className="w-full p-2 rounded mb-2"
-                required
-              />
-              <textarea
-                placeholder="Testimonial text"
-                value={t.text}
-                onChange={(e) => updateTestimonial(i, "text", e.target.value)}
-                className="w-full p-2 rounded mb-2"
-                required
-              />
-              <input
-                type="number"
-                min={1}
-                max={5}
-                value={t.rating}
-                onChange={(e) =>
-                  updateTestimonial(i, "rating", parseInt(e.target.value))
-                }
-                className="w-full p-2 rounded mb-2"
-                required
-              />
-              <label>Image *</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  updateTestimonial(i, "image", e.target.files?.[0] || null)
-                }
-                required
-              />
+              + Add Service
+            </button>
+          </div>
+          
+          {formData.services.map((service, serviceIndex) => (
+            <div key={serviceIndex} className="p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-secondary)] space-y-3">
+              <div className="flex justify-between items-center">
+                <h4 className="font-medium text-[var(--text-secondary)]">
+                  Service {serviceIndex + 1}
+                </h4>
+                {formData.services.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeService(serviceIndex)}
+                    className="text-red-500 hover:text-red-700 text-sm"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                    Service Name *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Web Development"
+                    value={service.name}
+                    onChange={(e) => handleServiceChange(serviceIndex, 'name', e.target.value)}
+                    className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                    Price
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Starting at $2,500"
+                    value={service.price}
+                    onChange={(e) => handleServiceChange(serviceIndex, 'price', e.target.value)}
+                    className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                  Service Description
+                </label>
+                <textarea
+                  placeholder="Describe this service in detail..."
+                  value={service.description}
+                  onChange={(e) => handleServiceChange(serviceIndex, 'description', e.target.value)}
+                  rows={3}
+                  className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent resize-vertical"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                    Key Features
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => addFeature(serviceIndex)}
+                    className="text-xs px-2 py-1 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white rounded transition-colors"
+                  >
+                    + Add Feature
+                  </button>
+                </div>
+                {service.features.map((feature, featureIndex) => (
+                  <div key={featureIndex} className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g., Responsive Design"
+                      value={feature}
+                      onChange={(e) => handleFeatureChange(serviceIndex, featureIndex, e.target.value)}
+                      className="flex-1 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                    />
+                    {service.features.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeFeature(serviceIndex, featureIndex)}
+                        className="text-red-500 hover:text-red-700 px-2"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={addTestimonial}
-            className="mt-2 py-2 px-4 bg-[var(--accent-primary)] rounded"
-          >
-            + Add Testimonial
-          </button>
         </div>
 
-        {/* submit */}
+        {/* Service Areas Section */}
+        <div className="space-y-4 p-4 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-secondary)]">
+          <div className="flex justify-between items-center border-b border-[var(--border-secondary)] pb-2">
+            <h3 className="text-lg font-semibold text-[var(--text-secondary)]">
+              Service Areas
+            </h3>
+            <button
+              type="button"
+              onClick={addServiceArea}
+              className="px-3 py-1 text-sm bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white rounded-lg transition-colors"
+            >
+              + Add Area
+            </button>
+          </div>
+          
+          {formData.serviceAreas.map((area, areaIndex) => (
+            <div key={areaIndex} className="p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-secondary)] space-y-3">
+              <div className="flex justify-between items-center">
+                <h4 className="font-medium text-[var(--text-secondary)]">
+                  Service Area {areaIndex + 1}
+                </h4>
+                {formData.serviceAreas.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeServiceArea(areaIndex)}
+                    className="text-red-500 hover:text-red-700 text-sm"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                    City/Location *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., San Francisco"
+                    value={area.city}
+                    onChange={(e) => handleServiceAreaChange(areaIndex, 'city', e.target.value)}
+                    className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                    Region/Area *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Bay Area & Silicon Valley"
+                    value={area.region}
+                    onChange={(e) => handleServiceAreaChange(areaIndex, 'region', e.target.value)}
+                    className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                  Area Description
+                </label>
+                <textarea
+                  placeholder="Describe your services in this area..."
+                  value={area.description}
+                  onChange={(e) => handleServiceAreaChange(areaIndex, 'description', e.target.value)}
+                  rows={2}
+                  className="w-full p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent resize-vertical"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3 rounded-xl bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white font-semibold shadow-md"
+          disabled={isLoading}
+          className="w-full py-3 rounded-xl bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold shadow-md transition-colors duration-200"
         >
-          Submit
+          {isLoading ? "Creating Landing Page..." : "Create Landing Page"}
         </button>
       </form>
     </div>

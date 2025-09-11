@@ -11,6 +11,8 @@ import {
 import { validateBody } from '../middleware/validation';
 import { 
   createLandingPageSchema, 
+  createSimpleLandingPageSchema,
+  createEnhancedLandingPageSchema,
   updateLandingPageSchema,
   createImageSchema
 } from '../validation';
@@ -97,43 +99,54 @@ router.delete('/images/:imageId', asyncHandler(async (req, res) => {
   sendSuccess(res, result, 'Image deleted successfully');
 }));
 
-// Create page from template (simplified workflow)
-router.post('/generate', asyncHandler(async (req, res) => {
-  const { businessName, templateId, githubUrl } = req.body;
-  
-  // Validate required fields
-  if (!businessName || !templateId || !githubUrl) {
-    return handleServiceError(
-      new Error('businessName, templateId, and githubUrl are required'), 
-      res, 
-      'Missing required fields'
-    );
-  }
+// Create simple landing page from basic business info
+router.post('/create-simple', 
+  validateBody(createSimpleLandingPageSchema),
+  asyncHandler(async (req, res) => {
+    try {
+      // Generate landing page data from simplified input
+      const pageData = await landingPageGeneratorService.generateSimpleLandingPageData(req.body);
 
-  try {
-    // Generate landing page data from template
-    const pageData = await landingPageGeneratorService.generateLandingPageData({
-      businessName,
-      templateId,
-      githubUrl
-    });
+      // Create the page in database
+      const createdPage = await pageService.createPage(pageData);
 
-    // Create the page in database
-    const createdPage = await pageService.createPage(pageData);
+      sendSuccess(res, createdPage, 'Simple landing page created successfully', 201);
+    } catch (error) {
+      console.error('Error creating simple landing page:', error);
+      return handleServiceError(error as Error, res, 'Failed to create simple landing page');
+    }
+  })
+);
 
-    // Fetch and setup GitHub repository (async process)
-    landingPageGeneratorService.fetchAndSetupRepo(
-      { businessName, templateId, githubUrl },
-      createdPage.id
-    ).catch(error => {
-      console.error('Error setting up repository:', error);
-    });
+// Create page from template with enhanced business data
+router.post('/generate', 
+  validateBody(createEnhancedLandingPageSchema),
+  asyncHandler(async (req, res) => {
+    try {
+      // Generate landing page data from template with enhanced business info
+      const pageData = await landingPageGeneratorService.generateComprehensiveLandingPageData(req.body);
 
-    sendSuccess(res, createdPage, 'Landing page generated successfully', 201);
-  } catch (error) {
-    console.error('Error generating landing page:', error);
-    return handleServiceError(error as Error, res, 'Failed to generate landing page');
-  }
-}));
+      // Create the page in database
+      const createdPage = await pageService.createPage(pageData);
+
+      // Fetch and setup GitHub repository (async process)
+      landingPageGeneratorService.fetchAndSetupRepo(
+        { 
+          businessName: req.body.businessName, 
+          templateId: req.body.templateId, 
+          githubUrl: req.body.githubUrl 
+        },
+        createdPage.id
+      ).catch(error => {
+        console.error('Error setting up repository:', error);
+      });
+
+      sendSuccess(res, createdPage, 'Landing page generated successfully', 201);
+    } catch (error) {
+      console.error('Error generating landing page:', error);
+      return handleServiceError(error as Error, res, 'Failed to generate landing page');
+    }
+  })
+);
 
 export default router;
