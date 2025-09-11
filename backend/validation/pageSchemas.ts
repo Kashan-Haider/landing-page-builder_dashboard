@@ -35,6 +35,7 @@ export const createEnhancedLandingPageSchema = z.object({
     region: z.string().min(1, "Service area region is required"),
     description: z.string().optional(),
   })).default([]),
+  themeData: themeDataSchema,
 });
 
 // Simplified schema for basic landing page creation (kept for backward compatibility)

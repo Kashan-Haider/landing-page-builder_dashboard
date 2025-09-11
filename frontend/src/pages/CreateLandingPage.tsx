@@ -21,6 +21,11 @@ interface ServiceArea {
   description: string;
 }
 
+interface ThemeData {
+  primaryColor: string;
+  secondaryColor: string;
+}
+
 interface FormData {
   businessName: string;
   email: string;
@@ -36,6 +41,7 @@ interface FormData {
   githubUrl: string;
   services: Service[];
   serviceAreas: ServiceArea[];
+  themeData: ThemeData;
 }
 
 const CreateLandingPage: React.FC = () => {
@@ -63,7 +69,11 @@ const CreateLandingPage: React.FC = () => {
     templateId: "template001", // Default to first template
     githubUrl: "https://github.com/Kashan-Haider/template001",
     services: [{ name: "", description: "", price: "", features: [""] }],
-    serviceAreas: [{ city: "", region: "", description: "" }]
+    serviceAreas: [{ city: "", region: "", description: "" }],
+    themeData: {
+      primaryColor: "#0f172a", // Default from sample-page.json
+      secondaryColor: "#3D3D3D" // Default from sample-page.json
+    }
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -90,6 +100,17 @@ const CreateLandingPage: React.FC = () => {
     const updatedServiceAreas = [...formData.serviceAreas];
     updatedServiceAreas[index][field] = value;
     setFormData((prev) => ({ ...prev, serviceAreas: updatedServiceAreas }));
+  };
+
+  // Handle theme color changes
+  const handleThemeColorChange = (field: keyof ThemeData, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      themeData: {
+        ...prev.themeData,
+        [field]: value
+      }
+    }));
   };
 
   // Add new service
@@ -185,7 +206,8 @@ const CreateLandingPage: React.FC = () => {
             country: formData.country
           },
           services: formData.services.filter(service => service.name.trim() !== ""),
-          serviceAreas: formData.serviceAreas.filter(area => area.city.trim() !== "")
+          serviceAreas: formData.serviceAreas.filter(area => area.city.trim() !== ""),
+          themeData: formData.themeData
         })
       });
 
@@ -214,7 +236,11 @@ const CreateLandingPage: React.FC = () => {
         templateId: "template001",
         githubUrl: "https://github.com/Kashan-Haider/template001",
         services: [{ name: "", description: "", price: "", features: [""] }],
-        serviceAreas: [{ city: "", region: "", description: "" }]
+        serviceAreas: [{ city: "", region: "", description: "" }],
+        themeData: {
+          primaryColor: "#0f172a",
+          secondaryColor: "#3D3D3D"
+        }
       });
     } catch (error) {
       console.error("Error creating landing page:", error);
@@ -629,6 +655,195 @@ const CreateLandingPage: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Theme Colors Section */}
+        <div className="space-y-4 p-4 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-secondary)]">
+          <h3 className="text-lg font-semibold text-[var(--text-secondary)] border-b border-[var(--border-secondary)] pb-2">
+            Theme Colors
+          </h3>
+          <p className="text-sm text-[var(--text-tertiary)]">
+            Customize the color scheme for your landing page. These colors will be used throughout your website design.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Primary Color */}
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                Primary Color *
+              </label>
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <input
+                    type="color"
+                    value={formData.themeData.primaryColor}
+                    onChange={(e) => handleThemeColorChange('primaryColor', e.target.value)}
+                    className="w-12 h-12 rounded-lg border-2 border-[var(--border-secondary)] cursor-pointer"
+                    title="Select primary color"
+                  />
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={formData.themeData.primaryColor}
+                    onChange={(e) => handleThemeColorChange('primaryColor', e.target.value)}
+                    placeholder="#0f172a"
+                    className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent font-mono text-sm"
+                    pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+                    title="Enter a valid hex color (e.g., #0f172a)"
+                  />
+                </div>
+              </div>
+              <div 
+                className="w-full h-8 rounded-lg border border-[var(--border-secondary)] shadow-inner"
+                style={{ backgroundColor: formData.themeData.primaryColor }}
+                title="Primary color preview"
+              ></div>
+              <p className="text-xs text-[var(--text-tertiary)]">
+                Used for headers, buttons, and main brand elements
+              </p>
+            </div>
+
+            {/* Secondary Color */}
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-[var(--text-secondary)]">
+                Secondary Color *
+              </label>
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <input
+                    type="color"
+                    value={formData.themeData.secondaryColor}
+                    onChange={(e) => handleThemeColorChange('secondaryColor', e.target.value)}
+                    className="w-12 h-12 rounded-lg border-2 border-[var(--border-secondary)] cursor-pointer"
+                    title="Select secondary color"
+                  />
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={formData.themeData.secondaryColor}
+                    onChange={(e) => handleThemeColorChange('secondaryColor', e.target.value)}
+                    placeholder="#3D3D3D"
+                    className="w-full p-3 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent font-mono text-sm"
+                    pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+                    title="Enter a valid hex color (e.g., #3D3D3D)"
+                  />
+                </div>
+              </div>
+              <div 
+                className="w-full h-8 rounded-lg border border-[var(--border-secondary)] shadow-inner"
+                style={{ backgroundColor: formData.themeData.secondaryColor }}
+                title="Secondary color preview"
+              ></div>
+              <p className="text-xs text-[var(--text-tertiary)]">
+                Used for accents, highlights, and secondary elements
+              </p>
+            </div>
+          </div>
+
+          {/* Color Palette Preview */}
+          <div className="mt-6 p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-secondary)]">
+            <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">
+              Color Palette Preview
+            </h4>
+            <div className="flex space-x-4">
+              <div className="flex-1 text-center">
+                <div 
+                  className="w-full h-16 rounded-lg border border-[var(--border-secondary)] mb-2 flex items-center justify-center text-white text-sm font-medium shadow-sm"
+                  style={{ backgroundColor: formData.themeData.primaryColor }}
+                >
+                  Primary
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)] font-mono">
+                  {formData.themeData.primaryColor}
+                </p>
+              </div>
+              <div className="flex-1 text-center">
+                <div 
+                  className="w-full h-16 rounded-lg border border-[var(--border-secondary)] mb-2 flex items-center justify-center text-white text-sm font-medium shadow-sm"
+                  style={{ backgroundColor: formData.themeData.secondaryColor }}
+                >
+                  Secondary
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)] font-mono">
+                  {formData.themeData.secondaryColor}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Preset Color Schemes */}
+          <div className="mt-4">
+            <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">
+              Quick Color Schemes
+            </h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  handleThemeColorChange('primaryColor', '#0f172a');
+                  handleThemeColorChange('secondaryColor', '#3D3D3D');
+                }}
+                className="p-2 rounded-lg border border-[var(--border-secondary)] hover:border-[var(--accent-primary)] transition-colors"
+                title="Dark Professional"
+              >
+                <div className="flex space-x-1 mb-1">
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#0f172a' }}></div>
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3D3D3D' }}></div>
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)]">Dark Pro</p>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  handleThemeColorChange('primaryColor', '#172F87');
+                  handleThemeColorChange('secondaryColor', '#612B5E');
+                }}
+                className="p-2 rounded-lg border border-[var(--border-secondary)] hover:border-[var(--accent-primary)] transition-colors"
+                title="Blue Modern"
+              >
+                <div className="flex space-x-1 mb-1">
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#172F87' }}></div>
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#612B5E' }}></div>
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)]">Blue</p>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  handleThemeColorChange('primaryColor', '#3d2b1f');
+                  handleThemeColorChange('secondaryColor', '#614932');
+                }}
+                className="p-2 rounded-lg border border-[var(--border-secondary)] hover:border-[var(--accent-primary)] transition-colors"
+                title="Green Fresh"
+              >
+                <div className="flex space-x-1 mb-1">
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3d2b1f' }}></div>
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#614932' }}></div>
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)]">Brown</p>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  handleThemeColorChange('primaryColor', '#333333');
+                  handleThemeColorChange('secondaryColor', '#1C3901');
+                }}
+                className="p-2 rounded-lg border border-[var(--border-secondary)] hover:border-[var(--accent-primary)] transition-colors"
+                title="Red Bold"
+              >
+                <div className="flex space-x-1 mb-1">
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#333333' }}></div>
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#1C3901' }}></div>
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)]">Green</p>
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Submit Button */}

@@ -53,6 +53,10 @@ interface ComprehensiveLandingPageInput {
     region: string;
     description?: string;
   }[];
+  themeData: {
+    primaryColor: string;
+    secondaryColor: string;
+  };
 }
 
 interface LandingPageTemplate {
@@ -121,6 +125,15 @@ class LandingPageGeneratorService {
               'Ongoing support'
             ]
           }))
+        };
+      }
+      
+      // Update theme data with user-provided colors
+      if (customizedData.themeData && input.themeData) {
+        customizedData.themeData = {
+          ...customizedData.themeData,
+          primaryColor: input.themeData.primaryColor,
+          secondaryColor: input.themeData.secondaryColor
         };
       }
       
