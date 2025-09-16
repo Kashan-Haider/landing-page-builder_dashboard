@@ -4,7 +4,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import pageRoutes from './routes/pageRoutes';
-import webhookRoutes from './routes/webhookRoutes';
 import authRoutes from './routes/authRoutes';
 import { ApiResponse } from './types';
 import { handleServiceError } from './middleware/errorHandler';
@@ -15,7 +14,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Configure CORS to allow requests from frontend
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:5179', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,7 +32,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/pages', pageRoutes);
-app.use('/api/webhooks', webhookRoutes);
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {

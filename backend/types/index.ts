@@ -168,20 +168,6 @@ export interface UpdateLandingPageData {
   businessData?: Partial<BusinessData>;
 }
 
-export interface WebhookPayload {
-  templateId: string;
-  githubUrl?: string;
-  event: 'created' | 'updated';
-  timestamp: string;
-}
-
-export interface WebhookConfig {
-  id?: string;
-  name: string;
-  url: string;
-  events: ('created' | 'updated')[];
-  isActive?: boolean;
-}
 
 export interface ApiResponse<T = any> {
   success: boolean;

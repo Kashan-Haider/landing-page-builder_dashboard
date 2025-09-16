@@ -15,8 +15,8 @@ export * from "./businessSchemas";
 // SEO and theme schemas
 export * from "./seoThemeSchemas";
 
-// Image and webhook schemas
-export * from "./imageWebhookSchemas";
+// Image schemas
+export * from "./imageSchemas";
 
 // Main page schemas
 export * from "./pageSchemas";

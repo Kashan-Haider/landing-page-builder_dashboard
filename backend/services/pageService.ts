@@ -6,7 +6,6 @@ import {
   UpdateLandingPageInput,
   CreateImageInput,
 } from "../validation";
-import { webhookService } from "./webhookService";
 import { imageService } from "./imageService";
 import { merge } from "lodash";
 
@@ -86,15 +85,6 @@ class PageService {
         },
       });
 
-      // Trigger webhook notification
-      try {
-        await webhookService.triggerWebhooks("created", {
-          templateId: page.templateId,
-          githubUrl: page.githubUrl || undefined,
-        });
-      } catch (webhookError) {
-        console.warn("Webhook trigger failed:", webhookError);
-      }
 
       return page;
     } catch (error) {
@@ -188,15 +178,6 @@ class PageService {
         },
       });
 
-      // Trigger webhook notification
-      try {
-        await webhookService.triggerWebhooks("updated", {
-          templateId: updatedPage.templateId,
-          githubUrl: updatedPage.githubUrl || undefined,
-        });
-      } catch (webhookError) {
-        console.warn("Webhook trigger failed:", webhookError);
-      }
 
       return updatedPage;
     } catch (error) {
@@ -230,15 +211,6 @@ class PageService {
         where: { id },
       });
 
-      // Trigger webhook notification
-      try {
-        await webhookService.triggerWebhooks("updated", {
-          templateId: existingPage.templateId,
-          githubUrl: existingPage.githubUrl || undefined,
-        });
-      } catch (webhookError) {
-        console.warn("Webhook trigger failed:", webhookError);
-      }
 
       return { success: true, message: "Page deleted successfully" };
     } catch (error) {

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**
- * Image and webhook validation schemas
+ * Image validation schemas
  */
 
 export const imageSchema = z.object({
@@ -20,8 +20,3 @@ export const createImageSchema = z.object({
   category: z.string().min(1, "Category name is required"),
 });
 
-export const createWebhookSchema = z.object({
-  name: z.string().min(1, "Webhook name is required"),
-  url: z.string().url("Valid webhook URL is required"),
-  events: z.array(z.string()).min(1, "At least one event is required"),
-});

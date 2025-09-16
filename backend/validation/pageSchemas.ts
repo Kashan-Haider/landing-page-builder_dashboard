@@ -2,7 +2,7 @@ import { z } from "zod";
 import { contentSchema } from "./contentSchemas";
 import { businessDataSchema } from "./businessSchemas";
 import { seoDataSchema, themeDataSchema } from "./seoThemeSchemas";
-import { imageSchema, createImageSchema, createWebhookSchema } from "./imageWebhookSchemas";
+import { imageSchema, createImageSchema } from "./imageSchemas";
 
 /**
  * Main page schemas that combine all validation schemas
@@ -77,4 +77,3 @@ export type CreateSimpleLandingPageInput = z.infer<typeof createSimpleLandingPag
 export type CreateLandingPageInput = z.infer<typeof createLandingPageSchema>;
 export type UpdateLandingPageInput = z.infer<typeof updateLandingPageSchema>;
 export type CreateImageInput = z.infer<typeof createImageSchema>;
-export type CreateWebhookInput = z.infer<typeof createWebhookSchema>;
