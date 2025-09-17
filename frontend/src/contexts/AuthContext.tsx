@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 interface User {
   id: string;
   email: string;
-  role: 'ADMIN' | 'EMPLOYEE' | 'CLIENT';
+  role: 'ADMIN' | 'EMPLOYEE';
 }
 
 interface AuthState {
@@ -17,7 +17,7 @@ interface AuthState {
 interface AuthContextType extends AuthState {
   login: (token: string, user: User) => void;
   logout: () => void;
-  redirectToRoleBasedLogin: (requiredRole?: 'ADMIN' | 'EMPLOYEE' | 'CLIENT') => void;
+  redirectToRoleBasedLogin: (requiredRole?: 'ADMIN' | 'EMPLOYEE') => void;
   verifyToken: (token: string) => Promise<{ isValid: boolean; shouldClear: boolean }>;
   clearAuthData: () => void;
 }
@@ -163,14 +163,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Role-based redirect function
-  const redirectToRoleBasedLogin = (requiredRole?: 'ADMIN' | 'EMPLOYEE' | 'CLIENT') => {
+  const redirectToRoleBasedLogin = (requiredRole?: 'ADMIN' | 'EMPLOYEE') => {
     if (!authState.isAuthenticated) {
       // If no specific role required, redirect based on current path or default to admin
       if (!requiredRole) {
         const currentPath = window.location.pathname;
-        if (currentPath.includes('/client')) {
-          navigate('/client/login');
-        } else if (currentPath.includes('/employee')) {
+        if (currentPath.includes('/employee')) {
           navigate('/employee/login');
         } else {
           navigate('/admin/login');
@@ -184,9 +182,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           case 'EMPLOYEE':
             navigate('/employee/login');
             break;
-          case 'CLIENT':
-            navigate('/client/login');
-            break;
         }
       }
     } else if (requiredRole && authState.user?.role !== requiredRole) {
@@ -197,9 +192,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           break;
         case 'EMPLOYEE':
           navigate('/employee/login');
-          break;
-        case 'CLIENT':
-          navigate('/client/login');
           break;
         default:
           navigate('/admin/login');

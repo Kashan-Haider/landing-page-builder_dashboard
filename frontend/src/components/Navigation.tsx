@@ -32,13 +32,22 @@ const Navigation: React.FC = () => {
               Dashboard
             </Link>
             {user?.role === 'ADMIN' && (
-              <Link 
-                to="/admin/users" 
-                className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                Users
-              </Link>
+              <>
+                <Link 
+                  to="/create-page" 
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  Create Page
+                </Link>
+                <Link 
+                  to="/admin/users" 
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  Users
+                </Link>
+              </>
             )}
             
             <div className="flex items-center space-x-3 ml-6 pl-6 border-l" style={{ borderColor: 'var(--border-primary)' }}>

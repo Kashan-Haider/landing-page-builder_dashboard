@@ -4,6 +4,7 @@ import { Users, Plus, Edit, Trash2, Key, Shield } from 'lucide-react';
 import CreateUserModal from '../components/modals/CreateUserModal';
 import EditUserModal from '../components/modals/EditUserModal';
 import ChangePasswordModal from '../components/modals/ChangePasswordModal';
+import DeleteUserModal from '../components/modals/DeleteUserModal';
 
 interface User {
   id: string;
@@ -20,6 +21,7 @@ const AdminUserManagement: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const { token, isAuthenticated, redirectToRoleBasedLogin } = useAuth();
 
@@ -52,28 +54,15 @@ const AdminUserManagement: React.FC = () => {
     }
   };
 
-  // Delete user
-  const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) return;
+  // Handle delete user modal
+  const handleDeleteUser = (user: User) => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
+  };
 
-    try {
-      const response = await fetch(`http://localhost:3000/api/auth/users/${userId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setUsers(users.filter(user => user.id !== userId));
-      } else {
-        setError(data.message || 'Failed to delete user');
-      }
-    } catch (err) {
-      setError('Network error. Please try again.');
-    }
+  // Refresh users after deletion
+  const handleUserDeleted = () => {
+    fetchUsers();
   };
 
   useEffect(() => {
@@ -92,7 +81,7 @@ const AdminUserManagement: React.FC = () => {
     switch (role) {
       case 'ADMIN': return 'var(--error)';
       case 'EMPLOYEE': return 'var(--warning)';
-      case 'CLIENT': return 'var(--info)';
+      case 'CLIENT': return '#3b82f6';
       default: return 'var(--text-muted)';
     }
   };
@@ -270,7 +259,7 @@ const AdminUserManagement: React.FC = () => {
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => handleDeleteUser(user)}
                           className="p-2 rounded transition-colors"
                           style={{ 
                             backgroundColor: 'var(--bg-quaternary)',
@@ -329,6 +318,16 @@ const AdminUserManagement: React.FC = () => {
       <ChangePasswordModal
         isOpen={showPasswordModal}
         onClose={() => setShowPasswordModal(false)}
+      />
+
+      <DeleteUserModal
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setSelectedUser(null);
+        }}
+        onUserDeleted={handleUserDeleted}
+        user={selectedUser}
       />
     </div>
   );

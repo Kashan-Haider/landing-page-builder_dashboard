@@ -20,7 +20,7 @@ interface EditUserModalProps {
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onUserUpdated, user }) => {
   const [formData, setFormData] = useState({
     email: '',
-    role: 'CLIENT' as 'ADMIN' | 'EMPLOYEE' | 'CLIENT',
+    role: 'EMPLOYEE' as 'ADMIN' | 'EMPLOYEE' | 'CLIENT',
     password: ''
   });
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onUserUp
     if (user) {
       setFormData({
         email: user.email,
-        role: user.role,
+        role: user.role as 'ADMIN' | 'EMPLOYEE' | 'CLIENT',
         password: ''
       });
     }
@@ -141,9 +141,9 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, onUserUp
                 color: 'var(--text-primary)'
               }}
             >
-              <option value="CLIENT">Client</option>
               <option value="EMPLOYEE">Employee</option>
               <option value="ADMIN">Admin</option>
+              <option value="CLIENT">Client</option>
             </select>
           </div>
 

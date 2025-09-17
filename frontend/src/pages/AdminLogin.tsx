@@ -17,13 +17,10 @@ const AdminLogin: React.FC = () => {
         navigate('/');
       } else {
         // Redirect non-admin users to their appropriate login
-        switch (user.role) {
-          case 'EMPLOYEE':
-            navigate('/employee/login');
-            break;
-          case 'CLIENT':
-            navigate('/client/login');
-            break;
+        if (user.role === 'EMPLOYEE') {
+          navigate('/employee/login');
+        } else if (user.role === 'CLIENT') {
+          navigate('/client/login');
         }
       }
     }

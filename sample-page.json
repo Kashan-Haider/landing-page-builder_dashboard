@@ -47,7 +47,7 @@
             "title": "Excellence in Business Solutions",
             "subtitle": "Your Trusted Partner for Growth and Success Since 2016",
             "ctaButton": {
-                "href": "/contact",
+                "href": "123456789",
                 "label": "Get Started Today"
             },
             "description": "We help ambitious businesses achieve their goals through innovative solutions, strategic consulting, and exceptional service delivery. Join hundreds of satisfied clients who have transformed their operations and achieved remarkable growth through our proven expertise and dedication."
@@ -60,7 +60,7 @@
                 "Dedicated Customer Support"
             ],
             "ctaButton": {
-                "href": "/contact",
+                "href": "123456789",
                 "label": "Learn More"
             },
             "description": "Since 2016, our company has been committed to delivering outstanding results and building lasting partnerships with our clients. Our experienced team combines industry knowledge with innovative approaches to help businesses navigate challenges and capitalize on opportunities. We've successfully completed thousands of projects across various industries, helping organizations improve efficiency, reduce costs, and achieve sustainable growth."
@@ -68,19 +68,19 @@
         "footer": {
             "links": [
                 {
-                    "href": "/privacy",
+                    "href": "#",
                     "text": "Privacy Policy"
                 },
                 {
-                    "href": "/terms",
+                    "href": "#",
                     "text": "Terms of Service"
                 },
                 {
-                    "href": "/cookies",
+                    "href": "#",
                     "text": "Cookie Policy"
                 },
                 {
-                    "href": "/careers",
+                    "href": "#",
                     "text": "Careers"
                 }
             ],
@@ -194,7 +194,7 @@
         "ctaSection": {
             "heading": "Let's Work Together",
             "ctaButton": {
-                "href": "/contact",
+                "href": "123456789",
                 "label": "Get Started"
             },
             "subHeading": "Ready to Begin?",
@@ -265,7 +265,7 @@
                 {
                     "heading": "Results-Driven Approach",
                     "ctaButton": {
-                        "href": "/methodology",
+                        "href": "123456789",
                         "label": "Learn Our Process"
                     },
                     "description": "We focus on delivering measurable results through proven methodologies, strategic thinking, and dedicated execution to ensure your investment delivers maximum value."
@@ -273,7 +273,7 @@
                 {
                     "heading": "Industry Expertise",
                     "ctaButton": {
-                        "href": "/industries",
+                        "href": "123456789",
                         "label": "Explore Industries"
                     },
                     "description": "With extensive experience across multiple industries, we understand the unique challenges and opportunities in your sector, allowing us to deliver targeted solutions that drive real results."
@@ -281,7 +281,7 @@
                 {
                     "heading": "Strategic Partnership",
                     "ctaButton": {
-                        "href": "/partnership",
+                        "href": "123456789",
                         "label": "Partner With Us"
                     },
                     "description": "More than a service provider, we're your strategic partner committed to your long-term success through continuous support, optimization, and growth enablement."
@@ -297,7 +297,7 @@
                 {
                     "heading": "Data-Driven Insights",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "Unlock Insights"
                     },
                     "description": "We leverage data and analytics to provide actionable insights that guide smarter business decisions and deliver measurable outcomes for your organization."
@@ -305,7 +305,7 @@
                 {
                     "heading": "Client-Centric Focus",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "See Our Approach"
                     },
                     "description": "Our client-centered philosophy ensures every solution we develop prioritizes your needs, objectives, and long-term success above all else."
@@ -313,7 +313,7 @@
                 {
                     "heading": "Proven Methodology",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "Learn Our Methods"
                     },
                     "description": "By leveraging time-tested methodologies and best practices, we deliver reliable, efficient, and effective solutions that meet your expectations consistently."
@@ -321,7 +321,7 @@
                 {
                     "heading": "Quality & Excellence",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "Explore Quality"
                     },
                     "description": "We maintain the highest standards of quality and excellence in everything we do, ensuring superior results and complete satisfaction with every engagement."
@@ -329,7 +329,7 @@
                 {
                     "heading": "Efficient Delivery",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "Understand Efficiency"
                     },
                     "description": "Through streamlined processes and efficient project management, we ensure rapid delivery, faster results, and continuous improvements for every project."
@@ -337,7 +337,7 @@
                 {
                     "heading": "Sustainable Practices",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "Go Sustainable"
                     },
                     "description": "Our solutions embrace sustainable business practices, helping organizations operate more efficiently while reducing costs and environmental impact."
@@ -345,7 +345,7 @@
                 {
                     "heading": "Team Development",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "Empower Teams"
                     },
                     "description": "We help build capable, confident teams with the right skills, tools, and mindset to drive innovation and achieve long-term business success."
@@ -353,7 +353,7 @@
                 {
                     "heading": "Wide Reach",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "See Our Reach"
                     },
                     "description": "With experience serving clients across diverse markets and regions, we bring broad perspective and localized expertise to every engagement."
@@ -361,7 +361,7 @@
                 {
                     "heading": "Continuous Innovation",
                     "ctaButton": {
-                        "href": "#",
+                        "href": "123456789",
                         "label": "Stay Ahead"
                     },
                     "description": "We continuously invest in learning, improvement, and innovation to ensure our clients benefit from the latest best practices and emerging opportunities."

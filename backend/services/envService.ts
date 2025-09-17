@@ -2,11 +2,14 @@
 import fs from 'fs/promises';
 import path from 'path';
 
+const DATABASE_URL = process.env.DATABASE_URL;
+const PORT = process.env.PORT;
+
 class EnvService {
   // Generate .env file content with required variables
   generateEnvContent(templateId: string, pageId: string): string {
-    return `DATABASE_URL=postgresql://admin:admin@localhost:5432/cms_dashboard_db?schema=public
-PORT=3000
+    return `DATABASE_URL=${DATABASE_URL}
+PORT=${PORT}
 NEXT_PUBLIC_TEMPLATE_ID=${templateId}
 NEXT_PUBLIC_ID=${pageId}
 `;

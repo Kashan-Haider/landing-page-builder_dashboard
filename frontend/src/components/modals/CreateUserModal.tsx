@@ -12,18 +12,42 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    role: 'CLIENT' as 'ADMIN' | 'EMPLOYEE' | 'CLIENT'
+    role: 'EMPLOYEE' as 'ADMIN' | 'EMPLOYEE'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const { token } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
+
+    // Client-side validation
+    if (!formData.email || !formData.password || !formData.role) {
+      setError('All fields are required');
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
 
     try {
+      console.log('Creating user with data:', formData);
+      
       const response = await fetch('http://localhost:3000/api/auth/users', {
         method: 'POST',
         headers: {
@@ -34,15 +58,24 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
       });
 
       const data = await response.json();
+      console.log('Create user response:', data);
+      
       if (data.success) {
+        setSuccess('User created successfully!');
         onUserCreated();
-        onClose();
-        setFormData({ email: '', password: '', role: 'CLIENT' });
+        
+        // Close modal after a short delay to show success message
+        setTimeout(() => {
+          onClose();
+          setFormData({ email: '', password: '', role: 'EMPLOYEE' });
+          setSuccess('');
+        }, 1500);
       } else {
-        setError(data.message || 'Failed to create user');
+        setError(data.message || data.error || 'Failed to create user');
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      console.error('Create user error:', err);
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -114,7 +147,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
                 borderColor: 'var(--border-primary)',
                 color: 'var(--text-primary)'
               }}
-              placeholder="Enter password"
+              placeholder="Enter password (min 6 characters)"
             />
           </div>
 
@@ -124,7 +157,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
             </label>
             <select
               value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value as 'ADMIN' | 'EMPLOYEE' | 'CLIENT' })}
+              onChange={(e) => setFormData({ ...formData, role: e.target.value as 'ADMIN' | 'EMPLOYEE' })}
               className="w-full px-3 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2"
               style={{ 
                 backgroundColor: 'var(--bg-tertiary)',
@@ -132,9 +165,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
                 color: 'var(--text-primary)'
               }}
             >
-              <option value="CLIENT">Client</option>
               <option value="EMPLOYEE">Employee</option>
               <option value="ADMIN">Admin</option>
+              <option value="CLIENT">Client</option>
             </select>
           </div>
 
@@ -148,6 +181,19 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
               }}
             >
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div 
+              className="p-3 rounded-lg border text-sm"
+              style={{ 
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                borderColor: '#22c55e',
+                color: '#22c55e'
+              }}
+            >
+              {success}
             </div>
           )}
 

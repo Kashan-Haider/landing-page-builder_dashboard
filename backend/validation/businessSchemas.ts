@@ -50,10 +50,7 @@ export const socialLinkSchema = z.object({
     "instagram", "Instagram", 
     "twitter", "Twitter", 
     "linkedin", "LinkedIn", 
-    "youtube", "YouTube",
-    "yelp", "Yelp",
-    "google", "Google",
-    "tiktok", "TikTok"
+    "youtube", "YouTube"
   ], {
     message: "Platform must be a supported social media platform"
   }),
